@@ -1,0 +1,113 @@
+<% @page_title= (action_name == "new" || action_name == "create") ? "New TRKS Transaction" : "Edit TRKS Transaction" %>
+
+<h1><%= (action_name == "new" || action_name == "create") ? "New TRKS Transaction" : "Edit TRKS Transaction"  %></h1>
+
+<% if @trkstransaction.errors.any? %>
+<div class="row">
+  <div class='col-md-1'></div>
+    <div class='col-md-10 status error' id="flashmsg" tabindex="0">
+    <h4>The form did not process due to the <%= pluralize(@trkstransaction.errors.count, "error") %> below:</h4>
+    <ul>
+      <% @trkstransaction.errors.each do |attr, msg| %>
+        <% if !msg.blank? %>
+        <li><%= msg %></li>
+        <% end %>
+      <% end %>
+    </ul>    
+    </div>
+    <div class='col-md-1'></div>
+</div>
+<% end %>
+    
+<div class="row">
+  <div class='col-md-1'></div>
+  <div class="col-md-10" align="right">
+    <h4><span class="required">*</span> = required field</h4><br>
+  </div>
+  <div class='col-md-1'></div>
+</div>
+    
+<%= form_for([:admin, @trkstransaction], class:'form-horizontal') do |f| %>
+<div class="row form-group">
+  <div class="col-md-3 labelAlign">
+    <%= f.label :name, "<span class='required'>*</span> Name".html_safe, class:"control-label" %>
+  </div>
+  <div class="col-md-7">
+    <%= f.text_field :name, class:'form-control', maxlength:50 %>
+  </div>  
+  <div class="col-md-2"></div>      
+</div>
+
+<div class="row form-group">
+  <div class="col-md-3 labelAlign">
+    <%= f.label :description, "<span class='required'>*</span> Description".html_safe, class:"control-label" %>
+  </div>
+  <div class="col-md-7">
+    <%= f.text_field :description, class:'form-control', maxlength:200 %>
+  </div>  
+  <div class="col-md-2"></div>      
+</div>
+
+<div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>Number Of Users Allowed</label>
+    </div>
+    <div class="col-md-7">
+      <div class="row">                   
+      <div class="col-md-2">
+        <%= f.label :num_users_allowed_1, "Under 30K", class:"control-label" %>
+        <%= f.text_field :num_users_allowed_1, class:"form-control", maxlength:4 %>
+      </div>
+
+        <div class="col-md-2">
+          <%= f.label :num_users_allowed_2, "Over 30K", class:"control-label" %>
+        <%= f.text_field :num_users_allowed_2, class:"form-control", maxlength:4 %>
+      </div>
+      
+      <div class="col-md-8">&nbsp;</div>      
+      </div>  
+  </div>
+  <div class="col-md-2"></div>
+</div>
+
+<div class="row form-group">
+  <div class="col-md-3 labelAlign"><label class:"control-label" for="status">Status</label></div>
+  <div class="col-md-7" id="status">
+    <%= f.check_box :active, class: 'checkbox-inline' %> <%= f.label :active, class:'control-label' %>
+  </div>
+  <div class="col-md-2"></div>    
+</div>
+
+<% if action_name == "edit" %>
+<div class="row form-group">
+  <div class="col-md-3 labelAlign"><label class:"control-label" for="created">Created</label></div>
+  <div class="col-md-7" id="created">
+    <input type="text" value="<%= @trkstransaction.pretty_created_at %>" class="form-control" readonly="readonly" title="Created Date">
+  </div>
+  <div class="col-md-2"></div>    
+</div>
+
+<div class="row form-group">
+  <div class="col-md-3 labelAlign"><label class:"control-label" for="updated">Updated</label></div>
+  <div class="col-md-7" id="updated">
+    <input type="text" value="<%= @trkstransaction.pretty_updated_at %>" class="form-control" readonly="readonly" title="Updated Date">
+  </div>
+  <div class="col-md-2"></div>    
+</div>
+<% end %>
+  
+<div class="row form-group">
+  <div class="col-md-offset-3 col-md-7">
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.submit ((action_name == "new" || action_name == "create") ? :create : :update), :class => "btn btn-default" %>
+      </div>
+      <div class="col-md-6" align="right">
+        <%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Cancel".html_safe, admin_trkstransactions_path, :title =>"cancel this edit" %>
+      </div>
+    </div>
+   </div>
+   <div class="col-md-2"></div>
+</div><br><br><br><br><br><br>
+<% end -%>

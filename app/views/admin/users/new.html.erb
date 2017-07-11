@@ -1,0 +1,82 @@
+<% @page_title="New User" %>
+
+ <h1>New User</h1>
+
+<% if @user.errors.any? %>
+<div class='status error' id="flashmsg" tabindex="0">
+<h3>The form did not process due to the <%= pluralize(@user.errors.count, "error") %> below:</h3>
+<ul>
+  <% @user.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+  <% end %>
+</ul>
+</div><br>
+<% end %>
+
+<div class="row">
+	<div class="col-md-12" align="right">
+		<h4><span class="required">*</span> = required field</h4><br>
+	</div>
+</div>
+
+<%= form_for([:admin, @user], class:'form') do |f| %>
+<div class="row form-group">
+	<div class="col-md-3">
+  	<%= f.label :samaccountname, "<span class='required'>*</span> samaccountname".html_safe, class:"control-label" %>
+  	<%= f.text_field :samaccountname, class:"form-control" %>
+	</div>
+
+	<div class="col-md-3">
+  	<%= f.label :first_name, "First Name", class:"control-label" %>
+  	<%= f.text_field :first_name, class:"form-control" %>
+	</div>
+
+	<div class="col-md-3">
+  	<%= f.label :last_name, "Last Name", class:"control-label" %>
+  	<%= f.text_field :last_name, class:"form-control" %>
+	</div>
+
+	<div class="col-md-3">
+	<%= f.label :active, "Status", class:"control-label" %>
+	<%= f.select :active, [["Active", true], ["Inactive", false]], {}, {:class => "form-control"} %>
+	</div>
+</div>
+
+<br>
+
+<div class="row form-group">
+	<div class="col-md-3">
+	<span class='required'>*</span> <label class="control-label" for="roles">Roles</label>
+		<div id="roles">
+		<%= hidden_field_tag "user[role_ids][]", nil %>
+		<% @role_list.each do |role| %>
+			<%= check_box_tag "user[role_ids][]", role.id, @user.role_ids.include?(role.id), id: dom_id(role), class:"checkbox-inline" %>
+			<%= label_tag dom_id(role), role.name %><br />
+		<% end -%>
+		<span class="help-block"><small class="help-block-uscis">System Administrator can manage the entire system. Reporter can only view the dashboard and staffing page.</small></span>
+		</div>
+	</div>
+
+	<div class="col-md-9">
+	<%= f.label :division_ids, "<span class='required'>*</span> Division".html_safe, class:"control-label" %>
+	<!--there are 2 arrays one for sys_admin and one for user_admin-->
+	<%= f.select :division_ids, (current_user.sys_admin? ? Division.all_options_array : Division.options_array(current_user.divisions.ids)), {}, {:size => 8, :multiple => true, :class => "form-control"} %>
+	<span class="help-block"><small class="help-block-uscis">Need to select all divisions for System Administrator role. Select all divisions for CIO/DCIO with Reporter role. All other Reporter role should select their respected division.</small></span>
+	</div>
+</div>
+
+<div class="row form-group">
+	<div class="col-md-12">
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<%= f.submit "Create", :class => "btn btn-default" %>
+			</div>
+			<div class="col-md-6" align="right">
+				<%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Cancel".html_safe, admin_users_path, :title =>"cancel" %>
+			</div>
+		</div>
+   </div>
+</div>
+<% end -%>
+<br><br><br><br>

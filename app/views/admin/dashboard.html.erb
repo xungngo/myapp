@@ -1,0 +1,81 @@
+<% @page_title="#{SITE_ACRONYM} Dashboard" %>
+
+<h1><%= SITE_ACRONYM %> Dashboard</h1><br>
+
+<div class="row" align="center">
+	<div class="col-md-12">
+		<form class="form-inline" name="locationform" action="#">
+		  <div class="form-group">
+			<label class="sr-only" for="location">Location Dropdown</label>
+		    <div class="input-group">
+		    	<div class="input-group-addon"><strong>Location</strong></div>
+				<select name="location" id="location" title="location" class="form-control">
+				<% @locations.each do |fco| %>
+					<option value="<%= fco.fcocode %>"<%= session[:current_fcocode] == fco.fcocode ? ' selected="selected"' : '' %>><%= fco.fcocode %> (<%= fco.fconame %>)&nbsp;&nbsp;</option>
+				<% end %>
+				</select>
+			</div>
+		  </div>
+		</form>
+	</div>
+</div><br>
+
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-4">
+		<fieldset>
+			<legend>CIS Reports</legend>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Report By Location".html_safe, admin_cis_location_path, :id => "cis_location", :class => "btn btn-default", :onclick => "addURL(this)" %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Detail Report By Location".html_safe, admin_cis_detail_location_path, :id => "cis_detail_location", :class => "btn btn-default", :onclick => "addURL(this)" %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Executive Summary Report".html_safe, admin_cis_executive_summary_path, :id => "cis_executive_summary", :class => "btn btn-default" %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Executive Summary Report (No Location)".html_safe, admin_cis_executive_summary_noloc_path, :id => "cis_executive_summary_noloc", :class => "btn btn-default" %></p>
+				</div>
+			</div>
+			<% if can? :manage, :all %>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Average Number of Users Report".html_safe, admin_cis_average_number_users_path, :id => "cis_average_number_users", :class => "btn btn-default" %></p>
+				</div>
+			</div>
+			<% end %>
+		</fieldset>
+  	</div>
+
+  	<div class="col-md-4">
+		<fieldset>
+			<legend>TRKS Reports</legend>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Report By Location".html_safe, admin_trks_location_path, :id => "trks_location", :class => "btn btn-default", :onclick => "addURL(this)" %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Detail Report By Location".html_safe, admin_trks_detail_location_path, :id => "trks_detail_location", :class => "btn btn-default", :onclick => "addURL(this)" %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p><%= link_to "<i class='glyphicon glyphicon-list'></i> Executive Summary Report".html_safe, admin_trks_executive_summary_path, :id => "trks_executive_summary", :class => "btn btn-default" %></p>
+				</div>
+			</div>
+		</fieldset>
+  	</div>
+  	<div class="col-md-2"></div>
+</div>
+
+<div style="height:100px">&nbsp;</div>

@@ -1,0 +1,12 @@
+TRKS: Report By Location (<%= params[:fco] %>)
+
+<% if @trks.length > 0 %>
+#,TRKS Transaction,Transaction Description,# of Users,# of Allowed Users
+<% @trks.each do |trks| %>
+<%= trks['currentrow'] %>,<%= trks['trans_name'] %>,<%= trks['trans_description'] %>,<%= trks['user_number'] %><% if (trks['user_number'].to_i > trks['user_allowed'].to_i) && !trks['user_allowed'].nil? %>*<% end %>,<%= trks['user_allowed'] %>
+<% end %>
+<% end %>
+
+Data Import: <%= @data_import.created_at.strftime("%b %Y") %>
+Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %>
+* = The number of users is greater than the number of allowed users

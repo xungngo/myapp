@@ -1,0 +1,61 @@
+<% @page_title="CIS: Detail Report By Location (#{params[:fco]})" %> 
+
+<h1>CIS: Detail Report By Location (<%= params[:fco] %>)</h1><br>
+
+<% if @cis.length > 0 %>
+<% if request.format.html? %>
+<div class="row">
+	<div class="col-md-6">
+		<%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Back to Dashboard".html_safe, home_path , :title =>"Back to Dashboard", :id => "back_link" %>
+	</div>	
+	<div class="col-md-6" align="right">
+		<%= link_to "<i class='glyphicon glyphicon-export'></i> Export to PDF".html_safe, url_for(:format => 'pdf', :fco => params[:fco]), :title =>"export to PDF" %>&nbsp;&nbsp;&nbsp;
+		<%= link_to "<i class='glyphicon glyphicon-export'></i> Export to CSV".html_safe, url_for(:format => 'csv', :fco => params[:fco]), :title =>"export to CSV" %>&nbsp;
+	</div>	
+</div>
+<% end %>
+	
+<table width="100%" class="table table-hover table-condensed">
+	<thead>	
+	<tr><td colspan="10"></td></tr>
+	<tr>
+		<th scope="col">#</th>     
+		<th scope="col">NAME</th>
+		<th scope="col" class="text_align_center">USER ID</th>
+		<th scope="col" class="text_align_center">REC CNT<sup>1</sup></th>
+		<% @cistransaction.each do |t| %>
+		<th scope="col" class="text_align_center"><%= t.name %></th>
+		<% end %>		
+	</tr>
+	</thead>
+	<tbody>
+		<% @cis.each do |cis| %>
+		<tr scope="row" class="appSmaller">
+			<td scope="row"><%= cis['currentrow'] %></td>
+			<td>
+				<% if request.format.html? %>
+					<%= link_to cis['fullname'], admin_mainframeusers_details_path(userid: cis['userid'], from: 'cis_detail_loc'), :title =>"#{cis['currentrow']}: #{cis['fullname']}" %>
+				<% else %>
+					<%= cis['fullname'] %>
+				<% end %>
+			</td>
+			<td class="text_align_center"><%= cis['userid'] %></td>
+			<td class="text_align_center"><%= cis['reccnt'] %></td>
+			<% ct = 0 %>
+			<% @cistransaction.each do |t| %>
+				<td class="text_align_center text_bold"><%= cis['transaction'][ct][t.name] %></td>
+				<% ct = ct + 1 %>
+			<% end %>			
+		</tr>
+		<% end %>
+	<tbody>
+</table>
+
+<div class="row">
+	<div class="col-md-12">Data Import: <%= @data_import.created_at.strftime("%b %Y") %>, Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %></div>
+	<div class="col-md-12"><sup>1</sup>The "REC CNT" column represents the number of times restricted transactions were used in the last year.</div>
+</div><br>
+
+<% else %>
+<div align="center"><br><br>No Record Found</div>
+<% end %>

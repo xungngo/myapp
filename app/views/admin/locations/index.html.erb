@@ -1,0 +1,41 @@
+<% @page_title="Locations (FCO)" %>
+
+<h1>Locations (FCO)</h1>
+
+<div class="row">
+	<div class="col-md-12">
+  	<table class="table table-hover">
+  		<thead>
+	  		<tr><td colspan="13" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Record".html_safe, new_admin_location_path, :title =>"new record" %></td></tr>
+	  		<tr>
+	  			<th scope="col">#</th>
+	  			<th scope="col">FCO Code</th>
+	  			<th scope="col">FCO Name</th>
+	  			<th scope="col">Directorate</th>
+	  			<th scope="col">Region</th>
+	  			<th scope="col" class="text-center">Agency</th>
+	  			<th scope="col" class="text-center">ActiveFile</th>
+	  			<th scope="col" class="text-center">Status</th>
+	  			<th scope="col" class="text-center">Option</th>
+	  		</tr>
+  		</thead>
+  		<tbody>
+  		<% currentrow = 0 %>
+  		<% @locations.each do |t| %>
+  			<% currentrow = currentrow + 1 %>
+  			<tr scope="row">
+  				<td scope="row"><%= currentrow %>)</td>
+  				<td><%= t.fcocode %></td>
+  				<td><%= t.fconame %></td>
+  				<td><%= t.directorate.name %></td>
+  				<td><%= t.region.name %></td>
+  				<td class="text-center"><%= t.agency.name %></td>
+  				<td class="text-center"><%= t.activefile %></td>
+  				<td class="text-center"><%= t.pretty_active %></td>
+  				<td class="text-center"><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_admin_location_path(t), :title =>"edit #{t.fconame}" %></td>
+  			</tr>
+  		<% end %>
+  		</tbody>
+  	</table>
+	</div>
+</div>

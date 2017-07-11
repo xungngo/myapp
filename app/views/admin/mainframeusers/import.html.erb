@@ -1,0 +1,56 @@
+<% @page_title="Import Mainframe Users" %>
+
+<h1>Import Mainframe Users</h1><br><br>
+
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-10 alert alert-info">
+		<p><strong>IMPORTANT! All data imports are resource intensive. Do not use multiple browsers/tabs to simultaneously run data imports.</strong></p>
+		<p>Provide a CSV file (<strong>.csv</strong> extension) or a zipped version of a CSV file (<strong>.zip</strong> extension) to import. It must have the same structure as this <strong><%= link_to "sample file", "mainframeusers_sample", title: "sample file" %></strong>.</p>
+		<p>There <strong>should not</strong> be a header row. There should be 8 columns of data.</p>
+	</div>
+	<div class="col-md-1"></div>
+</div><br><br>
+
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-5">
+		<%= form_tag admin_mainframeusersimport_path, id: :upload_form, multipart:true, remote:true, authenticity_token:true, class:"form", onsubmit:"return confirmImport('You are about to import Mainframe Users data into the system, proceed?')" do %>
+		<fieldset>
+			<legend><i class='glyphicon glyphicon-cloud-upload'></i> File To Import <span class="text_legend_span">(.zip | .csv)</span></legend>
+			<div class="row">
+				<div class="col-md-12">
+					<%= file_field_tag :file, title: "file upload", class:"form-control" %><br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<%= submit_tag "Import", id:"import_button", class:"btn btn-default" %>
+				</div>
+			</div>
+		</fieldset>
+		<% end -%>
+  	</div>
+
+  	<div class="col-md-5">
+		<fieldset>
+			<legend><i class='glyphicon glyphicon-flash'></i> Import Results</legend>
+			<div id="import_results">
+			<% if @success == true && @result.present? %>
+				<h2 style="color:green">Successful Import: "<%= @original_filename %>"</h2>
+				<p><strong style="color:green"><%= @result.added_records_count %></strong> records were added</p>
+			<% else %>
+				<% if @success == false && @extension_error.present? %>
+					<h2 style="color:red">Import Cancelled: "<%= @extension_error %>"</h2>
+					<p>The file you uploaded may not be a valid CSV file. You may be able to fix the file by opening it in Excel and resaving it as a new csv file.</p>
+				<% else %>
+					awaiting action...
+				<% end -%>
+			<% end -%>
+			</div>
+		</fieldset>
+  	</div>
+  	<div class="col-md-1"></div>
+</div>
+
+<br><br><br><br><br><br>

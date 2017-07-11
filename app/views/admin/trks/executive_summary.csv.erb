@@ -1,0 +1,12 @@
+TRKS: Executive Summary
+
+<% if @trks.length > 0 %>
+#,FCO<% @trkstransaction.each do |t| %>,<%= t.name %><% end %>
+<% @trks.each do |trks| %><% if trks['fco'].blank? %><% trks['fco'] = "N/A" %><% end %><%= trks['currentrow'] %>,<%= trks['fco'] %><% @trkstransaction.each do |t| %>,<% if trks['transaction'][t.name] == 0 %>0<% else %><%= trks['transaction'][t.name] %><%= trks["transaction"]["#{t.name}_highlighted"] %><% end %><% end %>
+<% end %>
+<% end %>
+
+Data Import: <%= @data_import.created_at.strftime("%b %Y") %>
+Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %>
+* = 7200 series transactions (not REC or COW).
+

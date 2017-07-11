@@ -1,0 +1,12 @@
+CIS: Report By Location (<%= params[:fco] %>)
+
+<% if @cis.length > 0 %>
+#,CIS Transaction,Transaction Description,# of Users,# of Allowed Users
+<% @cis.each do |cis| %>
+<%= cis['currentrow'] %>,<%= cis['trans_name'] %>,<%= cis['trans_description'] %>,<%= cis['user_number'] %><% if (cis['user_number'].to_i > cis['user_allowed'].to_i) && !cis['user_allowed'].nil? %>*<% end %>,<%= cis['user_allowed'] %>
+<% end %>
+<% end %>
+
+Data Import: <%= @data_import.created_at.strftime("%b %Y") %>
+Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %>
+* = The number of users is greater than the number of allowed users

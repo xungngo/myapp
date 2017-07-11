@@ -1,0 +1,64 @@
+<% if params[:fco].present? %>
+	<% title = "TRKS: Detailed Priv Report for Priv #{params[:trans]} & Location #{params[:fco]}" %>
+<% else %>
+	<% title = "TRKS: Detailed Priv Report for Priv #{params[:trans]}" %>
+<% end %>
+
+<% @page_title=title %> 
+
+<h1><%= title %></h1><br>
+
+<% if @trks.length > 0 %>
+<% if request.format.html? %>
+<div class="row">
+	<div class="col-md-6">
+		<%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Back To #{@back_to}".html_safe, home_path , :title =>"Back To #{@back_to}", :id => "back_link" %>
+	</div>	
+	<div class="col-md-6" align="right">
+		<%= link_to "<i class='glyphicon glyphicon-export'></i> Export to PDF".html_safe, url_for(:format => 'pdf', :fco => params[:fco], :trans => params[:trans]), :title =>"export to PDF" %>&nbsp;&nbsp;&nbsp;
+		<%= link_to "<i class='glyphicon glyphicon-export'></i> Export to CSV".html_safe, url_for(:format => 'csv', :fco => params[:fco], :trans => params[:trans]), :title =>"export to CSV" %>&nbsp;
+	</div>	
+</div>
+<% end %>
+		
+<table width="100%" class="table table-hover table-condensed">
+	<thead>	
+	<tr><td colspan="10"></td></tr>
+	<tr>
+		<th scope="col">#</th>     
+		<th scope="col">FIRST NAME</th>
+		<th scope="col">MIDDLE INIT</th>
+		<th scope="col">LAST NAME</th>
+		<th scope="col">USER ID</th>
+		<th scope="col">PRIV</th>
+		<th scope="col">RECORD COUNT</th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @trks.each do |trks| %>
+		<tr scope="row" class="appSmaller">			
+			<td scope="row"><%= trks['currentrow'] %></td>
+			<td><%= trks['firstname'] %></td>
+			<td><%= trks['middleinit'] %></td>
+			<td><%= trks['lastname'] %></td>
+			<td>
+				<% if request.format.html? %>
+					<%= link_to trks['userid'], admin_mainframeusers_details_path(userid: trks['userid'], from: 'trks'), :title => trks['userid'] %>
+				<% else %>
+					<%= trks['userid'] %>
+				<% end %>
+			</td>
+			<td><%= trks['privilege'] %></td>
+			<td><%= trks['usercount'] %></td>
+		</tr>		
+		<% end %>
+	<tbody>
+</table>
+
+<div class="row">
+	<div class="col-md-12">Data Import: <%= @data_import.created_at.strftime("%b %Y") %>, Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %></div>
+</div><br>
+
+<% else %>
+<div align="center"><br><br>No Record Found</div>
+<% end %>

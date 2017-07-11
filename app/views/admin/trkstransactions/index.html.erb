@@ -1,0 +1,37 @@
+<% @page_title="TRKS Transactions" %>
+
+<h1>TRKS Transactions</h1>
+
+<div class="row">
+	<div class="col-md-12">
+  	<table class="table table-hover">
+  		<thead>
+	  		<tr><td colspan="7" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Record".html_safe, new_admin_trkstransaction_path, :title =>"new record" %></td></tr>
+	  		<tr>
+	  			<th scope="col">#</th>
+	  			<th scope="col">Name</th>
+	  			<th scope="col">Description</th>
+	  			<th scope="col" class="text-center">Under 30K</th>
+	  			<th scope="col" class="text-center">Over 30K</th>
+	  			<th scope="col" class="text-center">Status</th>
+	  			<th scope="col" class="text-center">Option</th>
+	  		</tr>
+  		</thead>
+  		<tbody>
+  		<% currentrow = 0 %>
+  		<% @trkstransactions.each do |t| %>
+  			<% currentrow = currentrow + 1 %>
+  			<tr scope="row">
+  				<td scope="row"><%= currentrow %>)</td>
+  				<td><%= t.name %></td>
+  				<td><%= t.description %></td>
+  				<td class="text-center"><%= t.num_users_allowed_1 %></td>
+  				<td class="text-center"><%= t.num_users_allowed_2 %></td>
+  				<td class="text-center"><%= t.pretty_active %></td>
+  				<td class="text-center"><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_admin_trkstransaction_path(t), :title =>"edit #{t.name}" %></td>
+  			</tr>
+  		<% end %>
+  		</tbody>
+  	</table>
+	</div>
+</div>

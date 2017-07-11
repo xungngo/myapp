@@ -1,0 +1,8 @@
+<%= render "partials/email_header", :logo_filename => @logo_filename %>
+
+<h1><%= SITE_ACRONYM %>: New User Message</h1>
+<p>A new user <strong><%= @first_name %> <%= @last_name %></strong> was added to the system.</p>
+<p>The user is not active. You may log into the system with this link <%= SITE_URL %> to activate the user.</p>
+<p>To manage user accounts go to the user management page.</p>
+
+<%= render "partials/email_footer" %>

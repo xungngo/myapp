@@ -1,0 +1,11 @@
+CIS: Executive Summary (No Location)
+
+<% if @cis.length > 0 %>
+First Name,Middle Init,Last Name,User ID,Agency,Company Name,Office
+<% @cis.each do |cis| %>
+<%= cis.firstname %>,<%= cis.middleinit %>,<%= cis.lastname %>,<%= cis.userid %>,<%= cis.agency %>,<%= cis.company %>,<%= cis.office %>
+<% end %>
+<% end %>
+
+Data Import: <%= @data_import.created_at.strftime("%b %Y") %>
+Report Generated: <%= DateTime.now.strftime("%-m/%e/%Y %l:%M:%S %p ET") %>

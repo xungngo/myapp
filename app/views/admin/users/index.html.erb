@@ -1,0 +1,36 @@
+<% @page_title="Users" %>
+  	
+<h1>Users</h1><br>
+
+<div class="row bottom-margin-large">
+	<div class="col-md-12">	
+	<table class="table table-hover">
+		<thead>				
+			<tr>       		
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Email</th>
+		    	<th scope="col">Status</th>
+		    	<th scope="col">Role</th>
+				<th scope="col">Sign In #</th>
+				<th scope="col">Option</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% currentrow = 0 %>
+  		<% @users.each do |user| %>
+  			<% currentrow = currentrow + 1 %>
+  			<tr scope="row">
+  				<td scope="row"><%= currentrow %>)</td>
+  				<td><%= user.full_name_ad_style %></td>
+  				<td><%= user.email %></td>
+		    	<td><%= user.status %></td>
+		    	<td><%= user.roles[0].name %></td>
+				<td><%= user.sign_in_count %></td>
+				<td><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_admin_user_path(user), :id => "edit_"+user.id.to_s, :title =>"edit #{user.full_name_ad_style}" -%></td>
+			</tr>
+			<% end -%>
+		<tbody>
+	</table>
+	</div>
+</div>
