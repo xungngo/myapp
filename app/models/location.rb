@@ -1,15 +1,11 @@
 class Location < ActiveRecord::Base
-  belongs_to :agency
-  belongs_to :directorate
-  belongs_to :region
   has_many :user_location_mappings
   has_many :users, :through => :user_location_mappings
 
-  validates :fcocode, presence: {message: "The FCO Code field is required."}
-  validates :fcocode, uniqueness: {message: "The FCO Code field must be unique."}
-  validates :fconame, presence: {message: "The FCO Name field is required."}
-  validates :fconame, uniqueness: {message: "The FCO Name field must be unique."}
-  validates_numericality_of :activefile, message: "The ActiveFile field should be an integer.", :only_integer => true
+  validates :code, presence: {message: "The Location Code field is required."}
+  validates :code, uniqueness: {message: "The Location Code field must be unique."}
+  validates :name, presence: {message: "The Location Name field is required."}
+  validates :name, uniqueness: {message: "The Location Name field must be unique."}
 
   def pretty_active
     self.active ? "Active" : "Inactive"
@@ -24,7 +20,7 @@ class Location < ActiveRecord::Base
   end
 
   def self.all_options_array
-    self.all.order("fcocode ASC").collect {|x| ["#{x.fcocode} - #{x.fconame}", x.id]}
+    self.all.order("fcocode ASC").collect {|x| ["#{x.code} - #{x.name}", x.id]}
   end
 
   private
