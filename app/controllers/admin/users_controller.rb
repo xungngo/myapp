@@ -1,6 +1,6 @@
 class Admin::UsersController < ApplicationController
-	before_action :authenticate_user!
-  load_and_authorize_resource
+	#before_action :authenticate_user!
+  #load_and_authorize_resource
 
   #def user_params
   #  params.require(:user).permit(:samaccountname)
