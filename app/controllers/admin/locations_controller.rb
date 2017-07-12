@@ -1,5 +1,6 @@
 class Admin::LocationsController < ApplicationController
 
+=begin
   before_action :authenticate_user!
   load_and_authorize_resource #cancancan
 
@@ -53,5 +54,5 @@ private
     @directorates = Directorate.all.order(:name).where(:active => true)
     @regions = Region.all.order(:name).where(:active => true)
   end
-
+=end
 end
