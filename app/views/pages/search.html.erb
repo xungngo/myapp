@@ -1,0 +1,118 @@
+
+  <!-- SECTION 1 -->
+  <section id="mc-section-1" class="mc-section-1 section" style="padding:30px 10px; 30px; 10px;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Firstname</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="active">
+                <td>1</td>
+                <td>Anna</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Debbie</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>John</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="col-lg-6"><div id="map"></div></div>          
+        </div>
+      </div>
+  </section>
+  <!-- END / SECTION 1 -->
+
+  <!-- Load jQuery & Other Scripts -->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  <script>
+    var map;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 10,
+        center: new google.maps.LatLng(38.764590, -77.550688),
+        mapTypeId: 'roadmap'
+      });
+      
+      // Create a <script> tag and set the USGS URL as the source.
+      var script = document.createElement('script');
+      // This example uses a local copy of the GeoJSON stored at
+      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+      script.src = "https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js";
+      document.getElementsByTagName('head')[0].appendChild(script);
+    };
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+      for (var i = 0; i < results.features.length; i++) {
+        var coords = results.features[i].geometry.coordinates;
+        var latLng = new google.maps.LatLng(coords[1],coords[0]);
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+      };
+    };
+
+
+    $(document).ready(function() {
+      $("#searchButton").click(function(){
+        //var form_params = $("form").serialize();
+        var form_params = $("#keywordInput").val();
+        alert(form_params);
+        $.ajax({
+          type: "PUT",
+          url: "search_result",
+          data: form_params,
+          cache: false,
+          dataType: "json",
+          success: function(rtn_json) {
+            alert(rtn_json);
+            //addToMap(rtn_json);
+          }
+        });
+      });
+    });
+
+    /*
+    function submitPoll_1(frm){
+      
+      var datastr = $('##'+frm).serializeArray();
+      $.ajax({
+        type: 'POST',
+        url: '#application.action_url#/poll.cfm',
+        crossDomain: true,
+        data: datastr,
+        cache: false,
+        success: function(rtn_json) {
+          addToMap(rtn_json);
+        }
+      });
+      
+      function addToMap(rtn_json){
+        var obj = jQuery.parseJSON(rtn_json);
+        $('#pollformdiv_1').effect('fade', 100).hide();	
+        $('#pollanswerdiv_1').effect('fade', 2500).show();		
+        for (var i=1; i <= 10; i++){ 
+          var ans = 'obj.answer'+i;
+          var desc = 'obj.desc'+i;
+        }
+      };
+      		
+    };    
+    */
+  </script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap"></script>

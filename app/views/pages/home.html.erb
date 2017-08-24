@@ -11,7 +11,7 @@
                             <h2>Start Your Search Here</h2>
                             <p>Provide your training criteria and hit<br> the search button. If you can&#39;t find a trainer,<br> the trainer will find you.</p>
                             <div class="group">
-                                <a href="#" class="mc-btn btn-style-1">Find A Trainer</a>
+                                <a href="/search" class="mc-btn btn-style-1">Find A Trainer</a>
                             </div>
                         </div>
 
@@ -30,7 +30,7 @@
                             <h2>Let Trainers Find You!</h2>
                             <p>Annouce to the community what you want<br> to learn and let the community arrange<br> live training for you.</p>
                             <div class="group">
-                                <a href="#" class="mc-btn btn-style-1">Find A Trainer</a>
+                                <a href="/search" class="mc-btn btn-style-1">Find A Trainer</a>
                             </div>
                         </div>
 
@@ -47,51 +47,39 @@
     </section>
     <!-- END / HOME SLIDER -->
 
-
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+        google.maps.event.addDomListener(window, 'load', function () {
+            var places = new google.maps.places.Autocomplete(document.getElementById('location'));
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var latitude = place.geometry.location.A;
+                var longitude = place.geometry.location.F;
+                var mesg = "Address: " + address;
+                mesg += "\nLatitude: " + latitude;
+                mesg += "\nLongitude: " + longitude;
+                alert(mesg);
+            });
+        });
+    </script>
     <!-- AFTER SLIDER -->
     <section id="after-slider" class="after-slider section">
         <div class="awe-color bg-color-1"></div>
         <div class="after-slider-bg-2"></div>
         <div class="container">
-    
             <div class="after-slider-content tb">
                 <div class="inner tb-cell">
-                    <h4>Find your course</h4>
-                    <div class="mc-select-wrap">
-                        <div class="mc-select">
-                            <select class="select" name="" id="industries">
-                                <option value="" selected>Computers and Technology</option>
-                                <option value="">Health Care and Allied Health</option>
-                                <option value="">Education and Social Services</option>
-                                <option value="">Arts and Communications</option>
-                                <option value="">Trades and Transportation</option>
-                                <option value="">Management, Business, and Finance</option>
-                                <option value="">Architecture and Civil Engineering</option>
-                                <option value="">Science</option>
-                                <option value="">Hospitality, Tourism, and the Service Industry</option>
-                                <option value="">Law and Law Enforcement</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="course-keyword">
                         <input type="text" placeholder="Course keyword">
                     </div>
-                    <div class="mc-select-wrap">
-                        <div class="mc-select">
-                            <select class="select" name="" id="all-locations">
-                                <option value="" selected>All Locations</option>
-                                <option value="">Washington DC</option>
-                                <option value="">Maryland</option>
-                                <option value="">Baltimore</option>
-                                <option value="">Northern Virginia</option>
-                                <option value="">Norfolk</option>
-                            </select>
-                        </div>
+                    <div class="home-search-location">
+                        <input type="text" id="location" placeholder="Enter a location">
                     </div>
                 </div>
                 <div class="tb-cell text-right">
                     <div class="form-actions">
-                        <input type="submit" value="Find Course" class="mc-btn btn-style-1">
+                        <input type="submit" value="Find Classes" class="mc-btn btn-style-1">
                     </div>
                 </div>
             </div>

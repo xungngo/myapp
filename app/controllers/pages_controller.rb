@@ -4,4 +4,8 @@ class PagesController < ApplicationController
      # return redirect_to admin_dashboard_path
     #end
   end
+
+  def getmarker
+    sdfsd
+  end
 end
