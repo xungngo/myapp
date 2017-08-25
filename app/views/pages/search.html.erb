@@ -4,30 +4,11 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Firstname</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="active">
-                <td>1</td>
-                <td>Anna</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Debbie</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>John</td>
-              </tr>
-            </tbody>
-          </table>
+            <div id="search-list"></div>
           </div>
-          <div class="col-lg-6"><div id="map"></div></div>          
+          <div class="col-lg-6">
+            <div id="map"></div>
+          </div>          
         </div>
       </div>
   </section>
@@ -44,75 +25,61 @@
         center: new google.maps.LatLng(38.764590, -77.550688),
         mapTypeId: 'roadmap'
       });
-      
-      // Create a <script> tag and set the USGS URL as the source.
-      var script = document.createElement('script');
-      // This example uses a local copy of the GeoJSON stored at
-      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-      script.src = "https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js";
-      document.getElementsByTagName('head')[0].appendChild(script);
     };
-    
-    // Loop through the results array and place a marker for each
-    // set of coordinates.
-    window.eqfeed_callback = function(results) {
-      for (var i = 0; i < results.features.length; i++) {
-        var coords = results.features[i].geometry.coordinates;
-        var latLng = new google.maps.LatLng(coords[1],coords[0]);
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map
-        });
-      };
-    };
-
 
     $(document).ready(function() {
       $("#searchButton").click(function(){
-        //var form_params = $("form").serialize();
-        var form_params = $("#keywordInput").val();
-        alert(form_params);
+        var form_params = $("input[name^='input_']").serialize();
         $.ajax({
-          type: "PUT",
+          type: "GET",
           url: "search_result",
           data: form_params,
           cache: false,
           dataType: "json",
-          success: function(rtn_json) {
-            alert(rtn_json);
-            //addToMap(rtn_json);
+          success: function(data) {
+            addToMap(data);
+            addToList(data);
+          },
+          error: function() {
+            alert("Request Error! Please refresh the page.")
           }
         });
       });
     });
 
-    /*
-    function submitPoll_1(frm){
+    function addToMap(data){
+      for (var i=0; i<data.length; i++){
+        var dataRow = data[i]
+        var latLng = new google.maps.LatLng(dataRow.latitude,dataRow.longitude);
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+      }
+    };
+
+    function addToList(data){
+      container = $('#search-list');
+      $.each(data,function(i,data){
+          // Create DOM
+          var item = $('<div>').addClass('search-item'),
+              name = $('<h1>'),
+              addr = $('<p>'),
+              link = $('<a>');
       
-      var datastr = $('##'+frm).serializeArray();
-      $.ajax({
-        type: 'POST',
-        url: '#application.action_url#/poll.cfm',
-        crossDomain: true,
-        data: datastr,
-        cache: false,
-        success: function(rtn_json) {
-          addToMap(rtn_json);
-        }
-      });
+          // Add to DOM
+          link.attr('href','http://www.google.com').text(data.name).appendTo(name);
       
-      function addToMap(rtn_json){
-        var obj = jQuery.parseJSON(rtn_json);
-        $('#pollformdiv_1').effect('fade', 100).hide();	
-        $('#pollanswerdiv_1').effect('fade', 2500).show();		
-        for (var i=1; i <= 10; i++){ 
-          var ans = 'obj.answer'+i;
-          var desc = 'obj.desc'+i;
-        }
-      };
-      		
-    };    
-    */
+          addr.text(data.address);
+      
+          // Append the infos to the item
+          item.append(name,addr);
+      
+          // Append the item to the container
+          item.appendTo(container);
+      });      
+      //$('#search-list').effect('fade', 100).show();
+    };
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap"></script>

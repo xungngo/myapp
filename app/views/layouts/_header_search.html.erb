@@ -21,11 +21,10 @@
     /* DOCTYPE on line 1 defines this as html5. When map height is 100% google map doesn't showing up. A fix height will solve the problem but we want the height to be 100%. */
     #map {height: 758px;}
     /* Optional: Makes the sample page fill the window. */
-    html, body, {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    }
+    html, body, {height:100%; margin:0; padding:0;}
+
+    #search-list {height:758px; padding:20px; overflow:auto;}
+    .search-item {background-color:#dedede; padding:10px; margin-bottom:20px;}
     </style>
   </head>
 
@@ -62,10 +61,10 @@
 
                 <!-- MENU -->
                 <ul class="menu">
-                    <li class="search-input-keyword"><input type="text" id="keywordInput" placeholder="Course keyword"></li>
-                    <li class="search-input-location"><input type="text" id="addressInput" placeholder="Enter a location"></li>
+                    <li class="search-input-keyword"><input type="text" name="input_keyword" id="input_keyword" placeholder="Course keyword"></li>
+                    <li class="search-input-location"><input type="text" name="input_address" id="input_address" placeholder="Enter a location"></li>
                     <li>
-                        <input type="hidden" id="radiusSelect" value="30">
+                        <input type="hidden" name="input_radius" id="input_radius" value="30">
                         <input type="submit" id="searchButton" value="Find Classes" class="mc-btn btn-style-1">
                     </li>
 

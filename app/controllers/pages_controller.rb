@@ -5,7 +5,8 @@ class PagesController < ApplicationController
     #end
   end
 
-  def getmarker
-    sdfsd
+  def getmarkers
+    @markers = Marker.all
+    render :json => @markers.as_json
   end
 end
