@@ -8,6 +8,11 @@
           </div>
           <div class="col-lg-6">
             <div id="map"></div>
+            <div id="infowindow-content">
+              <img src="" width="16" height="16" id="place-icon">
+              <span id="place-name" class="title"></span><br>
+              <span id="place-address"></span>
+            </div>
           </div>          
         </div>
       </div>
@@ -24,6 +29,54 @@
         zoom: 10,
         center: new google.maps.LatLng(38.764590, -77.550688),
         mapTypeId: 'roadmap'
+      });
+
+      var input_address = document.getElementById("input_address");
+      var autocomplete = new google.maps.places.Autocomplete(input_address);
+      autocomplete.bindTo('bounds', map);
+
+      var infowindow = new google.maps.InfoWindow();
+      var infowindowContent = document.getElementById('infowindow-content');
+      infowindow.setContent(infowindowContent);
+      var marker = new google.maps.Marker({
+        map: map,
+        anchorPoint: new google.maps.Point(0, -29)
+      });
+      
+      autocomplete.addListener('place_changed', function() {
+        infowindow.close();
+        marker.setVisible(false);
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          // User entered the name of a Place that was not suggested and
+          // pressed the Enter key, or the Place Details request failed.
+          window.alert("No details available for input: '" + place.name + "'");
+          return;
+        }
+    
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+        }
+        map.setZoom(10);
+        marker.setPosition(place.geometry.location);
+        marker.setVisible(true);
+    
+        var address = '';
+        if (place.address_components) {
+          address = [
+            (place.address_components[0] && place.address_components[0].short_name || ''),
+            (place.address_components[1] && place.address_components[1].short_name || ''),
+            (place.address_components[2] && place.address_components[2].short_name || '')
+          ].join(' ');
+        }
+    
+        infowindowContent.children['place-icon'].src = place.icon;
+        infowindowContent.children['place-name'].textContent = place.name;
+        infowindowContent.children['place-address'].textContent = address;
+        infowindow.open(map, marker);
       });
     };
 
@@ -59,27 +112,20 @@
     };
 
     function addToList(data){
-      container = $('#search-list');
+      container = $('#search-list').empty();
       $.each(data,function(i,data){
-          // Create DOM
-          var item = $('<div>').addClass('search-item'),
-              name = $('<h1>'),
-              addr = $('<p>'),
-              link = $('<a>');
-      
-          // Add to DOM
-          link.attr('href','http://www.google.com').text(data.name).appendTo(name);
-      
-          addr.text(data.address);
-      
-          // Append the infos to the item
-          item.append(name,addr);
-      
-          // Append the item to the container
-          item.appendTo(container);
+        // Create DOM
+        var item = $('<div>').addClass('search-item'),
+          header = $('<h1>'),
+          addr = $('<p>'),
+          link = $('<a>');
+        link.attr('href','http://www.google.com').text(data.name).appendTo(header);
+        addr.text(data.address);
+        item.append(header,addr); // Append the infos to the item
+        item.appendTo(container); // Append the item to the container
       });      
       //$('#search-list').effect('fade', 100).show();
     };
   </script>
 
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
