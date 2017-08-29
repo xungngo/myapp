@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   end
 
   def getmarkers
-    @markers = Marker.all
+    @markers = Marker.where("name LIKE (?)", "%#{params[:input_keyword]}%")
     render :json => @markers.as_json
   end
 end

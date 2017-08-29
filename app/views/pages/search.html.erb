@@ -77,12 +77,16 @@
         infowindowContent.children['place-name'].textContent = place.name;
         infowindowContent.children['place-address'].textContent = address;
         infowindow.open(map, marker);
+
+        $("#input_latitude").val(place.geometry.location.lat());
+        $("#input_longitude").val(place.geometry.location.lng());
       });
     };
 
     $(document).ready(function() {
       $("#searchButton").click(function(){
         var form_params = $("input[name^='input_']").serialize();
+        alert(form_params);
         $.ajax({
           type: "GET",
           url: "search_result",
