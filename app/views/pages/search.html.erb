@@ -24,6 +24,7 @@
 
   <script>
     var map;
+    var markers = [];
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
@@ -86,7 +87,7 @@
     $(document).ready(function() {
       $("#searchButton").click(function(){
         var form_params = $("input[name^='input_']").serialize();
-        alert(form_params);
+        //alert(form_params);
         $.ajax({
           type: "GET",
           url: "search_result",
@@ -105,6 +106,7 @@
     });
 
     function addToMap(data){
+      deleteMarkers();
       for (var i=0; i<data.length; i++){
         var dataRow = data[i]
         var latLng = new google.maps.LatLng(dataRow.latitude,dataRow.longitude);
@@ -112,6 +114,7 @@
           position: latLng,
           map: map
         });
+        markers.push(marker);
       }
     };
 
@@ -130,6 +133,14 @@
       });      
       //$('#search-list').effect('fade', 100).show();
     };
+
+    function deleteMarkers() {
+      //Loop through all the markers and remove
+      for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+      }
+      markers = [];
+  };    
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
