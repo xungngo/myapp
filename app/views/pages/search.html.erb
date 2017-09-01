@@ -41,6 +41,7 @@
       infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
+        draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
       
@@ -72,7 +73,7 @@
             (place.address_components[1] && place.address_components[1].short_name || ''),
             (place.address_components[2] && place.address_components[2].short_name || '')
           ].join(' ');
-        }
+        };
     
         infowindowContent.children['place-icon'].src = place.icon;
         infowindowContent.children['place-name'].textContent = place.name;
@@ -81,6 +82,16 @@
 
         $("#input_latitude").val(place.geometry.location.lat());
         $("#input_longitude").val(place.geometry.location.lng());
+      });
+
+      // marker dragging
+      google.maps.event.addListener(marker, 'dragend', function(evt){
+        current_lat = evt.latLng.lat().toFixed(6);
+        current_long = evt.latLng.lng().toFixed(6);
+        map.setCenter(marker.position);
+        marker.setMap(map);
+        map.setZoom(10);
+        alert(current_lat + ' | ' + current_long);
       });
     };
 
@@ -135,7 +146,6 @@
     };
 
     function deleteMarkers() {
-      //Loop through all the markers and remove
       for (var i = 0; i < markers.length; i++) {
           markers[i].setMap(null);
       }
