@@ -1,0 +1,409 @@
+<% @page_title="Sign In" %>
+
+    <!-- HOME SLIDER -->
+    <section class="slide" style="background-image: url(<%= asset_path('bg.jpg') %>)">
+        <div class="container">
+            <div class="slide-cn" id="slide-home">
+                <!-- SLIDE ITEM -->
+                <div class="slide-item">
+                    <div class="item-inner">
+                        <div class="text">
+                            <h2>Start Your Search Here</h2>
+                            <p>Provide your training criteria and hit<br> the search button. If you can&#39;t find a trainer,<br> the trainer will find you.</p>
+                            <div class="group">
+                                <a href="/search" class="mc-btn btn-style-1">Find A Trainer</a>
+                            </div>
+                        </div>
+
+                        <div class="img">
+                            <%= image_tag "group_cooking.jpg" %>
+                        </div>
+                    </div>
+
+                </div>  
+                <!-- SLIDE ITEM -->     
+
+                <!-- SLIDE ITEM -->
+                <div class="slide-item">
+                    <div class="item-inner">
+                        <div class="text">
+                            <h2>Let Trainers Find You!</h2>
+                            <p>Annouce to the community what you want<br> to learn and let the community arrange<br> live training for you.</p>
+                            <div class="group">
+                                <a href="/search" class="mc-btn btn-style-1">Find A Trainer</a>
+                            </div>
+                        </div>
+
+                        <div class="img">
+                            <%= image_tag "group_study.png" %>
+                        </div>
+
+                    </div>  
+                </div>  
+                <!-- SLIDE ITEM -->  
+
+            </div>
+        </div>
+    </section>
+    <!-- END / HOME SLIDER -->
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+        google.maps.event.addDomListener(window, 'load', function () {
+            var places = new google.maps.places.Autocomplete(document.getElementById('location'));
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var latitude = place.geometry.location.A;
+                var longitude = place.geometry.location.F;
+                var mesg = "Address: " + address;
+                mesg += "\nLatitude: " + latitude;
+                mesg += "\nLongitude: " + longitude;
+                alert(mesg);
+            });
+        });
+    </script>
+    <!-- AFTER SLIDER -->
+    <section id="after-slider" class="after-slider section">
+        <div class="awe-color bg-color-1"></div>
+        <div class="after-slider-bg-2"></div>
+        <div class="container">
+            <div class="after-slider-content tb">
+                <div class="inner tb-cell">
+                    <div class="course-keyword">
+                        <input type="text" placeholder="Course keyword">
+                    </div>
+                    <div class="home-search-location">
+                        <input type="text" id="location" placeholder="Enter a location">
+                    </div>
+                </div>
+                <div class="tb-cell text-right">
+                    <div class="form-actions">
+                        <input type="submit" value="Find Classes" class="mc-btn btn-style-1">
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </section>
+    <!-- END / AFTER SLIDER -->
+    
+    <!-- SECTION 1 -->
+    <section id="mc-section-1" class="mc-section-1 section">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-5">
+                    <div class="mc-section-1-content-1"> 
+                        <h2 class="big">Online And Offline Training Course Management</h2>
+                        <p class="mc-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                        <a href="#" class="mc-btn btn-style-1">About us</a>
+                    </div>
+                </div>
+    
+                <div class="col-md-6 col-lg-offset-1">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="featured-item">
+                                <i class="icon icon-featured-1"></i>
+                                <h4 class="title-box text-uppercase">CLEAN AND EASY</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam  tincidunt ut laoreet</p>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-6">
+                            <div class="featured-item">
+                                <i class="icon icon-featured-2"></i>
+                                <h4 class="title-box text-uppercase">TEACH AS YOU CAN</h4>
+                                <p> Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit</p>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-6">
+                            <div class="featured-item">
+                                <i class="icon icon-featured-3"></i>
+                                <h4 class="title-box text-uppercase">COMMUNITY SUPPORT</h4>
+                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat</p>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-6">
+                            <div class="featured-item">
+                                <i class="icon icon-featured-4"></i>
+                                <h4 class="title-box text-uppercase">TRACKING PERFORMANCE</h4>
+                                <p> Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+    <!-- END / SECTION 1 -->
+    
+    
+    
+    <!-- SECTION 2 -->
+    <section id="mc-section-2" class="mc-section-2 section">
+        <div class="awe-parallax bg-section1-demo"></div>
+        <div class="overlay-color-1"></div>
+        <div class="container">
+            <div class="section-2-content">
+                <div class="row">
+                    
+                    <div class="col-md-5">
+                        <div class="ct">
+                            <h2 class="big">Learning online is easier than ever before</h2>
+                            <p class="mc-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                            <a href="#" class="mc-btn btn-style-3">See how it work</a>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-7">
+                        <div class="image">
+                            <%= image_tag 'image.png' %>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END / SECTION 2 -->
+    
+    
+    <!-- SECTION 3 -->
+    <section id="mc-section-3" class="mc-section-3 section">
+        <div class="container">
+            <!-- FEATURE -->
+            <div class="feature-course">
+                <h4 class="title-box text-uppercase">FEATURE COURSE</h4>
+                <a href="categories.html" class="all-course mc-btn btn-style-1">View all</a>
+                <div class="row">
+                    <div class="feature-slider">
+                        <div class="mc-item mc-item-1">
+                            <div class="image-heading">
+                                <%= image_tag 'feature/img-1.jpg' %>
+                            </div>
+                            <div class="meta-categories"><a href="#">Web design</a></div>
+                            <div class="content-item">
+                                <div class="image-author">
+                                    <%= image_tag 'avatar-1.jpg' %>
+                                </div>
+                                <h4><a href="course-intro.html">The Complete Digital Photography Course Amazon Top Seller</a></h4>
+                                <div class="name-author">
+                                    By <a href="#">Name of Mr or Mrs</a>
+                                </div>
+                            </div>
+                            <div class="ft-item">
+                                <div class="rating">
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#"></a>
+                                    <a href="#"></a>
+                                </div>
+                                <div class="view-info">
+                                    <i class="icon md-users"></i>
+                                    2568
+                                </div>
+                                <div class="comment-info">
+                                    <i class="icon md-comment"></i>
+                                    25
+                                </div>
+                                <div class="price">
+                                    $190
+                                    <span class="price-old">$134</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mc-item mc-item-1">
+                            <div class="image-heading">
+                                <%= image_tag 'feature/img-1.jpg' %>
+                            </div>
+                            <div class="meta-categories"><a href="#">Web design</a></div>
+                            <div class="content-item">
+                                <div class="image-author">
+                                    <%= image_tag 'avatar-1.jpg' %>
+                                </div>
+                                <h4><a href="course-intro.html">The Complete Digital Photography Course Amazon Top Seller</a></h4>
+                                <div class="name-author">
+                                    <span>By <a href="#">Name of Mr or Mrs</a></span>
+                                </div>
+                            </div>
+                            <div class="ft-item">
+                                <div class="rating">
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#"></a>
+                                    <a href="#"></a>
+                                </div>
+                                <div class="view-info">
+                                    <i class="icon md-users"></i>
+                                    2568
+                                </div>
+                                <div class="comment-info">
+                                    <i class="icon md-comment"></i>
+                                    25
+                                </div>
+                                <div class="price">
+                                    Free
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mc-item mc-item-1">
+                            <div class="image-heading">
+                                <%= image_tag 'feature/img-1.jpg' %>
+                            </div>
+                            <div class="meta-categories"><a href="#">Web design</a></div>
+                            <div class="content-item">
+                                <div class="image-author">
+                                    <%= image_tag 'avatar-1.jpg' %>
+                                </div>
+                                <h4><a href="course-intro.html">The Complete Digital Photography Course Amazon Top Seller</a></h4>
+                                <div class="name-author">
+                                    <span>By <a href="#">Name of Mr or Mrs</a></span>
+                                </div>
+                            </div>
+                            <div class="ft-item">
+                                <div class="rating">
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#"></a>
+                                    <a href="#"></a>
+                                </div>
+                                <div class="view-info">
+                                    <i class="icon md-users"></i>
+                                    2568
+                                </div>
+                                <div class="comment-info">
+                                    <i class="icon md-comment"></i>
+                                    25
+                                </div>
+                                <div class="price">
+                                    $190
+                                    <span class="price-old">$134</span>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mc-item mc-item-1">
+                            <div class="image-heading">
+                                <%= image_tag 'feature/img-1.jpg' %>
+                            </div>
+                            <div class="meta-categories"><a href="#">Web design</a></div>
+                            <div class="content-item">
+                                <div class="image-author">
+                                    <%= image_tag 'avatar-1.jpg' %>
+                                </div>
+                                <h4><a href="course-intro.html">The Complete Digital Photography Course Amazon Top Seller</a></h4>
+                                <div class="name-author">
+                                    <span>By <a href="#">Name of Mr or Mrs</a></span>
+                                </div>
+                            </div>
+                            <div class="ft-item">
+                                <div class="rating">
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#"></a>
+                                    <a href="#"></a>
+                                </div>
+                                <div class="view-info">
+                                    <i class="icon md-users"></i>
+                                    2568
+                                </div>
+                                <div class="comment-info">
+                                    <i class="icon md-comment"></i>
+                                    25
+                                </div>
+                                <div class="price">
+                                    $190
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mc-item mc-item-1">
+                            <div class="image-heading">
+                                <%= image_tag 'feature/img-1.jpg' %>
+                            </div>
+                            <div class="meta-categories"><a href="#">Web design</a></div>
+                            <div class="content-item">
+                                <div class="image-author">
+                                    <%= image_tag 'avatar-1.jpg' %>
+                                </div>
+                                <h4><a href="course-intro.html">The Complete Digital Photography Course Amazon Top Seller</a></h4>
+                                <div class="name-author">
+                                    <span>By <a href="#">Name of Mr or Mrs</a></span>
+                                </div>
+                            </div>
+                            <div class="ft-item">
+                                <div class="rating">
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#" class="active"></a>
+                                    <a href="#"></a>
+                                    <a href="#"></a>
+                                </div>
+                                <div class="view-info">
+                                    <i class="icon md-users"></i>
+                                    2568
+                                </div>
+                                <div class="comment-info">
+                                    <i class="icon md-comment"></i>
+                                    25
+                                </div>
+                                <div class="price">
+                                    $190
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END / FEATURE -->
+        </div>
+    </section>
+    <!-- END / SECTION 3 -->
+    
+    
+    
+    <!-- BEFORE FOOTER -->
+    <section id="before-footer" class="before-footer">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-8">
+                    <div class="mc-count-item">
+                         <h4>Courses</h4>
+                         <p><span class="countup">2536,556</span></p>
+                     </div>
+                     <div class="mc-count-item">
+                         <h4>Teachers</h4>
+                         <p><span class="countup">10,389</span></p>
+                     </div>
+                     <div class="mc-count-item">
+                         <h4>Students</h4>
+                         <p><span class="countup">34,177</span></p>
+                     </div>
+                     <div class="mc-count-item">
+                         <h4>Tuition Paid</h4>
+                         <p>$ <span class="countup">793,361,890</span></p>
+                     </div>
+                </div>
+    
+                <div class="col-lg-4">
+                    <div class="before-footer-link">
+                        <a href="#" class="mc-btn btn-style-2">Become a member</a>
+                        <a href="#" class="mc-btn btn-style-1">Become a teacher</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END / BEFORE FOOTER -->
+
+</div>
