@@ -1,6 +1,6 @@
 
   <!-- SECTION 1 -->
-  <section id="mc-section-1" class="mc-section-1 section" style="padding:30px 10px; 30px; 10px;">
+  <section id="mc-section-1" class="mc-section-1 section" style="padding:20px 0px; 20px; 0px;">
       <div class="container">
         <div class="row">
           <div class="col-lg-6 table-responsive">
@@ -133,16 +133,19 @@
       container = $('#search-list').empty();
       $.each(data,function(i,data){
         // Create DOM
-        var item = $('<div>').addClass('search-item'),
-          header = $('<h1>'),
+        var item = $('<div class="col-md-4 table-responsive">').addClass('search-item'),
+          header = $('<h2>'),
           addr = $('<p>'),
           link = $('<a>');
         link.attr('href','http://www.google.com').text(data.name).appendTo(header);
         addr.text(data.address);
         item.append(header,addr); // Append the infos to the item
         item.appendTo(container); // Append the item to the container
-      });      
-      //$('#search-list').effect('fade', 100).show();
+      });
+      var divs = $("#search-list > div");
+      for(var i = 0; i < divs.length; i+=3) {
+        divs.slice(i, i+3).wrapAll("<div class='row'></div>");
+      };
     };
 
     function deleteMarkers() {
