@@ -41,6 +41,7 @@
       infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
+        icon: '/you.png',
         draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
@@ -127,6 +128,7 @@
         var latLng = new google.maps.LatLng(dataRow.latitude,dataRow.longitude);
         var marker = new google.maps.Marker({
           position: latLng,
+          icon: '/teacher.png',
           map: map
         });
         markers.push(marker);
