@@ -79,7 +79,8 @@
         infowindowContent.children['place-name'].textContent = place.name;
         infowindowContent.children['place-address'].textContent = address;
         infowindow.open(map, marker);
-
+        
+        //put cordinate into hidden form fields
         $("#input_latitude").val(place.geometry.location.lat());
         $("#input_longitude").val(place.geometry.location.lng());
       });
