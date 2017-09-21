@@ -1,6 +1,6 @@
 
   <!-- SECTION 1 -->
-  <section id="mc-section-1" class="mc-section-1 section" style="padding:30px 10px; 30px; 10px;">
+  <section id="mc-section-1" class="mc-section-1 section" style="padding:20px 0px; 20px; 0px;">
       <div class="container">
         <div class="row">
           <div class="col-lg-6 table-responsive">
@@ -41,6 +41,7 @@
       infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
+        icon: '/you.png',
         draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
@@ -92,58 +93,67 @@
         map.setCenter(marker.position);
         marker.setMap(map);
         map.setZoom(10);
-        alert(current_lat + ' | ' + current_long);
+        //reverse geocode and resubmit
+        getAddress(current_lat, current_long);
       });
     };
 
     $(document).ready(function() {
       $("#searchButton").click(function(){
-        var form_params = $("input[name^='input_']").serialize();
-        //alert(form_params);
-        $.ajax({
-          type: "GET",
-          url: "search_result",
-          data: form_params,
-          cache: false,
-          dataType: "json",
-          success: function(data) {
-            addToMap(data);
-            addToList(data);
-          },
-          error: function() {
-            alert("Request Error! Please refresh the page.")
-          }
-        });
+        submitSearch();
       });
     });
 
-    function addToMap(data){
+    function submitSearch() {
+      var form_params = $("input[name^='input_']").serialize();
+      $.ajax({
+        type: "GET",
+        url: "search_result",
+        data: form_params,
+        cache: false,
+        dataType: "json",
+        success: function(data) {
+          renderMap(data);
+          renderList(data);
+        },
+        error: function() {
+          alert("Request Error! Please refresh the page.")
+        }
+      });
+    };
+
+    function renderMap(data){
       deleteMarkers();
       for (var i=0; i<data.length; i++){
         var dataRow = data[i]
         var latLng = new google.maps.LatLng(dataRow.latitude,dataRow.longitude);
         var marker = new google.maps.Marker({
           position: latLng,
+          icon: '/teacher.png',
           map: map
         });
         markers.push(marker);
       }
     };
 
-    function addToList(data){
+    function renderList(data){
       container = $('#search-list').empty();
       $.each(data,function(i,data){
         // Create DOM
-        var item = $('<div>').addClass('search-item'),
-          header = $('<h1>'),
+        var item = $('<div class="col-md-4 table-responsive">').addClass('search-item'),
+          header = $('<h2>'),
           addr = $('<p>'),
           link = $('<a>');
         link.attr('href','http://www.google.com').text(data.name).appendTo(header);
         addr.text(data.address);
         item.append(header,addr); // Append the infos to the item
         item.appendTo(container); // Append the item to the container
-      });      
-      //$('#search-list').effect('fade', 100).show();
+      });
+      // spread it 3 items per row
+      var divs = $("#search-list > div");
+      for(var i = 0; i < divs.length; i+=3) {
+        divs.slice(i, i+3).wrapAll("<div class='row'></div>");
+      };
     };
 
     function deleteMarkers() {
@@ -151,7 +161,21 @@
           markers[i].setMap(null);
       }
       markers = [];
-  };    
+    };
+
+    function getAddress(lat, lng) {
+      var latlng = new google.maps.LatLng(lat, lng);
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+              geo_address = results[0].formatted_address;
+              $("#input_address").val(geo_address);
+              $("#input_latitude").val(lat);
+              $("#input_longitude").val(lng);
+              submitSearch();
+          };
+      });
+    };
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
