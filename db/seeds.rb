@@ -1,18 +1,20 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
-Marker.create([{name: 'Heir Apparel', address: 'Crowea Pl, Frenchs Forest NSW 2086', latitude: '-33.737885', longitude: '151.235260', active: true},
-               {name: 'BeeYourself Clothing', address: 'Thalia St, Hassall Grove NSW 2761', latitude: '-33.729752', longitude: '150.836090', active: true},
-               {name: 'Dress Code', address: 'Glenview Avenue, Revesby, NSW 2212', latitude: '-33.949448', longitude: '151.008591', active: true},
-               {name: 'The Legacy', address: 'Charlotte Ln, Chatswood NSW 2067', latitude: '-33.796669', longitude: '151.183609', active: true},
-               {name: 'Fashiontasia', address: 'Braidwood Dr, Prestons NSW 2170', latitude: '-33.944489', longitude: '150.854706', active: true},
-               {name: 'Trish & Tash', address: 'Lincoln St, Lane Cove West NSW 2066', latitude: '-33.812222', longitude: '151.143707', active: true},
-               {name: 'Perfect Fit', address: 'Darley Rd, Randwick NSW 2031', latitude: '-33.903557', longitude: '151.237732', active: true},
-               {name: 'Buena Ropa!', address: 'Brodie St, Rydalmere NSW 2116', latitude: '-33.815521', longitude: '151.026642', active: true},
-               {name: 'Coxcomb and Lily Boutique', address: 'Ferrers Rd, Horsley Park NSW 2175', latitude: '-33.829525', longitude: '150.873764', active: true},
-               {name: 'Moda Couture', address: 'Northcote Rd, Glebe NSW 2037', latitude: '-33.873882', longitude: '151.177460', active: true}])
+Marker.create!([
+  {name: "Manassas Park", address: "Manassas Park VA US", latitude: "38.784003", longitude: "-77.469711", active: true},
+  {name: "Manassas Mall", address: "8300 Sudley Rd Manassas", latitude: "38.773324", longitude: "-77.505326", active: true},
+  {name: "Manassas National Battlefield Park", address: "6511 Sudley Rd Manassas", latitude: "38.813412", longitude: "-77.522168", active: true},
+  {name: "Lake Manassas Drive", address: "Lake Manassas Dr Gainesville Brentsville", latitude: "38.786115", longitude: "-77.646402", active: true},
+  {name: "Manassas Downtown Post Office", address: "9108 Church St Manassas", latitude: "38.751778", longitude: "-77.473217", active: true},
+  {name: "Regal Cinemas Virginia Gateway 14 & RPX", address: "8001 Gateway Promenade Pl Gainesville", latitude: "38.787121", longitude: "-77.60575", active: true},
+  {name: "Jiffy Lube Live", address: "7800 Cellar Door Dr Bristow", latitude: "38.785706", longitude: "-77.587311", active: true},
+  {name: "Manassas Regional Airport", address: "10600 Harry J Parrish Blvd Manassas", latitude: "38.725575", longitude: "-77.512319", active: true},
+  {name: "Costco Wholesale", address: "Manassas Gainesville Prince William County", latitude: "38.783511", longitude: "-77.516895", active: true},
+  {name: "Costco Gasoline", address: "10701 Sudley Manor Dr Manassas", latitude: "38.784336", longitude: "-77.516012", active: true},
+  {name: "Manassas Regional Airport", address: "10600 Harry J Parrish Blvd, Manassas, VA 20110, USA", latitude: "38.725575", longitude: "-77.512319", active: true},
+  {name: "Prince William Forest Park", address: "18170 Park Entrance Rd, Triangle, VA 22172, USA", latitude: "38.591005", longitude: "-77.38285"},
+  {name: "Potomac Mill", address: "2700 Potomac Mills Cir, Woodbridge, VA 22192, USA", latitude: "38.643422", longitude: "-77.295341"},
+  {name: "Sandy Run Regional Park", address: "10249-10253 Van Thompson Rd, Fairfax Station, VA 22039, USA", latitude: "38.710027", longitude: "-77.303753"},
+  {name: "Fountainhead Regional Park", address: "Outlet, Fairfax Station, VA 22039, USA", latitude: "38.721144", longitude: "-77.33345"},
+  {name: "Hemlock Overlook Regional Park", address: "13269-13299 Yates Ford Rd, Clifton, VA 20124, USA", latitude: "38.77028", longitude: "-77.409668"},
+  {name: "Westfields Golf Club", address: "13940 Balmoral Greens Ave, Clifton, VA 20124, USA", latitude: "38.795437", longitude: "-77.424946"},
+  {name: "Bristow Manor Golf Club", address: "11507 Valley View Dr, Bristow, VA 20136, USA", latitude: "38.705606", longitude: "-77.531033"}
+])
