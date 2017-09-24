@@ -41,7 +41,7 @@
       infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
-        icon: '/you.png',
+        icon: '/seeker.png',
         draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
@@ -67,7 +67,8 @@
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
 
-        infoWindowContentAutocomplete(place, infowindow, infowindowContent, marker)
+        infoWindowContentAutocomplete(place, infowindow, infowindowContent, marker);
+        seekerMouseEvent(map, marker);
 
         //put cordinate into hidden form fields
         $("#input_latitude").val(place.geometry.location.lat());
@@ -131,7 +132,7 @@
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             google.maps.event.addListener(marker, 'click', function() {
             infowindowContent = document.getElementById('infowindow-content');
-            infowindowContent.children['place-icon'].src = '/you.png';
+            infowindowContent.children['place-icon'].src = '/seeker.png';
             infowindowContent.children['place-name'].textContent = place.name;
             infowindowContent.children['place-address'].textContent = place.formatted_address;
             infowindow.setContent(infowindowContent);
@@ -200,7 +201,7 @@
       });
     };
 
-    // marker mouseover event
+    // organizer marker mouseover event
     function organizerMouseEvent(map, marker, dataCt){
       marker.addListener('mouseover', function() {
         $('#item_'+dataCt).addClass('search-item-highlite');
@@ -209,6 +210,16 @@
       marker.addListener('mouseout', function() {
         $('#item_'+dataCt).removeClass('search-item-highlite');
         markers[dataCt-1].setIcon('/teacher.png');
+      });
+    };
+
+    // seeker marker mouseover event
+    function seekerMouseEvent(map, marker){
+      marker.addListener('mouseover', function() {
+        marker.setIcon('/seeker_light.png');
+      });
+      marker.addListener('mouseout', function() {
+        marker.setIcon('/seeker.png');
       });
     };
 
