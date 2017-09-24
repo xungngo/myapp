@@ -178,7 +178,7 @@
           icon: '/teacher.png',
           label: {
             text: dataCt.toString(),
-            color: "#000",
+            color: "#fff",
             fontWeight: "900"
           },
           map: map
@@ -204,9 +204,11 @@
     function organizerMouseEvent(map, marker, dataCt){
       marker.addListener('mouseover', function() {
         $('#item_'+dataCt).addClass('search-item-highlite');
+        markers[dataCt-1].setIcon('/teacher_light.png');
       });
       marker.addListener('mouseout', function() {
         $('#item_'+dataCt).removeClass('search-item-highlite');
+        markers[dataCt-1].setIcon('/teacher.png');
       });
     };
 
@@ -274,15 +276,19 @@
     };
 
     $(document).on("mouseover", ".search-item",function() {
-      var row = this.id.split('_');
-      row = parseInt(row[1])-1;
-      markers[row].setIcon('/student.png')
+      row = this.id.split('_');
+      row_ct = parseInt(row[1]);
+      row_minus = parseInt(row[1])-1;
+      markers[row_minus].setIcon('/teacher_light.png');
+      $('#item_'+row_ct).addClass('search-item-highlite');
     });
 
     $(document).on("mouseout", ".search-item",function() {
-      var row = this.id.split('_');
-      row = parseInt(row[1])-1;
-      markers[row].setIcon('/teacher.png')
+      row = this.id.split('_');
+      row_ct = parseInt(row[1]);
+      row_minus = parseInt(row[1])-1;
+      markers[row_minus].setIcon('/teacher.png');
+      $('#item_'+row_ct).removeClass('search-item-highlite');
     });
   </script>
 
