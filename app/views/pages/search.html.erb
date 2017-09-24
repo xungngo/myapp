@@ -41,7 +41,7 @@
       infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
-        icon: '/you.png',
+        icon: '/seeker.png',
         draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
@@ -66,36 +66,80 @@
         map.setZoom(10);
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
-    
-        var address = '';
-        if (place.address_components) {
-          address = [
-            (place.address_components[0] && place.address_components[0].short_name || ''),
-            (place.address_components[1] && place.address_components[1].short_name || ''),
-            (place.address_components[2] && place.address_components[2].short_name || '')
-          ].join(' ');
-        };
-    
-        infowindowContent.children['place-icon'].src = place.icon;
-        infowindowContent.children['place-name'].textContent = place.name;
-        infowindowContent.children['place-address'].textContent = address;
-        infowindow.open(map, marker);
-        
+
+        infoWindowContentAutocomplete(place, infowindow, infowindowContent, marker);
+        seekerMouseEvent(map, marker);
+
         //put cordinate into hidden form fields
         $("#input_latitude").val(place.geometry.location.lat());
         $("#input_longitude").val(place.geometry.location.lng());
+      });      
+
+      marker.addListener('click', function() {
+          infowindow.open(map, marker);
       });
 
       // marker dragging
       google.maps.event.addListener(marker, 'dragend', function(evt){
+        infowindow.close();
         current_lat = evt.latLng.lat().toFixed(6);
         current_long = evt.latLng.lng().toFixed(6);
         map.setCenter(marker.position);
         marker.setMap(map);
         map.setZoom(10);
         //reverse geocode and resubmit
-        getAddress(current_lat, current_long);
+        getGeo(current_lat, current_long, map, marker, infowindow, function(geo_result){callbackInfowindowSubmit(geo_result)});
+        //getAddress(current_lat, current_long, map, marker, infowindow);
       });
+    };
+
+    function callbackInfowindowSubmit(geo_result){
+      lat = geo_result['lat'];
+      lng = geo_result['lng'];
+      map = geo_result['map'];
+      marker = geo_result['marker'];
+      infowindow = geo_result['infowindow'];
+      placeid = geo_result['placeid'];
+      address = geo_result['address'];
+      $("#input_address").val(address);
+      $("#input_latitude").val(lat);
+      $("#input_longitude").val(lng);      
+      infoWindowContentDrag(map, marker, infowindow, placeid);
+      submitSearch();
+    };
+
+    function infoWindowContentAutocomplete(place, infowindow, infowindowContent, marker){
+      var address = '';
+      if (place.address_components) {
+        address = [
+          (place.address_components[0] && place.address_components[0].short_name || ''),
+          (place.address_components[1] && place.address_components[1].short_name || ''),
+          (place.address_components[2] && place.address_components[2].short_name || '')
+        ].join(' ');
+      };
+  
+      infowindowContent.children['place-icon'].src = place.icon;
+      infowindowContent.children['place-name'].textContent = place.name;
+      infowindowContent.children['place-address'].textContent = address;
+      infowindow.open(map, marker);
+    };
+
+    function infoWindowContentDrag(map, marker, infowindow, placeid){
+      var service = new google.maps.places.PlacesService(map);
+      service.getDetails({
+        placeId: placeid
+      }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            google.maps.event.addListener(marker, 'click', function() {
+            infowindowContent = document.getElementById('infowindow-content');
+            infowindowContent.children['place-icon'].src = '/seeker.png';
+            infowindowContent.children['place-name'].textContent = place.name;
+            infowindowContent.children['place-address'].textContent = place.formatted_address;
+            infowindow.setContent(infowindowContent);
+            infowindow.open(map, marker);
+          });
+        }
+      });
     };
 
     $(document).ready(function() {
@@ -124,27 +168,71 @@
 
     function renderMap(data){
       deleteMarkers();
+      var infowindow = new google.maps.InfoWindow();
+      var infowindowContent = document.getElementById('infowindow-content');
+      infowindow.setContent(infowindowContent);
       for (var i=0; i<data.length; i++){
-        var dataRow = data[i]
-        var latLng = new google.maps.LatLng(dataRow.latitude,dataRow.longitude);
+        var dataRow = data[i];
+        var dataCt = i+1;
         var marker = new google.maps.Marker({
-          position: latLng,
+          position: new google.maps.LatLng(dataRow.latitude,dataRow.longitude),
           icon: '/teacher.png',
+          label: {
+            text: dataCt.toString(),
+            color: "#fff",
+            fontWeight: "900"
+          },
           map: map
         });
+        infoWindowEvent(map, marker, dataRow.latitude, dataRow.longitude, dataRow.name, dataRow.address);
+        organizerMouseEvent(map, marker, dataCt);
         markers.push(marker);
-      }
+      };
+    };
+
+    // infowindow for organizer
+    function infoWindowEvent(map, marker, lat, lng, name, address){
+      marker.addListener('click', function() {
+        infowindowContent.children['place-icon'].src = '/teacher.png';
+        infowindowContent.children['place-name'].textContent = name;
+        infowindowContent.children['place-address'].textContent = address;
+        infowindow.setContent(infowindowContent);
+        infowindow.open(map, marker);
+      });
+    };
+
+    // organizer marker mouseover event
+    function organizerMouseEvent(map, marker, dataCt){
+      marker.addListener('mouseover', function() {
+        $('#item_'+dataCt).addClass('search-item-highlite');
+        markers[dataCt-1].setIcon('/teacher_light.png');
+      });
+      marker.addListener('mouseout', function() {
+        $('#item_'+dataCt).removeClass('search-item-highlite');
+        markers[dataCt-1].setIcon('/teacher.png');
+      });
+    };
+
+    // seeker marker mouseover event
+    function seekerMouseEvent(map, marker){
+      marker.addListener('mouseover', function() {
+        marker.setIcon('/seeker_light.png');
+      });
+      marker.addListener('mouseout', function() {
+        marker.setIcon('/seeker.png');
+      });
     };
 
     function renderList(data){
       container = $('#search-list').empty();
       $.each(data,function(i,data){
+        var itemCt = i+1;
         // Create DOM
-        var item = $('<div class="col-md-4 table-responsive">').addClass('search-item'),
+        var item = $('<div class="col-md-4 table-responsive" id="item_'+itemCt+'" >').addClass('search-item'),
           header = $('<h2>'),
           addr = $('<p>'),
           link = $('<a>');
-        link.attr('href','http://www.google.com').text(data.name).appendTo(header);
+        link.attr('href','http://localhost:3333/search').text(itemCt + ') ' + data.name).appendTo(header);
         addr.text(data.address);
         item.append(header,addr); // Append the infos to the item
         item.appendTo(container); // Append the item to the container
@@ -163,7 +251,7 @@
       markers = [];
     };
 
-    function getAddress(lat, lng) {
+    function getAddress(lat, lng, map, marker, infowindow) {
       var latlng = new google.maps.LatLng(lat, lng);
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': latlng }, function (results, status) {
@@ -172,10 +260,50 @@
               $("#input_address").val(geo_address);
               $("#input_latitude").val(lat);
               $("#input_longitude").val(lng);
+              infoWindowContentDrag(map, marker, infowindow, results[0].place_id);
               submitSearch();
           };
       });
     };
+
+    function getGeo(lat, lng, map, marker, infowindow, callback) {
+      var latlng = new google.maps.LatLng(lat, lng);
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+              placeid = results[0].place_id;
+              address = results[0].formatted_address;
+              var geo_result = [];
+              geo_result['lat'] = lat;
+              geo_result['lng'] = lng;
+              geo_result['map'] = map;
+              geo_result['marker'] = marker;
+              geo_result['infowindow'] = infowindow;
+              geo_result['placeid'] = placeid;
+              geo_result['address'] = address;
+              callback(geo_result);
+          };
+      });
+    };
+
+    $(document).on("mouseover", ".search-item",function() {
+      row = this.id.split('_');
+      row_ct = parseInt(row[1]);
+      row_minus = parseInt(row[1])-1;
+      markers[row_minus].setIcon('/teacher_light.png');
+      $('#item_'+row_ct).addClass('search-item-highlite');
+    });
+
+    $(document).on("mouseout", ".search-item",function() {
+      row = this.id.split('_');
+      row_ct = parseInt(row[1]);
+      row_minus = parseInt(row[1])-1;
+      markers[row_minus].setIcon('/teacher.png');
+      $('#item_'+row_ct).removeClass('search-item-highlite');
+    });
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
+
+  <!-- 1) after drag Organizer infowindow requires Seeker infowindow to click first
+       2) sql needs to be ordered by distance -->

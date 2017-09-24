@@ -8,8 +8,6 @@ Marker.create!([
   {name: "Jiffy Lube Live", address: "7800 Cellar Door Dr Bristow", latitude: "38.785706", longitude: "-77.587311", active: true},
   {name: "Manassas Regional Airport", address: "10600 Harry J Parrish Blvd Manassas", latitude: "38.725575", longitude: "-77.512319", active: true},
   {name: "Costco Wholesale", address: "Manassas Gainesville Prince William County", latitude: "38.783511", longitude: "-77.516895", active: true},
-  {name: "Costco Gasoline", address: "10701 Sudley Manor Dr Manassas", latitude: "38.784336", longitude: "-77.516012", active: true},
-  {name: "Manassas Regional Airport", address: "10600 Harry J Parrish Blvd, Manassas, VA 20110, USA", latitude: "38.725575", longitude: "-77.512319", active: true},
   {name: "Prince William Forest Park", address: "18170 Park Entrance Rd, Triangle, VA 22172, USA", latitude: "38.591005", longitude: "-77.38285"},
   {name: "Potomac Mill", address: "2700 Potomac Mills Cir, Woodbridge, VA 22192, USA", latitude: "38.643422", longitude: "-77.295341"},
   {name: "Sandy Run Regional Park", address: "10249-10253 Van Thompson Rd, Fairfax Station, VA 22039, USA", latitude: "38.710027", longitude: "-77.303753"},
