@@ -80,7 +80,7 @@
       });
 
       // marker dragging
-      google.maps.event.addListener(marker, 'dragend', function(evt){
+      marker.addListener('dragend', function(evt){
         infowindow.close();
         current_lat = evt.latLng.lat().toFixed(6);
         current_long = evt.latLng.lng().toFixed(6);
@@ -130,7 +130,7 @@
         placeId: placeid
       }, function(place, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            google.maps.event.addListener(marker, 'click', function() {
+            marker.addListener('click', function() {
             infowindowContent = document.getElementById('infowindow-content');
             infowindowContent.children['place-icon'].src = '/seeker.png';
             infowindowContent.children['place-name'].textContent = place.name;
@@ -148,7 +148,7 @@
       });
     });
 
-    function submitSearch() {
+    function submitSearch() {      
       var form_params = $("input[name^='input_']").serialize();
       $.ajax({
         type: "GET",
@@ -167,10 +167,9 @@
     };
 
     function renderMap(data){
-      deleteMarkers();
       var infowindow = new google.maps.InfoWindow();
-      var infowindowContent = document.getElementById('infowindow-content');
-      infowindow.setContent(infowindowContent);
+      var infowindowContent = '';
+      deleteMarkers();
       for (var i=0; i<data.length; i++){
         var dataRow = data[i];
         var dataCt = i+1;
@@ -184,18 +183,16 @@
           },
           map: map
         });
-        infoWindowEvent(map, marker, dataRow.latitude, dataRow.longitude, dataRow.name, dataRow.address);
+        infoWindowEvent(map, marker, dataRow.name, dataRow.address);
         organizerMouseEvent(map, marker, dataCt);
         markers.push(marker);
       };
     };
 
     // infowindow for organizer
-    function infoWindowEvent(map, marker, lat, lng, name, address){
+    function infoWindowEvent(map, marker, name, address){
       marker.addListener('click', function() {
-        infowindowContent.children['place-icon'].src = '/teacher.png';
-        infowindowContent.children['place-name'].textContent = name;
-        infowindowContent.children['place-address'].textContent = address;
+        infowindowContent = '<div id="infowindow-content"><img src="/teacher.png" width="16" height="16" id="place-icon"><span id="place-name" class="title">'+name+'</span><br><span id="place-address">'+address+'</span></div>';
         infowindow.setContent(infowindowContent);
         infowindow.open(map, marker);
       });
