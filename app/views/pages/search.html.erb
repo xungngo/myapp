@@ -171,6 +171,8 @@
     };
 
     function renderMap(data){
+      var infowindow = new google.maps.InfoWindow();
+      var infowindowContent = '';
       deleteMarkers();
       for (var i=0; i<data.length; i++){
         var dataRow = data[i];
