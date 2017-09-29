@@ -25,6 +25,7 @@
   <script>
     var map;
     var markers = [];
+    var infowindow;
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
@@ -36,18 +37,19 @@
       var autocomplete = new google.maps.places.Autocomplete(input_address);
       autocomplete.bindTo('bounds', map);
 
-      var infowindow = new google.maps.InfoWindow();
-      var infowindowContent = document.getElementById('infowindow-content');
-      infowindow.setContent(infowindowContent);
       var marker = new google.maps.Marker({
         map: map,
         icon: '/seeker.png',
         draggable: true,
         anchorPoint: new google.maps.Point(0, -29)
       });
+
+      infowindow = new google.maps.InfoWindow();
+      infowindowContent = document.getElementById('infowindow-content');
+      infowindow.setContent(infowindowContent); 
       
       autocomplete.addListener('place_changed', function() {
-        infowindow.close();
+        //infowindow.close();
         marker.setVisible(false);
         var place = autocomplete.getPlace();
         if (!place.geometry) {
@@ -76,7 +78,7 @@
       });      
 
       marker.addListener('click', function() {
-          infowindow.open(map, marker);
+        infowindow.open(map, marker);
       });
 
       // marker dragging
@@ -117,7 +119,6 @@
           (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
       };
-  
       infowindowContent.children['place-icon'].src = place.icon;
       infowindowContent.children['place-name'].textContent = place.name;
       infowindowContent.children['place-address'].textContent = address;
@@ -157,6 +158,9 @@
         cache: false,
         dataType: "json",
         success: function(data) {
+          //var infowindow = new google.maps.InfoWindow();
+          //var infowindowContent = document.getElementById('infowindow-content');
+          //infowindow.setContent(infowindowContent);
           renderMap(data);
           renderList(data);
         },
@@ -167,12 +171,7 @@
     };
 
     function renderMap(data){
-      var infowindow = new google.maps.InfoWindow();
-      var infowindowContent = '';
       deleteMarkers();
-      var infowindow = new google.maps.InfoWindow();
-      var infowindowContent = document.getElementById('infowindow-content');
-      infowindow.setContent(infowindowContent);
       for (var i=0; i<data.length; i++){
         var dataRow = data[i];
         var dataCt = i+1;
@@ -186,14 +185,19 @@
           },
           map: map
         });
-        infoWindowEvent(map, marker, dataRow.name, dataRow.address);
+        if (i == 0 && infowindow == null) {
+          infowindow = new google.maps.InfoWindow();
+          infowindowContent = document.getElementById('infowindow-content');
+          infowindow.setContent(infowindowContent);
+        };
+        infoWindowEvent(map, marker, dataRow.name, dataRow.address, infowindow);
         organizerMouseEvent(map, marker, dataCt);
         markers.push(marker);
       };
     };
 
     // infowindow for organizer.
-    function infoWindowEvent(map, marker, name, address){
+    function infoWindowEvent(map, marker, name, address, infowindow){
       marker.addListener('click', function() {
         infowindowContent = '<div id="infowindow-content"><img src="/teacher.png" width="16" height="16" id="place-icon"><span id="place-name" class="title">'+name+'</span><br><span id="place-address">'+address+'</span></div>';
         infowindow.setContent(infowindowContent);
