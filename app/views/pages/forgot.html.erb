@@ -1,0 +1,88 @@
+<!-- LOGIN -->
+<section id="login-content" class="login-content">
+    <div class="awe-parallax bg-login-content"></div>
+    <div class="awe-overlay"></div>
+    <div class="container">
+        <div class="row">
+
+            <!-- FORM -->
+            <div class="col-xs-12 col-lg-4 pull-right">
+                <div class="form-login">
+
+                    <form id="login_form">
+                        <h2 class="text-uppercase">forgot password</h2>
+                        <div id="forgot-message" class="forgot-message">
+                        <ul>
+                            <li>Provide your email, we will send you the reset password.</li>
+                            <li>Use the reset password to sign in.</li>
+                            <li>Change your password after signing in.</li>
+                        </ul>
+                    </div>
+                        <div class="form-email">
+                            <input type="text" name="email" id="email" placeholder="Email" maxlength="100">
+                        </div>
+                        <div class="form-submit-1">
+                            <input type="button" name="reset_password" id="reset_password" value="Reset & Send Password" class="mc-btn btn-style-1">
+                        </div>
+                        <div class="link">
+                            <a href="register"><i class="icon md-arrow-right"></i>Register</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="login"><i class="icon md-arrow-right"></i>Sign In</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- END / FORM -->
+
+            <!--div class="image">
+                <img src="images/homeslider/img-thumb.png" alt="">
+            </div-->
+
+        </div>
+    </div>
+</section>
+<!-- END / LOGIN -->
+
+<!-- Load jQuery & Other Scripts -->
+<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+<script>
+$(document).ready(function() {
+    $("#login").click(function(){
+      submitLogin();
+    });
+  });
+
+function submitLogin() {      
+    var form_params = $("#login_form").serialize();
+    $.ajax({
+      type: "GET",
+      url: "login_result",
+      data: form_params,
+      cache: false,
+      dataType: "json",
+      success: function(data) {
+        msg = data[0].message
+        if (msg == 'success'){
+          goto = data[0].goto
+          window.location = "http://localhost:3333/" + goto;
+        } else {
+          $("#message").css('display', 'block');
+          $("#message").text(msg);
+        }
+      },
+      error: function() {
+        //alert("Request Error! Please refresh the page.")
+      }
+    });
+  };
+
+  <% if @logoff %>
+    $("#message").css("display", "block");
+    $("#message").text("<%= @logoff %>");
+  <% end %>
+
+  <% if params[:registered] %>
+    $("#message").css("display", "block");
+    $("#message").text("Thank you for registering. An email validation was sent to you. Please click on the validation link.");
+  <% end %>
+</script>

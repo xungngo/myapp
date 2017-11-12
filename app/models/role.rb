@@ -3,14 +3,14 @@ class Role < ActiveRecord::Base
   has_many :users, :through => :user_role_mappings
 
   def self.admin_key
-  	"sys_admin"
+  	"admin"
   end
 
-  def self.trainee_key
-  	"trainee"
+  def self.seeker_key
+  	"seeker"
   end
 
-  def self.trainer_key
-  	"trainer"
+  def self.organizer_key
+  	"organizer"
   end    
 end
