@@ -108,17 +108,21 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="categories.html">About Us</a>
+                        <a href="aboutus">About Us</a>
                     </li>
                     <li class="menu-item-has-children">
                         <% if session[:user_id] %>
-                        <a href="/login?logoff=1">Log Off</a>
+                            <a href="#">Menu</a>
+                            <ul class="sub-menu">
+                                <li><a href="/login?logoff=1">Sign Out</a></li>
+                                <li><a href="/account">Account</a></li>
+                            </ul>                        
                         <% else %>
-                        <a href="#">Login</a>
-                        <ul class="sub-menu">
-                            <li><a href="login">Login</a></li>
-                            <li><a href="register">Register</a></li>
-                        </ul>
+                            <a href="#">Sign In / Register</a>
+                            <ul class="sub-menu">
+                                <li><a href="login">Sign In</a></li>
+                                <li><a href="register">Register</a></li>
+                            </ul>
                         <% end %>
                     </li>
                 </ul>
@@ -271,147 +275,6 @@
                         </div>
                     </li>
                     <!-- END / MESSAGE INFO -->
-
-                    <!-- NOTIFICATION -->
-                    <li class="list-item notification">
-                        <div class="notification-info item-click">
-                            <i class="icon md-bell"></i>
-                            <span class="itemnew"></span>
-                        </div>
-                        <div class="toggle-notification toggle-list">
-                            <div class="list-profile-title">
-                                <h4>Notification</h4>
-                                <span class="count-value">2</span>
-                            </div>
-
-                            <ul class="list-notification">
-
-                                <!-- LIST ITEM -->
-                                <li class="ac-new">
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li class="ac-new">
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                
-
-                            </ul>
-                        </div>
-                    </li>
-                    <!-- END / NOTIFICATION -->
 
                     <li class="list-item account">
                         <div class="account-info item-click">

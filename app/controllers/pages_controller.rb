@@ -14,6 +14,10 @@ class PagesController < ApplicationController
     if params[:logoff]
       session[:user_id] = nil
       @logoff = "You were successfully logged off."
+    elsif params[:validate] && User.validate(params[:validate]).present?
+      @validated = "You were successfully validated. Please sign in below."
+    elsif params[:validate] && !User.validate(params[:validate]).present?
+      @validated = "We can not validate your email. Please copy and paste the url from your email."
     end
   end
 
@@ -21,10 +25,14 @@ class PagesController < ApplicationController
     if email_is_blank(params) || password_is_blank(params)
       return_message = [{"message":"The email and password are required!"}]
     elsif User.authenticate(params).present?
-      session[:user_id] = User.authenticate(params).id
-      return_message = [{"message":"success", "goto":"user"}]
+      if User.not_validated?(params)
+        return_message = [{"message":"Please validate your email before your first sign in."}]
+      else
+        session[:user_id] = User.authenticate(params).id
+        return_message = [{"message":"success", "goto":"user"}]
+      end
     else
-      return_message = [{"message":"This user is not in the system!"}]
+      return_message = [{"message":"Incorrect email or password. Please try again."}]
     end
     render :json => return_message.as_json
   end
@@ -42,6 +50,7 @@ class PagesController < ApplicationController
       regis_user = User.register(params)
       if regis_user.id.present?
         return_message = [{"message":"success", "goto":"login?registered=1"}]
+        ApplicationMailer.register_email(regis_user).deliver # send the email notification
       elsif regis_user.errors.messages[:firstname].present?
         return_message = [{"message":regis_user.errors.messages[:firstname]}]
       elsif regis_user.errors.messages[:lastname].present?
@@ -53,13 +62,14 @@ class PagesController < ApplicationController
       else
         return_message = [{"message":"System Error: please refresh the page and try again."}]
       end
-      #binding.pry
     end
     render :json => return_message.as_json
   end
 
-  def forgot
-  
+  def forgot  
+  end
+
+  def aboutus    
   end
 
   def getmarkers

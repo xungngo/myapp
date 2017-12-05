@@ -41,26 +41,6 @@ class User < ActiveRecord::Base
     return !!self.roles.find_by_unique_key('organizer')
   end
 
-=begin
-  def self.register(obj)
-    new_email = auth_info[:email].downcase.sub('.icam', '.gov')
-    user_with_email = User.find_by(:email => new_email, :cis_uuid => nil)
-
-    if user_with_email.blank?
-      user = User.new
-      user.update_icam_attributes(auth_info, should_save:false)
-      user.active = 0
-      user.role_ids = [2]
-      user.save
-      UserMailer.new_user_message(SYSTEM_INBOX_EMAIL_ADDRESS, auth_info[:first_name], auth_info[:last_name]).deliver
-      user
-    else
-      user_with_email.update(:name => auth_info[:email].split('@').first, :cis_uuid => auth_info[:cis_uuid])
-      user = user_with_email
-    end
-  end
-=end
-
   def self.authenticate(f)
     user = find_by_email(f[:email].downcase)
     return nil unless user && user.password == f[:password_digest]
@@ -72,7 +52,6 @@ class User < ActiveRecord::Base
                    username: create_username(f[:email]), uuid: SecureRandom.hex, role_ids: 3)
     new_user.password = f[:password_digest]
     new_user.save
-    #UserMailer.new_user_message(SYSTEM_INBOX_EMAIL_ADDRESS, auth_info[:first_name], auth_info[:last_name]).deliver
     new_user
   end
 
@@ -83,6 +62,24 @@ class User < ActiveRecord::Base
   def password=(new_password)
     @password = Password.create(new_password) # encrypt
     self.password_digest = @password
+  end
+
+  def self.not_validated?(f)
+    user = find_by_email(f[:email].downcase)
+    return true unless user.validated_at.present?
+  end
+
+  def self.validate(uid)
+    user = find_by_uuid(uid.downcase)
+    return nil unless user
+    user.set_validation_date
+    user
+  end
+
+  def set_validation_date
+    return nil unless self.validated_at.blank? # only set the date once
+    self.validated_at = Time.current
+    self.save
   end
 
   def update_login_info

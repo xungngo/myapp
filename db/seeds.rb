@@ -5,7 +5,7 @@ Role.create!([
 ])
 
 User.create!([
-  {email: "xungngo@gmail.com", username: "xungngo", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 1},
+  {email: "xungngo@gmail.biz", username: "xungngo", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 1},
   {email: "xung@axxume.com", username: "xung", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 2},
   {email: "xungngo@hotmail.com", username: "xungngo3", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 3}
 ])

@@ -85,6 +85,11 @@ function submitLogin() {
     $("#message").text("<%= @logoff %>");
   <% end %>
 
+  <% if @validated %>
+    $("#message").css("display", "block");
+    $("#message").text("<%= @validated %>");  
+  <% end %>
+
   <% if params[:registered] %>
     $("#message").css("display", "block");
     $("#message").text("Thank you for registering. An email validation was sent to you. Please click on the validation link.");

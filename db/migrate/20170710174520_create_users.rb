@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :address, :limit => 200
       t.boolean :active, null: false, default: false
       t.string :uuid, :limit => 100, null: false
+      t.datetime :validated_at
 
       ## Trackable
       t.integer  :sign_in_count, default: 0, null: false

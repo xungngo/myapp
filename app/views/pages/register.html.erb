@@ -57,8 +57,7 @@ $(document).ready(function() {
     });
   });
 
-function submitRegistration() {      
-    //var form_params = $("input[name^='input_']").serialize();
+function submitRegistration() {
     var form_params = $("#register_form").serialize();
     $.ajax({
       type: "GET",
