@@ -56,7 +56,7 @@ function submitLogin() {
     var form_params = $("#login_form").serialize();
     $.ajax({
       type: "GET",
-      url: "login_result",
+      url: "signin_result",
       data: form_params,
       cache: false,
       dataType: "json",

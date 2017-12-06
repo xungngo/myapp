@@ -114,13 +114,13 @@
                         <% if session[:user_id] %>
                             <a href="#">Menu</a>
                             <ul class="sub-menu">
-                                <li><a href="/login?logoff=1">Sign Out</a></li>
+                                <li><a href="/signin?logoff=1">Sign Out</a></li>
                                 <li><a href="/account">Account</a></li>
                             </ul>                        
                         <% else %>
                             <a href="#">Sign In / Register</a>
                             <ul class="sub-menu">
-                                <li><a href="login">Sign In</a></li>
+                                <li><a href="signin">Sign In</a></li>
                                 <li><a href="register">Register</a></li>
                             </ul>
                         <% end %>
@@ -283,7 +283,7 @@
                         <div class="toggle-account toggle-list">
                             <ul class="list-account">
                                 <li><a href="setting.html"><i class="icon md-config"></i>Setting</a></li>
-                                <li><a href="login.html"><i class="icon md-arrow-right"></i>Sign Out</a></li>
+                                <li><a href="signin.html"><i class="icon md-arrow-right"></i>Sign Out</a></li>
                             </ul>
                         </div>
                     </li>

@@ -10,7 +10,7 @@ class PagesController < ApplicationController
     #end
   end
 
-  def login
+  def signin
     if params[:logoff]
       session[:user_id] = nil
       @logoff = "You were successfully logged off."
@@ -21,7 +21,7 @@ class PagesController < ApplicationController
     end
   end
 
-  def login_result
+  def signin_result
     if email_is_blank(params) || password_is_blank(params)
       return_message = [{"message":"The email and password are required!"}]
     elsif User.authenticate(params).present?
@@ -49,7 +49,7 @@ class PagesController < ApplicationController
     else
       regis_user = User.register(params)
       if regis_user.id.present?
-        return_message = [{"message":"success", "goto":"login?registered=1"}]
+        return_message = [{"message":"success", "goto":"signin?registered=1"}]
         ApplicationMailer.register_email(regis_user).deliver # send the email notification
       elsif regis_user.errors.messages[:firstname].present?
         return_message = [{"message":regis_user.errors.messages[:firstname]}]
