@@ -1,3 +1,15 @@
+Role.create!([
+  {name: "administrator", unique_key: "admin", display_rank: 1},
+  {name: "seeker", unique_key: "seeker", display_rank: 2},
+  {name: "organizer", unique_key: "organizer", display_rank: 3}
+])
+
+User.create!([
+  {email: "xungngo@gmail.biz", username: "xungngo", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 1},
+  {email: "xung@axxume.com", username: "xung", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 2},
+  {email: "xungngo@hotmail.com", username: "xungngo3", password_digest: BCrypt::Password.create('2005Guile!7x'), firstname: "david", middleinit: "V", lastname: "smith", address: "11852 Medway Church Loop, Manassas, VA", uuid: SecureRandom.hex, role_ids: 3}
+])
+
 Marker.create!([
   {name: "Manassas Park", address: "Manassas Park VA US", latitude: "38.784003", longitude: "-77.469711", active: true},
   {name: "Manassas Mall", address: "8300 Sudley Rd Manassas", latitude: "38.773324", longitude: "-77.505326", active: true},

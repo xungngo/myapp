@@ -26,6 +26,9 @@
     var map;
     var markers = [];
     var infowindow;
+    var seeker_icon = '';
+    var seeker_placename = '';
+    var seeker_address = '';
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
@@ -77,21 +80,17 @@
         $("#input_longitude").val(place.geometry.location.lng());
       });      
 
-      marker.addListener('click', function() {
-        infowindow.open(map, marker);
-      });
+      infoWindowEvent(map, marker, seeker_icon, seeker_placename, seeker_address, infowindow);
 
       // marker dragging
       marker.addListener('dragend', function(evt){
-        infowindow.close();
         current_lat = evt.latLng.lat().toFixed(6);
         current_long = evt.latLng.lng().toFixed(6);
         map.setCenter(marker.position);
         marker.setMap(map);
         map.setZoom(10);
         //reverse geocode and resubmit
-        getGeo(current_lat, current_long, map, marker, infowindow, function(geo_result){callbackInfowindowSubmit(geo_result)});
-        //getAddress(current_lat, current_long, map, marker, infowindow);
+        getGeo(current_lat, current_long, map, marker, infowindow, 'seeker', function(geo_result){callbackInfowindowSubmit(geo_result)});
       });
     };
 
@@ -103,26 +102,24 @@
       infowindow = geo_result['infowindow'];
       placeid = geo_result['placeid'];
       address = geo_result['address'];
+      type = geo_result['type'];
       $("#input_address").val(address);
       $("#input_latitude").val(lat);
       $("#input_longitude").val(lng);      
       infoWindowContentDrag(map, marker, infowindow, placeid);
-      submitSearch();
+      submitSearch(type);
     };
 
     function infoWindowContentAutocomplete(place, infowindow, infowindowContent, marker){
-      var address = '';
+      seeker_placename = place.name;
       if (place.address_components) {
-        address = [
+        seeker_address = [
           (place.address_components[0] && place.address_components[0].short_name || ''),
           (place.address_components[1] && place.address_components[1].short_name || ''),
           (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
       };
-      infowindowContent.children['place-icon'].src = place.icon;
-      infowindowContent.children['place-name'].textContent = place.name;
-      infowindowContent.children['place-address'].textContent = address;
-      infowindow.open(map, marker);
+      infoWindowEvent(map, marker, seeker_icon, seeker_placename, seeker_address, infowindow);
     };
 
     function infoWindowContentDrag(map, marker, infowindow, placeid){
@@ -131,29 +128,22 @@
         placeId: placeid
       }, function(place, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            marker.addListener('click', function() {
-            infowindowContent = document.getElementById('infowindow-content');
-            infowindowContent.children['place-icon'].src = '/seeker.png';
-            infowindowContent.children['place-name'].textContent = place.name;
-            infowindowContent.children['place-address'].textContent = place.formatted_address;
-            infowindow.setContent(infowindowContent);
-            infowindow.open(map, marker);
-          });
+          infoWindowEvent(map, marker, seeker_icon, place.name, place.formatted_address, infowindow);
         }
       });
     };
 
     $(document).ready(function() {
       $("#searchButton").click(function(){
-        submitSearch();
+        submitSearch('seeker');
       });
     });
 
-    function submitSearch() {      
+    function submitSearch(type) {      
       var form_params = $("input[name^='input_']").serialize();
       $.ajax({
         type: "GET",
-        url: "search_result",
+        url: "search_result?type="+type,
         data: form_params,
         cache: false,
         dataType: "json",
@@ -171,15 +161,18 @@
     };
 
     function renderMap(data){
-      var infowindow = new google.maps.InfoWindow();
-      var infowindowContent = '';
       deleteMarkers();
       for (var i=0; i<data.length; i++){
         var dataRow = data[i];
         var dataCt = i+1;
+        if (dataRow.type == 'organizer') {
+          icon = '/student.png';
+        } else {
+          icon = '/teacher.png';
+        };
         var marker = new google.maps.Marker({
           position: new google.maps.LatLng(dataRow.latitude,dataRow.longitude),
-          icon: '/teacher.png',
+          icon: icon,
           label: {
             text: dataCt.toString(),
             color: "#fff",
@@ -187,21 +180,21 @@
           },
           map: map
         });
-        if (i == 0 && infowindow == null) {
-          infowindow = new google.maps.InfoWindow();
-          infowindowContent = document.getElementById('infowindow-content');
-          infowindow.setContent(infowindowContent);
-        };
-        infoWindowEvent(map, marker, dataRow.name, dataRow.address, infowindow);
+        infoWindowEvent(map, marker, icon, dataRow.name, dataRow.address, infowindow);
         organizerMouseEvent(map, marker, dataCt);
         markers.push(marker);
       };
     };
 
-    // infowindow for organizer.
-    function infoWindowEvent(map, marker, name, address, infowindow){
+    // infowindow for organizer and seeker.
+    function infoWindowEvent(map, marker, icon, name, address, infowindow){
+      if (icon == '/seeker.png') {
+        infowindowContent = '<div id="infowindow-content"><img src="'+icon+'" width="16" height="16" id="place-icon"><span id="place-name" class="title">'+name+'</span><br><span id="place-address">'+address+'</span></div>';
+        infowindow.setContent(infowindowContent);
+        infowindow.open(map, marker);
+      };
       marker.addListener('click', function() {
-        infowindowContent = '<div id="infowindow-content"><img src="/teacher.png" width="16" height="16" id="place-icon"><span id="place-name" class="title">'+name+'</span><br><span id="place-address">'+address+'</span></div>';
+        infowindowContent = '<div id="infowindow-content"><img src="'+icon+'" width="16" height="16" id="place-icon"><span id="place-name" class="title">'+name+'</span><br><span id="place-address">'+address+'</span></div>';
         infowindow.setContent(infowindowContent);
         infowindow.open(map, marker);
       });
@@ -237,8 +230,8 @@
         var item = $('<div class="col-md-4 table-responsive" id="item_'+itemCt+'" >').addClass('search-item'),
           header = $('<h2>'),
           addr = $('<p>'),
-          link = $('<a>');
-        link.attr('href','http://localhost:3333/search').text(itemCt + ') ' + data.name).appendTo(header);
+          link = $('<a id="organizersearch_'+data.latitude+'_'+data.longitude+'">');
+        link.attr('href','#').text(itemCt + ') ' + data.name).appendTo(header);
         addr.text(data.address);
         item.append(header,addr); // Append the infos to the item
         item.appendTo(container); // Append the item to the container
@@ -250,6 +243,16 @@
       };
     };
 
+    $(document).on("click", $("[id^=organizersearch_]"), function(){
+      theid = document.activeElement.id;
+      current_lat = theid.split('_')[1]
+      current_long = theid.split('_')[2]
+      if (theid.indexOf('organizersearch_') >= 0) {
+      console.log(theid + ' | ' + current_long);
+      getGeo(current_lat, current_long, map, marker, infowindow, 'organizer', function(geo_result){callbackInfowindowSubmit(geo_result)});
+      };
+    });
+
     function deleteMarkers() {
       for (var i = 0; i < markers.length; i++) {
           markers[i].setMap(null);
@@ -257,22 +260,7 @@
       markers = [];
     };
 
-    function getAddress(lat, lng, map, marker, infowindow) {
-      var latlng = new google.maps.LatLng(lat, lng);
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-              geo_address = results[0].formatted_address;
-              $("#input_address").val(geo_address);
-              $("#input_latitude").val(lat);
-              $("#input_longitude").val(lng);
-              infoWindowContentDrag(map, marker, infowindow, results[0].place_id);
-              submitSearch();
-          };
-      });
-    };
-
-    function getGeo(lat, lng, map, marker, infowindow, callback) {
+    function getGeo(lat, lng, map, marker, infowindow, type, callback) {
       var latlng = new google.maps.LatLng(lat, lng);
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': latlng }, function (results, status) {
@@ -287,6 +275,7 @@
               geo_result['infowindow'] = infowindow;
               geo_result['placeid'] = placeid;
               geo_result['address'] = address;
+              geo_result['type'] = type;
               callback(geo_result);
           };
       });
@@ -310,6 +299,3 @@
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
-
-  <!-- 1) after drag Organizer infowindow requires Seeker infowindow to click first
-       2) sql needs to be ordered by distance -->

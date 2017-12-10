@@ -1,0 +1,82 @@
+<!-- REGISTER -->
+<section id="login-content" class="login-content">
+    <div class="awe-parallax bg-login-content"></div>
+    <div class="awe-overlay"></div>
+    <div class="container">
+        <div class="row">
+            <!-- FORM -->
+            <div class="col-lg-4 pull-right">
+                <div class="form-login">
+                    <div id="message" class="message"></div>
+                    <form id="register_form">
+                        <h2 class="text-uppercase">register</h2>
+                        <div class="form-fullname">
+                            <input class ="first-name"type="text" name="firstname" id="firstname" placeholder="First Name" maxlength="25">
+                            <input class="last-name" type="text" name="lastname" id="lastname" placeholder="Last Name" maxlength="25">
+                        </div>
+                        <div class="form-email">
+                            <input type="text" name="email" id="email" placeholder="Email" maxlength="100">
+                        </div>
+                        <div class="form-password">
+                            <input type="password" name="password_digest" id="password_digest" placeholder="Password" maxlength="100">
+                        </div>
+                        <div class="form-password">
+                            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" maxlength="100">
+                        </div>
+                        <div class="form-password-format">Password Format: 8 or more characters, a digit, a lower case character, an upper case character, and a symbol</div>
+
+                        <div class="form-submit-1">
+                            <input type="submit" name="register" id="register" value="Sign Up" class="mc-btn btn-style-1">
+                        </div>
+                        <div class="link">
+                            <a href="signin">
+                                <i class="icon md-arrow-right"></i>Already have account ? Log in
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- END / FORM -->
+
+            <!--div class="image">
+                <img src="images/homeslider/img-thumb.png" alt="">
+            </div-->
+
+        </div>
+    </div>
+</section>
+<!-- END / REGISTER -->
+
+<!-- Load jQuery & Other Scripts -->
+<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+<script>
+$("#register_form").on('submit', function(e){
+  e.preventDefault();
+  submitRegistration();
+});
+
+function submitRegistration() {
+    var form_params = $("#register_form").serialize();
+    $.ajax({
+      type: "GET",
+      url: "register_result",
+      data: form_params,
+      cache: false,
+      dataType: "json",
+      success: function(data) {
+        msg = data[0].message
+        if (msg == 'success'){
+          goto = data[0].goto
+          window.location = "http://localhost:3333/" + goto;
+        } else {
+          $("#message").css('display', 'block');
+          $("#message").text(msg);
+        }
+      },
+      error: function() {
+        //alert("Request Error! Please refresh the page.")
+      }
+    });
+  };
+</script>

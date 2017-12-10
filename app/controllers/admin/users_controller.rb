@@ -1,6 +1,6 @@
 class Admin::UsersController < ApplicationController
-	#before_action :authenticate_user!
-  #load_and_authorize_resource
+	before_action :authenticate_user
+  #load_and_authorize_resource # cancancan
 
   #def user_params
   #  params.require(:user).permit(:samaccountname)
@@ -8,6 +8,14 @@ class Admin::UsersController < ApplicationController
 
 	def index
 		@users = User.includes(:user_role_mappings, :roles).order(:last_name, :first_name, :middle_name)
+	end
+
+	def user_home
+    if current_user.present?
+      @locations = Location.order(:code).where(:active => true, :id => UserLocationMapping.location_ids(current_user.id))
+    else
+      @locations = Location.all
+    end
 	end
 
 =begin

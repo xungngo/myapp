@@ -54,16 +54,17 @@ ActiveRecord::Schema.define(version: 20170819174500) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",           limit: 100, default: "", null: false
+    t.string   "email",           limit: 100, default: "",    null: false
     t.string   "username",        limit: 100
-    t.string   "password",        limit: 100
+    t.string   "password_digest", limit: 100
     t.string   "firstname",       limit: 100
     t.string   "middleinit",      limit: 100
     t.string   "lastname",        limit: 100
     t.string   "address",         limit: 200
-    t.boolean  "active"
-    t.string   "uuid",            limit: 100
-    t.integer  "sign_in_count",               default: 0,  null: false
+    t.boolean  "active",                      default: false, null: false
+    t.string   "uuid",            limit: 100,                 null: false
+    t.datetime "validated_at"
+    t.integer  "sign_in_count",               default: 0,     null: false
     t.datetime "last_sign_in_at"
     t.datetime "created_at"
     t.datetime "updated_at"

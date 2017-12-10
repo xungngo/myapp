@@ -13,24 +13,8 @@
     <![endif]-->
     <title>Aspirr</title>
     <%= csrf_meta_tags %>
+
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <style>
-    .container {
-      width: 100%;
-    }
-    /* DOCTYPE on line 1 defines this as html5. When map height is 100% google map doesn't showing up. A fix height will solve the problem but we want the height to be 100%. */
-    #map {height: 758px;}
-    /* Optional: Makes the sample page fill the window. */
-    html, body, {height:100%; margin:0; padding:0;}
-
-    #search-list {background-color:#eaeaea; height:758px; padding:20px; overflow:auto;}
-    .search-item {background-color:#ffffff; height:200px; padding:10px; border:solid #eaeaea 6px;}
-    .search-item-highlite {background-color:#fafad2;}
-
-    #infowindow-content .title {font-weight: bold;}
-    #infowindow-content {display: none;}
-    #map #infowindow-content {display: inline;}    
-    </style>
   </head>
 
 <body id="page-top" class="home">
@@ -66,15 +50,6 @@
 
                 <!-- MENU -->
                 <ul class="menu">
-                    <li class="search-input-keyword"><input type="text" name="input_keyword" id="input_keyword" placeholder="Course keyword"></li>
-                    <li class="search-input-location"><input type="text" name="input_address" id="input_address" placeholder="Enter a location" value="11852 Medway Church Loop, Manassas, VA, United States"></li>
-                    <li>
-                        <input type="hidden" name="input_radius" id="input_radius" value="30">
-                        <input type="hidden" name="input_latitude" id="input_latitude">
-                        <input type="hidden" name="input_longitude" id="input_longitude">
-                        <input type="submit" id="searchButton" value="Explore" class="mc-btn btn-style-1">
-                    </li>
-
                     <li class="current-menu-item"><a href="/">Home</a></li>
                     <li class="menu-item-has-children megamenu col-4">
                         <a href="#">Pages</a>
@@ -133,14 +108,22 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="categories.html">About Us</a>
+                        <a href="aboutus">About Us</a>
                     </li>
                     <li class="menu-item-has-children">
-                        <a href="#">Login</a>
-                        <ul class="sub-menu">
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="register.html">Register</a></li>
-                        </ul>
+                        <% if session[:user_id] %>
+                            <a href="#">Menu</a>
+                            <ul class="sub-menu">
+                                <li><a href="/signin?logoff=1">Sign Out</a></li>
+                                <li><a href="/account">Account</a></li>
+                            </ul>                        
+                        <% else %>
+                            <a href="#">Sign In / Register</a>
+                            <ul class="sub-menu">
+                                <li><a href="signin">Sign In</a></li>
+                                <li><a href="register">Register</a></li>
+                            </ul>
+                        <% end %>
                     </li>
                 </ul>
                 <!-- END / MENU -->
@@ -293,147 +276,6 @@
                     </li>
                     <!-- END / MESSAGE INFO -->
 
-                    <!-- NOTIFICATION -->
-                    <li class="list-item notification">
-                        <div class="notification-info item-click">
-                            <i class="icon md-bell"></i>
-                            <span class="itemnew"></span>
-                        </div>
-                        <div class="toggle-notification toggle-list">
-                            <div class="list-profile-title">
-                                <h4>Notification</h4>
-                                <span class="count-value">2</span>
-                            </div>
-
-                            <ul class="list-notification">
-
-                                <!-- LIST ITEM -->
-                                <li class="ac-new">
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li class="ac-new">
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                <!-- LIST ITEM -->
-                                <li>
-                                    <a href="#">
-                                        <div class="list-body">
-                                            <div class="author">
-                                                <span>Aspirr</span>
-                                                <div class="div-x"></div>
-                                            </div>
-                                            <p>attend Salary for newbie course</p>
-                                            <div class="image">
-                                                <%= image_tag 'feature/img-1.jpg' %>
-                                            </div>
-                                            <div class="time">
-                                                <span>5 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <!-- END / LIST ITEM -->
-
-                                
-
-                            </ul>
-                        </div>
-                    </li>
-                    <!-- END / NOTIFICATION -->
-
                     <li class="list-item account">
                         <div class="account-info item-click">
                             <%= image_tag 'team-13.jpg' %>
@@ -441,7 +283,7 @@
                         <div class="toggle-account toggle-list">
                             <ul class="list-account">
                                 <li><a href="setting.html"><i class="icon md-config"></i>Setting</a></li>
-                                <li><a href="login.html"><i class="icon md-arrow-right"></i>Sign Out</a></li>
+                                <li><a href="signin.html"><i class="icon md-arrow-right"></i>Sign Out</a></li>
                             </ul>
                         </div>
                     </li>

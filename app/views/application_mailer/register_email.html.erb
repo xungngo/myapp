@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= "#{@user.firstname} #{@user.lastname}" %>,</h1>
+    <p>Thank you for registering with <%= SITE_NAME %>.</p>
+    <p>Please validate your email by clicking on this <a href="<%= SITE_URL %>/signin?validate=<%= @user.uuid %>">validation link</a>.</p>
+    <br><br>
+    <p>Sincerely,<br>
+    <%= SITE_NAME %><br>
+    <%= SITE_DOTCOM %></p>
+  </body>
+</html>
