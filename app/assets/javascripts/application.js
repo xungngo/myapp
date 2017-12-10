@@ -18,6 +18,7 @@
 //= require library/jquery.owl.carousel
 //= require library/bootstrap.min
 //= require library/perfect-scrollbar.min
-//= require scripts
-// require min/scripts.min [this script is minified version of scripts.js]
-//= require_tree .
+//= require library/scripts
+// require library/scripts.min [this script is minified version of scripts.js]
+// require_tree . 
+// stub "library/scripts.min"

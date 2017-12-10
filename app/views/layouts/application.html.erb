@@ -1,9 +1,3 @@
-<% if params[:action] == "search" || params[:action] == "search1" %>
-  <%= render "/layouts/header_search" %>
-    <%= yield %>
-  <%= render "/layouts/footer_search" %>
-<% else %>
-  <%= render "/layouts/header" %>
-    <%= yield %>
-  <%= render "/layouts/footer" %>
-<% end %>
+<%= render "/layouts/header" %>
+  <%= yield %>
+<%= render "/layouts/footer" %>

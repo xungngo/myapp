@@ -26,7 +26,7 @@
                         <div class="form-password-format">Password Format: 8 or more characters, a digit, a lower case character, an upper case character, and a symbol</div>
 
                         <div class="form-submit-1">
-                            <input type="button" name="register" id="register" value="Sign Up" class="mc-btn btn-style-1">
+                            <input type="submit" name="register" id="register" value="Sign Up" class="mc-btn btn-style-1">
                         </div>
                         <div class="link">
                             <a href="signin">
@@ -51,11 +51,10 @@
 <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
 <script>
-$(document).ready(function() {
-    $("#register").click(function(){
-      submitRegistration();
-    });
-  });
+$("#register_form").on('submit', function(e){
+  e.preventDefault();
+  submitRegistration();
+});
 
 function submitRegistration() {
     var form_params = $("#register_form").serialize();
