@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170819174500) do
+ActiveRecord::Schema.define(version: 20171215104530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 20170819174500) do
     t.integer "display_rank", default: 5, null: false
   end
 
+  create_table "states", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "abbr", null: false
+  end
+
   create_table "user_location_mappings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "location_id"
@@ -60,7 +65,11 @@ ActiveRecord::Schema.define(version: 20170819174500) do
     t.string   "firstname",       limit: 100
     t.string   "middleinit",      limit: 100
     t.string   "lastname",        limit: 100
-    t.string   "address",         limit: 200
+    t.string   "address1",        limit: 100
+    t.string   "address2",        limit: 100
+    t.string   "city",            limit: 100
+    t.integer  "state_id"
+    t.string   "zipcode",         limit: 5
     t.boolean  "active",                      default: false, null: false
     t.string   "uuid",            limit: 100,                 null: false
     t.datetime "validated_at"

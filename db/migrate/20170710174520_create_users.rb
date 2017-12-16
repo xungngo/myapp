@@ -7,7 +7,11 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :firstname, :limit => 100
       t.string :middleinit, :limit => 100
       t.string :lastname, :limit => 100
-      t.string :address, :limit => 200
+      t.string :address1, :limit => 100
+      t.string :address2, :limit => 100
+      t.string :city, :limit => 100
+      t.integer :state_id
+      t.string :zipcode, :limit => 5
       t.boolean :active, null: false, default: false
       t.string :uuid, :limit => 100, null: false
       t.datetime :validated_at

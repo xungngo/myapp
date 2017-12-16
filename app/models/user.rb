@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :roles, :through => :user_role_mappings
   has_many :user_location_mappings
   has_many :locations, :through => :user_location_mappings
+  belongs_to :states
 
   validates :email, uniqueness: {message: "The email is in the system."}, presence: true
   validates :username, uniqueness: {message: "The username has already been taken."}, presence: true  
@@ -102,6 +103,21 @@ class User < ActiveRecord::Base
 
   def full_name_ad_style
     "#{firstname} #{middleinit} #{lastname}"
+  end
+
+  def created_at_formatted
+    return nil unless created_at.present?
+    created_at.strftime("%m/%d/%Y @ %l:%M%p ET")
+  end
+
+  def updated_at_formatted
+    return nil unless updated_at.present?
+    updated_at.strftime("%m/%d/%Y @ %l:%M%p ET")
+  end
+
+  def lastsignin_at_formatted
+    return nil unless last_sign_in_at.present?
+    last_sign_in_at.strftime("%m/%d/%Y @ %l:%M%p ET")
   end
 
   private

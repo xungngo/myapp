@@ -16,7 +16,50 @@ class Admin::UsersController < ApplicationController
     else
       @locations = Location.all
     end
-	end
+  end
+  
+	def user_profile
+    @user = User.find(current_user.id)
+    @states = State.all
+  end
+
+  def user_profile_update
+    @user = User.find(current_user.id)
+    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
+      flash[:success] = "User profile updated successfully."
+      redirect_to user_profile_path
+    else
+      render :action => :user_profile
+    end
+  end
+
+  def user_preferences
+    @user = User.find(current_user.id)
+  end
+
+  def user_preferences_update
+    @user = User.find(current_user.id)
+    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
+      flash[:success] = "User profile updated successfully."
+      redirect_to user_profile_path
+    else
+      render :action => :user_profile
+    end
+  end
+  
+  def user_security
+    @user = User.find(current_user.id)
+  end
+
+  def user_security_update
+    @user = User.find(current_user.id)
+    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
+      flash[:success] = "User profile updated successfully."
+      redirect_to user_profile_path
+    else
+      render :action => :user_profile
+    end
+	end  
 
 =begin
 	def new

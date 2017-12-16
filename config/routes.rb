@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   get '/register_result', to: 'pages#register_result'
   get '/forgot', to: 'pages#forgot'
   get 'user' => 'admin/users#user_home'
+  get 'user_profile' => 'admin/users#user_profile'
+  post 'user_profile_update' => 'admin/users#user_profile_update'
+  get 'user_preferences' => 'admin/users#user_preferences'
+  get 'user_security' => 'admin/users#user_security'
 
   get 'admin/' => redirect('/')
   get 'admin/dashboard' => 'admin#dashboard'
