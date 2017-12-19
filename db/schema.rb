@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20171215104530) do
     t.boolean  "active",                      default: false, null: false
     t.string   "uuid",            limit: 100,                 null: false
     t.datetime "validated_at"
+    t.string   "timezone"
     t.integer  "sign_in_count",               default: 0,     null: false
     t.datetime "last_sign_in_at"
     t.datetime "created_at"

@@ -1,13 +1,15 @@
 require 'bcrypt'
 class User < ActiveRecord::Base
-  #has_secure_password
   include BCrypt
-  
+  include Stripper
+
+  strip_attributes :firstname, :middleinit, :lastname, :address1, :address2, :city, :zipcode, :email, :username, :password_digest
+
   has_many :user_role_mappings
   has_many :roles, :through => :user_role_mappings
   has_many :user_location_mappings
   has_many :locations, :through => :user_location_mappings
-  belongs_to :states
+  belongs_to :state
 
   validates :email, uniqueness: {message: "The email is in the system."}, presence: true
   validates :username, uniqueness: {message: "The username has already been taken."}, presence: true  
@@ -17,6 +19,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i, message: "A valid email is required."
   # metacharacters [, \, ^, $, ., |, ?, *, +, (, and ) need to be escaped with a \
   validates_format_of :firstname, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid firstname is required."
+  validates_format_of :middleinit, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid middle initial is required.", :allow_blank => true
   validates_format_of :lastname, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid lastname is required."
 
   PASSWORD_FORMAT = /\A
@@ -27,7 +30,8 @@ class User < ActiveRecord::Base
   (?=.*[[:^alnum:]]) # Must contain a symbol
   /x
 
-  validates :password_digest, presence: true, format: { with: PASSWORD_FORMAT, message: "The password format is not valid." }
+  validates :password_digest, presence: true
+  # validates :password_digest, presence: true, format: { with: PASSWORD_FORMAT, message: "The password format is not valid." }
 
   #roles defined in one place. Must match what is in the unique_key column of the role table (used in cancancan ability file and other places)
   def admin?
@@ -49,8 +53,8 @@ class User < ActiveRecord::Base
   end
 
   def self.register(f)
-    new_user = new(firstname: f[:firstname], lastname: f[:lastname], email: f[:email].downcase, 
-                   username: create_username(f[:email]), uuid: SecureRandom.hex, role_ids: 3)
+    new_user = new(firstname: f[:firstname], lastname: f[:lastname], email: f[:email].downcase,
+                   username: create_username(f[:email]), uuid: SecureRandom.hex, role_ids: 3, state_id: 1)
     new_user.password = f[:password_digest]
     new_user.save
     new_user
@@ -83,6 +87,17 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def self.change_password(f, u) #PASSWORD_DIGEST DOESN'T VALIDATE BECAUSE THE ENCRYPTION IS ALWAYS SUCCESSFUL NOT THE REAL PASSWORD 
+    current_pw = f[:password_current]
+    decrypt_pw = Password.new(u.password_digest)
+    #binding.pry
+    return nil unless decrypt_pw == current_pw
+    user = User.find(u.id)
+    user.password = f[:password_digest]
+    user.save
+    user
+  end
+
   def update_login_info
     self.sign_in_count = self.sign_in_count + 1
     self.last_sign_in_at = Time.current
@@ -107,17 +122,17 @@ class User < ActiveRecord::Base
 
   def created_at_formatted
     return nil unless created_at.present?
-    created_at.strftime("%m/%d/%Y @ %l:%M%p ET")
+    created_at.strftime("%m/%d/%Y @ %l:%M %p")
   end
 
   def updated_at_formatted
     return nil unless updated_at.present?
-    updated_at.strftime("%m/%d/%Y @ %l:%M%p ET")
+    updated_at.strftime("%m/%d/%Y @ %l:%M %p")
   end
 
   def lastsignin_at_formatted
     return nil unless last_sign_in_at.present?
-    last_sign_in_at.strftime("%m/%d/%Y @ %l:%M%p ET")
+    last_sign_in_at.strftime("%m/%d/%Y @ %l:%M %p")
   end
 
   private

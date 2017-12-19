@@ -16,35 +16,18 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
 
-				<% if @user.errors.any? %>
-				<div class='status error' id="flashmsg" tabindex="0">
-				<h3>The form did not process due to the <%= pluralize(@user.errors.count, "error") %> below:</h3>
-				<ul>
-				<% @user.errors.full_messages.each do |msg| %>
-					<li><%= msg %></li>
-				<% end %>
-				</ul>
-				</div><br><br>
-				<% end %>
-
-				<% flash.each do |key, value| %>
-				<div class="alert alert-<%= key %> alert-dismissible" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<%= value %>
-				</div>
-				<% end %>
+				<%= render "layouts/error_message" %>
+				<%= render "layouts/error_flash" %>
 				
-				<%= form_for @user, url: user_profile_update_path, method: 'post', class:'form' do |f| %>
+				<%= form_for @user, url: user_preferences_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>
 					<legend>Preferences</legend>
 					
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
-						<%= f.label :firstname, "Username", class:"control-label" %>
-						<%= f.text_field :firstname, class:"form-control" %>
+						<%= f.label :username, "Username", class:"control-label" %>
+						<%= f.text_field :username, class: "form-control" %>
 						</div>
 						<div class="col-md-1"></div>
 					</div>
@@ -53,7 +36,16 @@
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
 						<%= f.label :email, "Email", class:"control-label" %>
-						<%= f.text_field :email, class:"form-control" %>
+						<%= f.text_field :email, class: "form-control" %>
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+
+					<div class="row form-group">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+						<%= f.label :timezone, "Your Time Zone", class:"control-label" %>
+						<%= f.time_zone_select :timezone, ActiveSupport::TimeZone.all.sort, {default: "Eastern Time (US & Canada)"}, {class: "form-control"} %>
 						</div>
 						<div class="col-md-1"></div>
 					</div>
@@ -75,7 +67,7 @@
 
 			<div class="col-lg-4">
 				
-				<%= form_for @user, url: user_profile_path(@user), class:'form' do |f| %>
+				<%= form_for @user, url: user_preferences_update_path(@user), class:'form' do |f| %>
 				<fieldset>
 					<legend>General Information</legend>
 					<div class="row form-group">

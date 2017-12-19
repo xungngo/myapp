@@ -15,6 +15,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.boolean :active, null: false, default: false
       t.string :uuid, :limit => 100, null: false
       t.datetime :validated_at
+      t.string :timezone
 
       ## Trackable
       t.integer  :sign_in_count, default: 0, null: false

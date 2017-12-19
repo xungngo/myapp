@@ -22,7 +22,7 @@ class PagesController < ApplicationController
   end
 
   def signin_result
-    if email_is_blank(params) || password_is_blank(params)
+    if email_is_blank(params) || password_digest_is_blank(params)
       return_message = [{"message":"The email and password are required!"}]
     elsif User.authenticate(params).present?
       if User.not_validated?(params)
@@ -42,8 +42,10 @@ class PagesController < ApplicationController
   end
 
   def register_result
-    if firstname_is_blank(params) || lastname_is_blank(params) || email_is_blank(params) || password_is_blank(params)
+    if firstname_is_blank(params) || lastname_is_blank(params) || email_is_blank(params) || password_digest_is_blank(params)
       return_message = [{"message":"All fields are required!"}]
+    elsif password_not_valid(params)
+      return_message = [{"message":"The password format is not valid!"}]
     elsif password_not_confirmed(params)
       return_message = [{"message":"The password does not confirm!"}]
     else
@@ -96,23 +98,4 @@ class PagesController < ApplicationController
 
   private
 
-  def email_is_blank(p)
-    p[:email].blank? ? true : false
-  end
-  
-  def password_is_blank(p)
-    p[:password_digest].blank? ? true : false
-  end
-
-  def firstname_is_blank(p)
-    p[:firstname].blank? ? true : false
-  end
-  
-  def lastname_is_blank(p)
-    p[:lastname].blank? ? true : false
-  end
-  
-  def password_not_confirmed(p)
-    p[:password_digest] == p[:password_confirmation] ? false : true
-  end
 end

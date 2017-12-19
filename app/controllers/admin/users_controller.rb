@@ -20,13 +20,12 @@ class Admin::UsersController < ApplicationController
   
 	def user_profile
     @user = User.find(current_user.id)
-    @states = State.all
   end
 
   def user_profile_update
     @user = User.find(current_user.id)
-    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
-      flash[:success] = "User profile updated successfully."
+    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname], address1: params[:user][:address1], address2: params[:user][:address2], city: params[:user][:city], state_id: params[:user][:state_id].to_i, zipcode: params[:user][:zipcode])
+      flash[:success] = "User profile was updated successfully."
       redirect_to user_profile_path
     else
       render :action => :user_profile
@@ -39,11 +38,11 @@ class Admin::UsersController < ApplicationController
 
   def user_preferences_update
     @user = User.find(current_user.id)
-    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
-      flash[:success] = "User profile updated successfully."
-      redirect_to user_profile_path
+    if @user.update(username: params[:user][:username], email: params[:user][:email], timezone: params[:user][:timezone])
+      flash[:success] = "User preferences were updated successfully."
+      redirect_to user_preferences_path
     else
-      render :action => :user_profile
+      render :action => :user_preferences
     end
   end
   
@@ -52,14 +51,18 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_security_update
-    @user = User.find(current_user.id)
-    if @user.update(firstname: params[:user][:firstname], middleinit: params[:user][:middleinit], lastname: params[:user][:lastname])
-      flash[:success] = "User profile updated successfully."
-      redirect_to user_profile_path
+    if password_current_is_blank(params) || password_digest_is_blank(params)
+      flash[:danger] = "All fields are required!"
+    elsif password_not_valid(params)
+      flash[:danger] = "The 'New Password' format is not valid!"
+    elsif password_not_confirmed(params)
+      flash[:danger] = "The new passwords do not confirm!"
     else
-      render :action => :user_profile
+      User.change_password(params, current_user)
+      flash[:success] = "User password was updated successfully."
     end
-	end  
+    redirect_to user_security_path
+	end
 
 =begin
 	def new

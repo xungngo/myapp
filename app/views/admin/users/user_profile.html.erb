@@ -16,25 +16,8 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
 
-				<% if @user.errors.any? %>
-				<div class='status error' id="flashmsg" tabindex="0">
-				<h3>The form did not process due to the <%= pluralize(@user.errors.count, "error") %> below:</h3>
-				<ul>
-				<% @user.errors.full_messages.each do |msg| %>
-					<li><%= msg %></li>
-				<% end %>
-				</ul>
-				</div><br><br>
-				<% end %>
-
-				<% flash.each do |key, value| %>
-				<div class="alert alert-<%= key %> alert-dismissible" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<%= value %>
-				</div>
-				<% end %>
+				<%= render "layouts/error_message" %>
+				<%= render "layouts/error_flash" %>
 				
 				<%= form_for @user, url: user_profile_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>
@@ -84,7 +67,7 @@
 						</div>
 						<div class="col-md-2">
 							<%= f.label :state_id, "State", class:"control-label" %>
-							<%= f.select :state_id, options_from_collection_for_select(@states, :id, :abbr, @user.state_id), {}, {:class => "form-control"} %>
+							<%= f.select :state_id, options_from_collection_for_select(State.all, :id, :abbr, @user.state_id), {}, {title: "States", class: "form-control"} %>
 						</div>
 						<div class="col-md-3">
 							<%= f.label :zipcode, "Zipcode", class:"control-label" %>
