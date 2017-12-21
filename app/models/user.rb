@@ -2,6 +2,7 @@ require 'bcrypt'
 class User < ActiveRecord::Base
   include BCrypt
   include Stripper
+  include UserHelpers
 
   strip_attributes :firstname, :middleinit, :lastname, :address1, :address2, :city, :zipcode, :email, :username, :password_digest
 
@@ -49,12 +50,13 @@ class User < ActiveRecord::Base
   def self.authenticate(f)
     user = find_by_email(f[:email].downcase)
     return nil unless user && user.password == f[:password_digest]
+    user.update_signin_info
     user
   end
 
   def self.register(f)
     new_user = new(firstname: f[:firstname], lastname: f[:lastname], email: f[:email].downcase,
-                   username: create_username(f[:email]), uuid: SecureRandom.hex, role_ids: 3, state_id: 1)
+                   username: create_username_by_email(f[:email]), uuid: SecureRandom.hex, role_ids: 3, state_id: 1)
     new_user.password = f[:password_digest]
     new_user.save
     new_user
@@ -83,24 +85,24 @@ class User < ActiveRecord::Base
 
   def set_validation_date
     return nil unless self.validated_at.blank? # only set the date once
-    self.validated_at = Time.current
+    self.validated_at = Time.now
     self.save
   end
 
-  def self.change_password(f, u) #PASSWORD_DIGEST DOESN'T VALIDATE BECAUSE THE ENCRYPTION IS ALWAYS SUCCESSFUL NOT THE REAL PASSWORD 
+  def self.change_password(f, u)
     current_pw = f[:password_current]
     decrypt_pw = Password.new(u.password_digest)
-    #binding.pry
     return nil unless decrypt_pw == current_pw
-    user = User.find(u.id)
+    user = u
     user.password = f[:password_digest]
+    user.security_updated_at = Time.now
     user.save
     user
   end
 
-  def update_login_info
+  def update_signin_info
     self.sign_in_count = self.sign_in_count + 1
-    self.last_sign_in_at = Time.current
+    self.last_sign_in_at = Time.now
     self.save
   end
 
@@ -120,19 +122,12 @@ class User < ActiveRecord::Base
     "#{firstname} #{middleinit} #{lastname}"
   end
 
-  def created_at_formatted
-    return nil unless created_at.present?
-    created_at.strftime("%m/%d/%Y @ %l:%M %p")
+  def self.username_is_taken(u, i)
+    where(username: u).where.not(id: i).present? ? true : false
   end
 
-  def updated_at_formatted
-    return nil unless updated_at.present?
-    updated_at.strftime("%m/%d/%Y @ %l:%M %p")
-  end
-
-  def lastsignin_at_formatted
-    return nil unless last_sign_in_at.present?
-    last_sign_in_at.strftime("%m/%d/%Y @ %l:%M %p")
+  def self.email_is_taken(e, i)
+    where(email: e).where.not(id: i).present? ? true : false
   end
 
   private
@@ -157,9 +152,9 @@ class User < ActiveRecord::Base
    end
   end
 
-  def self.create_username(n)
-    username = n.split("@")[0].downcase
+  def self.create_username_by_email(e)
+    username = e.split("@")[0].downcase
     return username unless User.find_by_username(username)
     username + rand(10..99).to_s
-  end  
+  end
 end

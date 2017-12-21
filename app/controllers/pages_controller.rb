@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     elsif password_not_valid(params)
       return_message = [{"message":"The password format is not valid!"}]
     elsif password_not_confirmed(params)
-      return_message = [{"message":"The password does not confirm!"}]
+      return_message = [{"message":"The password does not match the confirm password!"}]
     else
       regis_user = User.register(params)
       if regis_user.id.present?
