@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
   validates :password_digest, presence: true
   # validates :password_digest, presence: true, format: { with: PASSWORD_FORMAT, message: "The password format is not valid." }
 
+  # avatar with paperclip
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+
   #roles defined in one place. Must match what is in the unique_key column of the role table (used in cancancan ability file and other places)
   def admin?
     return !!self.roles.find_by_unique_key('admin')

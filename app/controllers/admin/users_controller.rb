@@ -52,6 +52,17 @@ class Admin::UsersController < ApplicationController
       render :action => :user_preferences
     end
   end
+
+  def user_preferences_avatar_update
+    @user = User.find(current_user.id)
+    if params[:user].present?
+      @user.update(avatar_params)
+      flash[:success] = "User avatar was added successfully."
+    else
+      flash[:danger] = "Please upload an image as your avatar."
+    end
+    redirect_to user_preferences_path avtr:1
+  end
   
   def user_security
     @user = User.find(current_user.id)
@@ -117,6 +128,10 @@ class Admin::UsersController < ApplicationController
 	end
 
   private
+
+  def avatar_params
+    params.require(:user).permit(:avatar)
+  end
 
 	def role_list
 	  @role_list = Role.all

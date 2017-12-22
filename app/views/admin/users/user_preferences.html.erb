@@ -16,9 +16,11 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
 
-				<%= render "layouts/error_message" %>
-				<%= render "layouts/error_flash" %>
-				
+				<% if !params[:avtr].present? %>
+					<%= render "layouts/error_message" %>
+					<%= render "layouts/error_flash" %>
+				<% end %>
+
 				<%= form_for @user, url: user_preferences_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>
 					<legend>Preferences</legend>
@@ -106,19 +108,24 @@
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
-
-				<%= render "layouts/error_message" %>
-				<%= render "layouts/error_flash" %>
 				
-				<%= form_for @user, url: user_preferences_update_path, method: 'post', class:'form' do |f| %>
+				<% if params[:avtr].present? %>
+					<%= render "layouts/error_message" %>
+					<%= render "layouts/error_flash" %>
+				<% end %>
+
+				<%= form_for @user, url: user_preferences_avatar_update_path, html: { multipart: true, method: 'post', class:'form' } do |f| %>
 				<fieldset>
 					<legend>Avatar</legend>
 					
 					<div class="row form-group">
 						<div class="col-md-1"></div>
-						<div class="col-md-10">
-						<%= f.label :username, "Username", class:"control-label" %>
-						<%= f.text_field :username, class: "form-control" %>
+						<div class="col-md-2">
+							<div class="avatar-image-round"><%= image_tag @user.avatar.url(:thumb) %></div>
+						</div>
+						<div class="col-md-8">
+						<%= f.label :avatar, "Upload Your Avatar", class:"control-label avatar-label" %>
+						<%= f.file_field :avatar, class: "form-control avatar-field" %>
 						</div>
 						<div class="col-md-1"></div>
 					</div>

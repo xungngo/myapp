@@ -21,6 +21,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.datetime :profile_updated_at
       t.datetime :preferences_updated_at
       t.datetime :security_updated_at
+      t.attachment :avatar
 
       ## Trackable
       t.integer  :sign_in_count, default: 0, null: false

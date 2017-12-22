@@ -79,6 +79,10 @@ ActiveRecord::Schema.define(version: 20171215104530) do
     t.datetime "profile_updated_at"
     t.datetime "preferences_updated_at"
     t.datetime "security_updated_at"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
     t.integer  "sign_in_count",                      default: 0,     null: false
     t.datetime "last_sign_in_at"
     t.datetime "created_at"

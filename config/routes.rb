@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post 'user_profile_update' => 'admin/users#user_profile_update'
   get 'user_preferences' => 'admin/users#user_preferences'
   post 'user_preferences_update' => 'admin/users#user_preferences_update'
+  post 'user_preferences_avatar_update' => 'admin/users#user_preferences_avatar_update'
   get 'user_security' => 'admin/users#user_security'
   post 'user_security_update' => 'admin/users#user_security_update'
 
