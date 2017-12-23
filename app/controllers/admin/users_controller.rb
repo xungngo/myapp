@@ -10,7 +10,8 @@ class Admin::UsersController < ApplicationController
 		@users = User.includes(:user_role_mappings, :roles).order(:last_name, :first_name, :middle_name)
 	end
 
-	def user_home
+  def user_home
+    @user = User.find(current_user.id)
     if current_user.present?
       @locations = Location.order(:code).where(:active => true, :id => UserLocationMapping.location_ids(current_user.id))
     else
@@ -56,14 +57,32 @@ class Admin::UsersController < ApplicationController
   def user_preferences_avatar_update
     @user = User.find(current_user.id)
     if params[:user].present?
-      @user.update(avatar_params)
-      flash[:success] = "User avatar was added successfully."
+      if @user.update(avatar_params)
+        flash[:success] = "User avatar was added successfully."
+        redirect_to user_preferences_path avtr:1
+      else
+        @user.errors.delete(:avatar)
+        render :action => :user_preferences
+      end
     else
       flash[:danger] = "Please upload an image as your avatar."
+      redirect_to user_preferences_path avtr:1
     end
-    redirect_to user_preferences_path avtr:1
   end
-  
+
+  def user_preferences_avatar_delete
+    @user = User.find(current_user.id)
+    @user.avatar = nil
+    @user.save
+    if @user.save
+      flash[:success] = "User avatar was deleted successfully."
+      redirect_to user_preferences_path avtr:1
+    else
+      flash[:danger] = "User avatar was NOT deleted. Please try again later."
+      redirect_to user_preferences_path avtr:1
+    end
+  end
+
   def user_security
     @user = User.find(current_user.id)
   end
@@ -130,7 +149,7 @@ class Admin::UsersController < ApplicationController
   private
 
   def avatar_params
-    params.require(:user).permit(:avatar)
+    params.require(:user).permit(:avatar).merge(preferences_updated_at: Time.now)
   end
 
 	def role_list

@@ -22,3 +22,4 @@
 // require library/scripts.min [this script is minified version of scripts.js]
 // require_tree . 
 // stub "library/scripts.min"
+//= require users

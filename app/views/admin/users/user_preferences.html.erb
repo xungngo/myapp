@@ -121,20 +121,37 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-2">
-							<div class="avatar-image-round"><%= image_tag @user.avatar.url(:thumb) %></div>
+							<div class="avatar-image-round"><%= image_tag current_user.avatar.url(:thumb) %></div>
+							<% if @user.avatar.present? %>
+							<div class="avatar-link-delete"><%= link_to "<i class='icon md-close-2'></i> Delete".html_safe, "javascript:;", id: "delete_avatar" %></div>
+							<% end %>
 						</div>
 						<div class="col-md-8">
-						<%= f.label :avatar, "Upload Your Avatar", class:"control-label avatar-label" %>
-						<%= f.file_field :avatar, class: "form-control avatar-field" %>
+							<%= f.label :avatar, "Upload Your Avatar", class:"control-label avatar-label" %>
+							<%= f.file_field :avatar, class: "form-control avatar-field" %>
 						</div>
 						<div class="col-md-1"></div>
 					</div>
+					<% if @user.avatar.present? %>
+					<div class="row form-group">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<div class='alert alert-warning' role="alert" id="alert_div" style="display: none">
+								<strong>Proceed to delete this avatar? &nbsp;&nbsp;
+								<button type="button" id="delete_avatar_yes" class="btn btn-default"> Yes </button> &nbsp;&nbsp;
+								<button type="button" id="delete_avatar_no" class="btn btn-default"> No </button></strong>
+							</div>
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+					<% end %>
 				</fieldset>
 
 				<hr>
 				<div class="row form-group">
 					<div class="col-md-1"></div>
 					<div class="col-md-10" align="right">
+						<input type="hidden" name="avtr" value="1">
 						<%= f.submit "Save", :class => "btn btn-default" %>
 					</div>
 					<div class="col-md-1"></div>
