@@ -1,12 +1,10 @@
 $("#delete_avatar").on("click", function() {
     $("#alert_div").show( "600", function() {
-    //alert("Hello")
     });
 });
 
 $("#delete_avatar_no").on("click", function() {
     $("#alert_div").hide( "600", function() {
-        //alert("Hello")
     });
 });
 

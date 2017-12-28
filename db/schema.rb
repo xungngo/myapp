@@ -10,10 +10,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171215104530) do
+ActiveRecord::Schema.define(version: 20171223174570) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachments", force: :cascade do |t|
+    t.string   "eventimg_file_name"
+    t.string   "eventimg_content_type"
+    t.integer  "eventimg_file_size"
+    t.datetime "eventimg_updated_at"
+  end
+
+  create_table "event_attachment_mappings", force: :cascade do |t|
+    t.integer  "event_id"
+    t.integer  "attachment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_schedule_mappings", force: :cascade do |t|
+    t.integer  "event_id"
+    t.integer  "schedule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string   "name",         limit: 100,                                           null: false
+    t.string   "description",  limit: 2000,                                          null: false
+    t.string   "requirement",  limit: 1000
+    t.string   "contact",      limit: 100
+    t.string   "address",      limit: 200,                                           null: false
+    t.string   "price",        limit: 100
+    t.integer  "limit"
+    t.integer  "eventtype_id",                                                       null: false
+    t.string   "tag",          limit: 100
+    t.decimal  "latitude",                  precision: 10, scale: 6,                 null: false
+    t.decimal  "longitude",                 precision: 10, scale: 6,                 null: false
+    t.boolean  "active",                                             default: false, null: false
+    t.string   "uuid",         limit: 100,                                           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "eventtypes", force: :cascade do |t|
+    t.string   "name",       limit: 100,                 null: false
+    t.boolean  "active",                 default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "locations", force: :cascade do |t|
     t.string   "code",       limit: 10
@@ -37,6 +83,13 @@ ActiveRecord::Schema.define(version: 20171215104530) do
     t.string  "name"
     t.string  "unique_key"
     t.integer "display_rank", default: 5, null: false
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "states", force: :cascade do |t|
