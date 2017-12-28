@@ -12,16 +12,20 @@ Rails.application.routes.draw do
   get '/register', to: 'pages#register'
   get '/register_result', to: 'pages#register_result'
   get '/forgot', to: 'pages#forgot'
-  get 'user' => 'admin/users#user_home'
-  get 'user_profile' => 'admin/users#user_profile'
-  post 'user_profile_update' => 'admin/users#user_profile_update'
-  get 'user_preferences' => 'admin/users#user_preferences'
-  post 'user_preferences_update' => 'admin/users#user_preferences_update'
-  post 'user_preferences_avatar_update' => 'admin/users#user_preferences_avatar_update'
-  get 'user_preferences_avatar_delete' => 'admin/users#user_preferences_avatar_delete'
-  get 'user_security' => 'admin/users#user_security'
-  post 'user_security_update' => 'admin/users#user_security_update'
+  get 'user', to: 'admin/users#user_home'
+  get 'user_profile', to: 'admin/users#user_profile'
+  post 'user_profile_update', to: 'admin/users#user_profile_update'
+  get 'user_preferences', to: 'admin/users#user_preferences'
+  post 'user_preferences_update', to: 'admin/users#user_preferences_update'
+  post 'user_preferences_avatar_update', to: 'admin/users#user_preferences_avatar_update'
+  get 'user_preferences_avatar_delete', to: 'admin/users#user_preferences_avatar_delete'
+  get 'user_security', to: 'admin/users#user_security'
+  post 'user_security_update', to: 'admin/users#user_security_update'
 
-  get 'admin/' => redirect('/')
-  get 'admin/dashboard' => 'admin#dashboard'
+  get 'admin/', to: redirect('/')
+  get 'admin/dashboard', to: 'admin#dashboard'
+
+  namespace :organizer do
+    resources :events
+  end
 end

@@ -8,7 +8,7 @@
 				<h2 class="h2-flush-top"><%=@page_title%></h2>
 			</div>
 			<div class="col-lg-7">
-				<%= render "user_nav" %>
+				<%= render "layouts/nav" %>
 			</div>
 		</div>
 		
@@ -16,8 +16,8 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
 
-				<%= render "layouts/error_message" %>
-				<%= render "layouts/error_flash" %>
+				<%= render "layouts/message_error" %>
+				<%= render "layouts/message_flash" %>
 				
 				<%= form_for @user, url: user_profile_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>

@@ -8,7 +8,7 @@
 				<h2 class="h2-flush-top"><%=@page_title%></h2>
 			</div>
 			<div class="col-lg-7">
-				<%= render "user_nav" %>
+				<%= render "layouts/nav" %>
 			</div>
 		</div>
 		
@@ -17,8 +17,8 @@
 			<div class="col-lg-4">
 
 				<% if !params[:avtr].present? %>
-					<%= render "layouts/error_message" %>
-					<%= render "layouts/error_flash" %>
+					<%= render "layouts/message_error" %>
+					<%= render "layouts/message_flash" %>
 				<% end %>
 
 				<%= form_for @user, url: user_preferences_update_path, method: 'post', class:'form' do |f| %>
@@ -110,8 +110,8 @@
 			<div class="col-lg-4">
 				
 				<% if params[:avtr].present? %>
-					<%= render "layouts/error_message" %>
-					<%= render "layouts/error_flash" %>
+					<%= render "layouts/message_error" %>
+					<%= render "layouts/message_flash" %>
 				<% end %>
 
 				<%= form_for @user, url: user_preferences_avatar_update_path, html: { multipart: true, method: 'post', class:'form' } do |f| %>

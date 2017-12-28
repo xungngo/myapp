@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   has_many :attachments, :through => :event_attachment_mappings
   has_many :event_schedule_mappings
   has_many :schedules, :through => :event_schedule_mappings
-  belongs_to :state
+  belongs_to :eventtype
 
   validates :name, presence: {message: "The Event Name field is required."}
   validates :description, presence: {message: "The Event Description field is required."}
@@ -13,4 +13,8 @@ class Event < ActiveRecord::Base
   validates :longitude, presence: {message: "The Event Latitude is required."}
   validates :uuid, presence: {message: "The Event UUID is required."}
   validates :uuid, presence: {message: "The Event UUID is required."}
+
+  def pretty_active
+    self.active ? "Active" : "Inactive"
+  end
 end

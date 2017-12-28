@@ -12,7 +12,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.string :tag, :limit => 100
       t.decimal :latitude, precision: 10, scale: 6, null: false
       t.decimal :longitude, precision: 10, scale: 6, null: false
-      t.boolean :active, null: false, default: false
+      t.boolean :active, null: false, default: true
       t.string :uuid, :limit => 100, null: false
       t.timestamps null: true
     end
