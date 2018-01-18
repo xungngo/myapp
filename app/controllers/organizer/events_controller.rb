@@ -33,11 +33,12 @@ class Organizer::EventsController < ApplicationController
 
   def update
     if params[:event].present?
-      @event = Event.find(params[:id]).update(event_params)
-      if @event
+      @event = Event.find(params[:id])
+      if @event.update_attributes(event_params)
         flash[:success] = "The event was updated successfully."
         redirect_to organizer_events_path
       else
+        #@event.errors.add(:base, "Error error error.")
         render :action => :edit
       end
     else
@@ -49,7 +50,7 @@ class Organizer::EventsController < ApplicationController
   private
   
     def event_params
-      params.require(:event).permit(:name, :description, :requirement, :address, :eventtype_id).merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
+      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendee_id).merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
     end
 
 end

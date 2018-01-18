@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   has_many :event_schedule_mappings
   has_many :schedules, :through => :event_schedule_mappings
   belongs_to :eventtype
+  belongs_to :eventattendee
 
   validates :name, presence: {message: "The Event Name field is required."}
   validates :description, presence: {message: "The Event Description field is required."}

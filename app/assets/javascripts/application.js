@@ -23,3 +23,7 @@
 // require_tree . 
 // stub "library/scripts.min"
 //= require users
+//= require moment.min
+//= require library/periodpicker/jquery.periodpicker.min
+//= require library/periodpicker/jquery.timepicker.min
+//= require events

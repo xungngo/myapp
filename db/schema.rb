@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171223174570) do
+ActiveRecord::Schema.define(version: 20180113174570) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,20 +36,28 @@ ActiveRecord::Schema.define(version: 20171223174570) do
     t.datetime "updated_at"
   end
 
+  create_table "eventattendees", force: :cascade do |t|
+    t.string   "name",       limit: 100,                 null: false
+    t.boolean  "active",                 default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "events", force: :cascade do |t|
-    t.string   "name",         limit: 100,                                           null: false
-    t.string   "description",  limit: 2000,                                          null: false
-    t.string   "requirement",  limit: 1000
-    t.string   "contact",      limit: 100
-    t.string   "address",      limit: 200,                                           null: false
-    t.string   "price",        limit: 100
+    t.string   "name",             limit: 100,                                          null: false
+    t.string   "description",      limit: 2000,                                         null: false
+    t.string   "requirement",      limit: 1000
+    t.string   "contact",          limit: 100
+    t.string   "address",          limit: 200,                                          null: false
+    t.string   "price",            limit: 100
     t.integer  "limit"
-    t.integer  "eventtype_id",                                                       null: false
-    t.string   "tag",          limit: 100
-    t.decimal  "latitude",                  precision: 10, scale: 6,                 null: false
-    t.decimal  "longitude",                 precision: 10, scale: 6,                 null: false
-    t.boolean  "active",                                             default: false, null: false
-    t.string   "uuid",         limit: 100,                                           null: false
+    t.integer  "eventtype_id",                                                          null: false
+    t.integer  "eventattendee_id",                                                      null: false
+    t.string   "tag",              limit: 100
+    t.decimal  "latitude",                      precision: 10, scale: 6,                null: false
+    t.decimal  "longitude",                     precision: 10, scale: 6,                null: false
+    t.boolean  "active",                                                 default: true, null: false
+    t.string   "uuid",             limit: 100,                                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

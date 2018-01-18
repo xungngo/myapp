@@ -71,6 +71,13 @@ Eventtype.create!([
   {name: "Virtual: WebCam"}
 ])
 
+Eventattendee.create!([
+  {name: "Anyone"},
+  {name: "Adults Only"},
+  {name: "Children Only"},
+  {name: "Seniors Only"}
+])
+
 Marker.create!([
   {name: "Manassas Park", address: "Manassas Park VA US", latitude: "38.784003", longitude: "-77.469711", active: true},
   {name: "Manassas Mall", address: "8300 Sudley Rd Manassas", latitude: "38.773324", longitude: "-77.505326", active: true},

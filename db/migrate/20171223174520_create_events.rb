@@ -9,6 +9,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.string :price, :limit => 100
       t.integer :limit
       t.integer :eventtype_id, null: false
+      t.integer :eventattendee_id, null: false
       t.string :tag, :limit => 100
       t.decimal :latitude, precision: 10, scale: 6, null: false
       t.decimal :longitude, precision: 10, scale: 6, null: false
