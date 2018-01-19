@@ -24,6 +24,5 @@
 // stub "library/scripts.min"
 //= require users
 //= require moment.min
-//= require library/periodpicker/jquery.periodpicker.min
-//= require library/periodpicker/jquery.timepicker.min
+//= require library/periodpicker/jquery.periodpicker.full.min
 //= require events

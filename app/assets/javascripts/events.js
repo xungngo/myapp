@@ -32,22 +32,26 @@ $('#event_start').periodpicker({
 
 $('#event_start').on('change', function () {
     var calVal = $(this).periodpicker('valueString');
-    var nameId = calVal.replace(/ /g, '');
-    var c = $('.clonedInput:first').clone(true);
-        c.children(':text').attr('name',nameId);
-        c.children(':text').attr('id',nameId);
-        c.children('label').html(calVal);
-    $('#timediv').before(c);
-    $('#'+nameId).timepickeralone({
-        hours: true,
-        minutes: true,
-        ampm: true
-    });
+    var starttime_name_id = 'starttime_'+calVal.replace(/ /g, '');
+    var endtime_name_id = 'endtime_'+calVal.replace(/ /g, '');
+    if ($('#'+starttime_name_id).length == 0) {
+        var c = $('#tr_clone:first').clone(true);
+            c.css('visibility', 'visible'); // show
+            c.attr('id',''); // remove dup id
+            c.find('label').html(calVal);
+            c.find('.starttime').attr('name',starttime_name_id);
+            c.find('.starttime').attr('id',starttime_name_id);
+            c.find('.endtime').attr('name',endtime_name_id);
+            c.find('.endtime').attr('id',endtime_name_id);
+        $('#tr_clone').before(c);
+        $('#'+starttime_name_id).timepickeralone({hours: true, minutes: true, ampm: true});
+        $('#'+endtime_name_id).timepickeralone({hours: true, minutes: true, ampm: true});
+    };
 });
 
 $('.btnDel').click(function() {
     if (confirm('continue delete?')) {
-        $(this).closest('.clonedInput').remove();
+        $(this).closest('.tr_clone').remove(); //id is gone, use class
     }
 });
 
