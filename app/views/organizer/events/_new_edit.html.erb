@@ -96,21 +96,21 @@
 
 		<fieldset>
 			<legend>3. When</legend>
-			<div><span class="help-block">Select date(s) for this event.</span></div><br>
+			<div><span class="help-block">Select 1-14 day(s) for this event.</span></div><br>
 			
 			<div class="row form-group">
 				<div class="col-md-1"></div>
-				<div class="col-md-10">
+				<div class="col-md-4">
 					<input type="input" name="event_start" id="event_start" class="form-control">
+					<div style="display:none;">
+						<div class="clonedInput">
+							<label></label>
+							<input type="text" name="parent_input" style="width:120px;">
+							<input type="button" value="Delete" class="btn btn-default btnDel">
+						</div>
+					</div>
 				</div>
-				<div class="col-md-1"></div>
-			</div>
-			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<%= f.label 'end', "End Date <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<input type="input" name="event_end" id="event_end" class="form-control">
-				</div>
+				<div class="col-md-6" id="timediv"></div>
 				<div class="col-md-1"></div>
 			</div>
 		</fieldset><br><br><br>

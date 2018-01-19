@@ -29,6 +29,40 @@ $('#event_start').periodpicker({
     yearsPeriod: ppYearsPeriod
 });
 
+
 $('#event_start').on('change', function () {
-	alert($(this).periodpicker('valueStringStrong'));
+    var calVal = $(this).periodpicker('valueString');
+    var nameId = calVal.replace(/ /g, '');
+    var c = $('.clonedInput:first').clone(true);
+        c.children(':text').attr('name',nameId);
+        c.children(':text').attr('id',nameId);
+        c.children('label').html(calVal);
+    $('#timediv').before(c);
+    $('#'+nameId).timepickeralone({
+        hours: true,
+        minutes: true,
+        ampm: true
+    });
 });
+
+$('.btnDel').click(function() {
+    if (confirm('continue delete?')) {
+        $(this).closest('.clonedInput').remove();
+    }
+});
+
+/*
+function createTimeDiv(v){
+    //alert(v);
+    var tmpDiv = '<div id="'+v+'"/>';
+    var tmpDivId = '#'+v;
+    $('#timediv').append($(tmpDiv));
+    $('<a href="#" id="close">remove</a>').appendTo(tmpDivId);   
+    $('<div id="box-results"><p>you need to add the click handler on #close after you insert the element into the document.</p></div>').appendTo(tmpDivId);
+    $('#close').bind('click', function ()
+    {
+    $(tmpDivId).remove();
+    return false;
+    });
+};
+*/
