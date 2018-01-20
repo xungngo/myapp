@@ -30,21 +30,23 @@ $('#event_start').periodpicker({
 });
 
 $('#event_start').on('change', function () {
-    var val_string = $(this).periodpicker('valueString');
-    var starttime_name_id = 'starttime_'+val_string.replace(/ /g, '');
-    var endtime_name_id = 'endtime_'+val_string.replace(/ /g, '');
-    if ($('#'+starttime_name_id).length == 0) {
+    var date_array = $(this).periodpicker('valueString').split(' ');
+    var date_string = date_array[1] + ' ' + date_array[0] + ', ' + date_array[2];
+    var date_id = date_string.replace(/ /g, '_').replace(',', '')
+    var starttime_id = 'starttime_'+date_id;
+    var endtime_id = 'endtime_'+date_id;
+    if ($('#'+starttime_id).length == 0) {
         var c = $('#tr_clone:first').clone(true);
             c.css('visibility', 'visible'); // show
             c.attr('id',''); // remove dup id
-            c.find('label').html(val_string);
-            c.find('.starttime').attr('name',starttime_name_id);
-            c.find('.starttime').attr('id',starttime_name_id);
-            c.find('.endtime').attr('name',endtime_name_id);
-            c.find('.endtime').attr('id',endtime_name_id);
+            c.find('label').html(date_string);
+            c.find('.starttime').attr('name',starttime_id);
+            c.find('.starttime').attr('id',starttime_id);
+            c.find('.endtime').attr('name',endtime_id);
+            c.find('.endtime').attr('id',endtime_id);
         $('#tr_clone').before(c);
-        $('#'+starttime_name_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a'});
-        $('#'+endtime_name_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a'});
+        $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:''});
+        $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:''});
     };
 });
 
