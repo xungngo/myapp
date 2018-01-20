@@ -29,23 +29,22 @@ $('#event_start').periodpicker({
     yearsPeriod: ppYearsPeriod
 });
 
-
 $('#event_start').on('change', function () {
-    var calVal = $(this).periodpicker('valueString');
-    var starttime_name_id = 'starttime_'+calVal.replace(/ /g, '');
-    var endtime_name_id = 'endtime_'+calVal.replace(/ /g, '');
+    var val_string = $(this).periodpicker('valueString');
+    var starttime_name_id = 'starttime_'+val_string.replace(/ /g, '');
+    var endtime_name_id = 'endtime_'+val_string.replace(/ /g, '');
     if ($('#'+starttime_name_id).length == 0) {
         var c = $('#tr_clone:first').clone(true);
             c.css('visibility', 'visible'); // show
             c.attr('id',''); // remove dup id
-            c.find('label').html(calVal);
+            c.find('label').html(val_string);
             c.find('.starttime').attr('name',starttime_name_id);
             c.find('.starttime').attr('id',starttime_name_id);
             c.find('.endtime').attr('name',endtime_name_id);
             c.find('.endtime').attr('id',endtime_name_id);
         $('#tr_clone').before(c);
-        $('#'+starttime_name_id).timepickeralone({hours: true, minutes: true, ampm: true});
-        $('#'+endtime_name_id).timepickeralone({hours: true, minutes: true, ampm: true});
+        $('#'+starttime_name_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a'});
+        $('#'+endtime_name_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a'});
     };
 });
 
@@ -54,19 +53,3 @@ $('.btnDel').click(function() {
         $(this).closest('.tr_clone').remove(); //id is gone, use class
     }
 });
-
-/*
-function createTimeDiv(v){
-    //alert(v);
-    var tmpDiv = '<div id="'+v+'"/>';
-    var tmpDivId = '#'+v;
-    $('#timediv').append($(tmpDiv));
-    $('<a href="#" id="close">remove</a>').appendTo(tmpDivId);   
-    $('<div id="box-results"><p>you need to add the click handler on #close after you insert the element into the document.</p></div>').appendTo(tmpDivId);
-    $('#close').bind('click', function ()
-    {
-    $(tmpDivId).remove();
-    return false;
-    });
-};
-*/
