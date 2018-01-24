@@ -32,6 +32,7 @@ class Organizer::EventsController < ApplicationController
   end
 
   def update
+    binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
       if @event.update_attributes(event_params)
