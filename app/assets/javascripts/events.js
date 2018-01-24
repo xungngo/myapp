@@ -28,45 +28,57 @@ $('#event_start').periodpicker({
     maxDate: pickerMaxDate,
     yearsPeriod: ppYearsPeriod
 });
-
+var cloned_ct = 1
 $('#event_start').on('change', function() {
     var date_array = $(this).periodpicker('valueStringStrong').split('-');
     var date_string = date_array[0];
     var date_id = date_string.replace(/\//g, '_');
     var starttime_id = 'starttime_'+date_id;
     var endtime_id = 'endtime_'+date_id;
-    if ($('#'+starttime_id).length == 0) {
-        var c = $('#tr_clone:first').clone(true);
-            c.css('visibility', 'visible'); // show
-            c.attr('id',''); // remove dup id
-            c.find('label').html(date_string);
-            c.find('.starttime').attr('name',starttime_id);
-            c.find('.starttime').attr('id',starttime_id);
-            c.find('.endtime').attr('name',endtime_id);
-            c.find('.endtime').attr('id',endtime_id);
-        $('#tr_clone').before(c);
+    if ($('#'+starttime_id).length == 0 && cloned_ct <= 14) {
+        cloned_obj = $('#tr_clone:first').clone(true);
+        cloned_obj.css('visibility', 'visible'); // show
+        cloned_obj.attr('id',''); // remove dup id
+        cloned_obj.find('.dateshow').html(date_string);
+        cloned_obj.find('.starttime').attr('name',starttime_id);
+        cloned_obj.find('.starttime').attr('id',starttime_id);
+        cloned_obj.find('.endtime').attr('name',endtime_id);
+        cloned_obj.find('.endtime').attr('id',endtime_id);
+        $('#tr_clone').before(cloned_obj);
         var starttime_picker = $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'9:00 am', steps:[1,5,2,1], onHide: function($input){setMinTime($input.val(), $input.attr('id'))}});
         var endtime_picker = $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'5:00 pm', steps:[1,5,2,1], onHide: function($input){setMaxTime($input.val(), $input.attr('id'))}});
+        cloned_ct = $('.tr_clone').length;
+        console.log(cloned_ct);
     };
-    sortTableColumn('event_date_table',0);
+    sortTableColumn('event_date_table',1);
+    countRows();
 });
 
 $('.btnDel').click(function() {
     if (confirm('continue delete?')) {
         $(this).closest('.tr_clone').remove(); //id is gone, use class
+        countRows();
     }
 });
 
 function setMinTime(v, id) {
     endtime_id = id.replace('starttime', 'endtime');
     $('#'+endtime_id).timepickeralone('setMin', v);
-    //console.log(v);
-    //console.log(id);
 };
 
 function setMaxTime(v, id) {
     starttime_id = id.replace('endtime', 'starttime');
     $('#'+starttime_id).timepickeralone('setMax', v);
+};
+
+function countRows() {
+    var tbody = document.getElementById('event_date_tbody'),
+        rows = tbody.rows,
+        text = 'textContent' in document ? 'textContent' : 'innerText';
+        //console.log(text);
+    for (var i = 0, len = rows.length; i < len; i++){
+    rows[i].children[0][text] = i+1 + ':';
+    };
 };
 
 function sortTableColumn(tb,col) {
