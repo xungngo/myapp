@@ -58,6 +58,7 @@ $('.btnDel').click(function() {
     if (confirm('continue delete?')) {
         $(this).closest('.tr_clone').remove(); //id is gone, use class
         countRows();
+        cloned_ct = 1;
     }
 });
 
