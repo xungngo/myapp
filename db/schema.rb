@@ -29,35 +29,43 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.datetime "updated_at"
   end
 
-  create_table "event_schedule_mappings", force: :cascade do |t|
-    t.integer  "event_id"
-    t.integer  "schedule_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "eventattendees", force: :cascade do |t|
+  create_table "eventattendeetypes", force: :cascade do |t|
     t.string   "name",       limit: 100,                 null: false
     t.boolean  "active",                 default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  create_table "eventdates", force: :cascade do |t|
+    t.date     "eventdate"
+    t.time     "starttime"
+    t.time     "endtime"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "eventdates_events", id: false, force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "eventdate_id"
+    t.index ["event_id"], name: "index_eventdates_events_on_event_id", using: :btree
+    t.index ["eventdate_id"], name: "index_eventdates_events_on_eventdate_id", using: :btree
+  end
+
   create_table "events", force: :cascade do |t|
-    t.string   "name",             limit: 100,                                          null: false
-    t.string   "description",      limit: 2000,                                         null: false
-    t.string   "requirement",      limit: 1000
-    t.string   "contact",          limit: 100
-    t.string   "address",          limit: 200,                                          null: false
-    t.string   "price",            limit: 100
+    t.string   "name",                 limit: 100,                                          null: false
+    t.string   "description",          limit: 2000,                                         null: false
+    t.string   "requirement",          limit: 1000
+    t.string   "contact",              limit: 100
+    t.string   "address",              limit: 200,                                          null: false
+    t.string   "price",                limit: 100
     t.integer  "limit"
-    t.integer  "eventtype_id",                                                          null: false
-    t.integer  "eventattendee_id",                                                      null: false
-    t.string   "tag",              limit: 100
-    t.decimal  "latitude",                      precision: 10, scale: 6,                null: false
-    t.decimal  "longitude",                     precision: 10, scale: 6,                null: false
-    t.boolean  "active",                                                 default: true, null: false
-    t.string   "uuid",             limit: 100,                                          null: false
+    t.integer  "eventtype_id",                                                              null: false
+    t.integer  "eventattendeetype_id",                                                      null: false
+    t.string   "tag",                  limit: 100
+    t.decimal  "latitude",                          precision: 10, scale: 6,                null: false
+    t.decimal  "longitude",                         precision: 10, scale: 6,                null: false
+    t.boolean  "active",                                                     default: true, null: false
+    t.string   "uuid",                 limit: 100,                                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -91,13 +99,6 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.string  "name"
     t.string  "unique_key"
     t.integer "display_rank", default: 5, null: false
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.datetime "start"
-    t.datetime "end"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "states", force: :cascade do |t|

@@ -61,9 +61,9 @@ State.create!([
 ])
 
 User.create!([
-  {email: "xungngo@gmail.com", username: "xungngo", password_digest: BCrypt::Password.create('Guile!7x'), firstname: "Xung", middleinit: "V", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 1, validated_at: Time.now},
-  {email: "xung@axxume.com", username: "axxume", password_digest: BCrypt::Password.create('Guile!7x'), firstname: "Xung", middleinit: "K", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 2, validated_at: Time.now},
-  {email: "xungngo@hotmail.com", username: "xungngohotmail", password_digest: BCrypt::Password.create('Guile!7x'), firstname: "Michael", middleinit: "L", lastname: "Jackson", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 3, validated_at: Time.now}
+  {email: "xungngo@gmail.com", username: "xungngo", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "V", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 1, validated_at: Time.now},
+  {email: "xung@axxume.com", username: "axxume", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "K", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 2, validated_at: Time.now},
+  {email: "xungngo@hotmail.com", username: "xungngohotmail", password_digest: BCrypt::Password.create('Password!23'), firstname: "Michael", middleinit: "L", lastname: "Jackson", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 3, validated_at: Time.now}
 ])
 
 Eventtype.create!([
@@ -71,7 +71,7 @@ Eventtype.create!([
   {name: "Virtual: WebCam"}
 ])
 
-Eventattendee.create!([
+Eventattendeetype.create!([
   {name: "Anyone"},
   {name: "Adults Only"},
   {name: "Children Only"},

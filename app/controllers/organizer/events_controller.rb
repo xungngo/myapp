@@ -12,9 +12,10 @@ class Organizer::EventsController < ApplicationController
   end
 
   def create
+    # binding.pry
     if params[:event].present?
       @event = Event.new(event_params)
-      if @event.save
+      if @event.save && Eventdate.create(params, @event.id)
         flash[:success] = "The event was created successfully."
         redirect_to organizer_events_path
       else
@@ -27,12 +28,12 @@ class Organizer::EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.includes(:eventtype, :schedules).find(params[:id])
-    #@event = Event.includes(:eventtype, :schedule).find_or_initialize_by(params[:id])
+    @event = Event.includes(:eventtype, :eventattendeetype, :eventdates).find(params[:id])
+    #@eventdates = Eventdate.includes(:EventdatesEvents).where(EventdatesEvents: { event_id: params[:id] })
   end
 
   def update
-    binding.pry
+    #binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
       if @event.update_attributes(event_params)
@@ -51,7 +52,7 @@ class Organizer::EventsController < ApplicationController
   private
   
     def event_params
-      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendee_id).merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
+      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id).merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
     end
 
 end
