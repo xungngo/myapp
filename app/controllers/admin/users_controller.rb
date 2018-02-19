@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+
   before_action :authenticate_user
   #load_and_authorize_resource # cancancan
 
@@ -12,6 +13,7 @@ class Admin::UsersController < ApplicationController
 
   def user_home
     @user = User.find(current_user.id)
+
     if current_user.present?
       @locations = Location.order(:code).where(:active => true, :id => UserLocationMapping.location_ids(current_user.id))
     else

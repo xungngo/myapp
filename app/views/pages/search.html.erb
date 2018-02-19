@@ -148,6 +148,9 @@
         cache: false,
         dataType: "json",
         success: function(data) {
+          //var infowindow = new google.maps.InfoWindow();
+          //var infowindowContent = document.getElementById('infowindow-content');
+          //infowindow.setContent(infowindowContent);
           renderMap(data);
           renderList(data);
         },
