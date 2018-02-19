@@ -68,7 +68,7 @@ function submitRegistration() {
         msg = data[0].message
         if (msg == 'success'){
           goto = data[0].goto
-          window.location = "http://localhost:3333/" + goto;
+          window.location = "<%= SITE_URL %>/" + goto;
         } else {
           $("#message").css('display', 'block');
           $("#message").text(msg);

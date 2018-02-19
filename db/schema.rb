@@ -15,31 +15,31 @@ ActiveRecord::Schema.define(version: 20180113174570) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "attachments", force: :cascade do |t|
-    t.string   "eventimg_file_name"
-    t.string   "eventimg_content_type"
-    t.integer  "eventimg_file_size"
+  create_table "attachments", id: :serial, force: :cascade do |t|
+    t.string "eventimg_file_name"
+    t.string "eventimg_content_type"
+    t.integer "eventimg_file_size"
     t.datetime "eventimg_updated_at"
   end
 
-  create_table "event_attachment_mappings", force: :cascade do |t|
-    t.integer  "event_id"
-    t.integer  "attachment_id"
+  create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "attachment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "eventattendeetypes", force: :cascade do |t|
-    t.string   "name",       limit: 100,                 null: false
-    t.boolean  "active",                 default: false, null: false
+  create_table "eventattendeetypes", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "eventdates", force: :cascade do |t|
-    t.date     "eventdate"
-    t.time     "starttime"
-    t.time     "endtime"
+  create_table "eventdates", id: :serial, force: :cascade do |t|
+    t.date "eventdate"
+    t.time "starttime"
+    t.time "endtime"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -47,105 +47,105 @@ ActiveRecord::Schema.define(version: 20180113174570) do
   create_table "eventdates_events", id: false, force: :cascade do |t|
     t.integer "event_id"
     t.integer "eventdate_id"
-    t.index ["event_id"], name: "index_eventdates_events_on_event_id", using: :btree
-    t.index ["eventdate_id"], name: "index_eventdates_events_on_eventdate_id", using: :btree
+    t.index ["event_id"], name: "index_eventdates_events_on_event_id"
+    t.index ["eventdate_id"], name: "index_eventdates_events_on_eventdate_id"
   end
 
-  create_table "events", force: :cascade do |t|
-    t.string   "name",                 limit: 100,                                          null: false
-    t.string   "description",          limit: 2000,                                         null: false
-    t.string   "requirement",          limit: 1000
-    t.string   "contact",              limit: 100
-    t.string   "address",              limit: 200,                                          null: false
-    t.string   "price",                limit: 100
-    t.integer  "limit"
-    t.integer  "eventtype_id",                                                              null: false
-    t.integer  "eventattendeetype_id",                                                      null: false
-    t.string   "tag",                  limit: 100
-    t.decimal  "latitude",                          precision: 10, scale: 6,                null: false
-    t.decimal  "longitude",                         precision: 10, scale: 6,                null: false
-    t.boolean  "active",                                                     default: true, null: false
-    t.string   "uuid",                 limit: 100,                                          null: false
+  create_table "events", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "description", limit: 2000, null: false
+    t.string "requirement", limit: 1000
+    t.string "contact", limit: 100
+    t.string "address", limit: 200, null: false
+    t.string "price", limit: 100
+    t.integer "limit"
+    t.integer "eventtype_id", null: false
+    t.integer "eventattendeetype_id", null: false
+    t.string "tag", limit: 100
+    t.decimal "latitude", precision: 10, scale: 6, null: false
+    t.decimal "longitude", precision: 10, scale: 6, null: false
+    t.boolean "active", default: true, null: false
+    t.string "uuid", limit: 100, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "eventtypes", force: :cascade do |t|
-    t.string   "name",       limit: 100,                 null: false
-    t.boolean  "active",                 default: false, null: false
+  create_table "eventtypes", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "locations", force: :cascade do |t|
-    t.string   "code",       limit: 10
-    t.string   "name",       limit: 100
-    t.boolean  "active",                 default: true, null: false
+  create_table "locations", id: :serial, force: :cascade do |t|
+    t.string "code", limit: 10
+    t.string "name", limit: 100
+    t.boolean "active", default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "markers", force: :cascade do |t|
-    t.string   "name",       limit: 100,                                         null: false
-    t.string   "address",    limit: 100,                                         null: false
-    t.decimal  "latitude",               precision: 10, scale: 6,                null: false
-    t.decimal  "longitude",              precision: 10, scale: 6,                null: false
-    t.boolean  "active",                                          default: true
+  create_table "markers", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "address", limit: 100, null: false
+    t.decimal "latitude", precision: 10, scale: 6, null: false
+    t.decimal "longitude", precision: 10, scale: 6, null: false
+    t.boolean "active", default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "roles", force: :cascade do |t|
-    t.string  "name"
-    t.string  "unique_key"
+  create_table "roles", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "unique_key"
     t.integer "display_rank", default: 5, null: false
   end
 
-  create_table "states", force: :cascade do |t|
+  create_table "states", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "abbr", null: false
   end
 
-  create_table "user_location_mappings", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "location_id"
+  create_table "user_location_mappings", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "location_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "user_role_mappings", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "role_id"
+  create_table "user_role_mappings", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 100, default: "",    null: false
-    t.string   "email_temp",             limit: 100
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "email", limit: 100, default: "", null: false
+    t.string "email_temp", limit: 100
     t.datetime "email_validated_at"
-    t.string   "username",               limit: 100
-    t.string   "password_digest",        limit: 100
-    t.string   "firstname",              limit: 100
-    t.string   "middleinit",             limit: 100
-    t.string   "lastname",               limit: 100
-    t.string   "address1",               limit: 100
-    t.string   "address2",               limit: 100
-    t.string   "city",                   limit: 100
-    t.integer  "state_id"
-    t.string   "zipcode",                limit: 5
-    t.boolean  "active",                             default: false, null: false
-    t.string   "uuid",                   limit: 100,                 null: false
+    t.string "username", limit: 100
+    t.string "password_digest", limit: 100
+    t.string "firstname", limit: 100
+    t.string "middleinit", limit: 100
+    t.string "lastname", limit: 100
+    t.string "address1", limit: 100
+    t.string "address2", limit: 100
+    t.string "city", limit: 100
+    t.integer "state_id"
+    t.string "zipcode", limit: 5
+    t.boolean "active", default: false, null: false
+    t.string "uuid", limit: 100, null: false
     t.datetime "validated_at"
-    t.string   "timezone"
+    t.string "timezone"
     t.datetime "profile_updated_at"
     t.datetime "preferences_updated_at"
     t.datetime "security_updated_at"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
+    t.string "avatar_file_name"
+    t.string "avatar_content_type"
+    t.integer "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.integer  "sign_in_count",                      default: 0,     null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "last_sign_in_at"
     t.datetime "created_at"
     t.datetime "updated_at"
