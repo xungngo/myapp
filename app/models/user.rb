@@ -1,12 +1,16 @@
 require 'bcrypt'
 class User < ActiveRecord::Base
-  #has_secure_password
   include BCrypt
-  
+  include Stripper
+  include UserHelpers
+
+  strip_attributes :firstname, :middleinit, :lastname, :address1, :address2, :city, :zipcode, :email, :username, :password_digest
+
   has_many :user_role_mappings
   has_many :roles, :through => :user_role_mappings
   has_many :user_location_mappings
   has_many :locations, :through => :user_location_mappings
+  belongs_to :state
 
   validates :email, uniqueness: {message: "The email is in the system."}, presence: true
   validates :username, uniqueness: {message: "The username has already been taken."}, presence: true  
@@ -16,6 +20,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i, message: "A valid email is required."
   # metacharacters [, \, ^, $, ., |, ?, *, +, (, and ) need to be escaped with a \
   validates_format_of :firstname, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid firstname is required."
+  validates_format_of :middleinit, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid middle initial is required.", :allow_blank => true
   validates_format_of :lastname, :with => /\A[^0-9`~!@#\$%\^&*+_=\]|\\(){}:;"<>,.?\/]+\z/, message: "A valid lastname is required."
 
   PASSWORD_FORMAT = /\A
@@ -26,7 +31,13 @@ class User < ActiveRecord::Base
   (?=.*[[:^alnum:]]) # Must contain a symbol
   /x
 
-  validates :password_digest, presence: true, format: { with: PASSWORD_FORMAT, message: "The password format is not valid." }
+  validates :password_digest, presence: true
+  # validates :password_digest, presence: true, format: { with: PASSWORD_FORMAT, message: "The password format is not valid." }
+
+  # avatar with paperclip
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/, message: 'Avatar should be an image type such as: jpeg, gif, or png.'
+  validates_attachment_size :avatar, :less_than => 500.kilobytes, message: 'Avatar file size should be less than 500Kb!'
 
   #roles defined in one place. Must match what is in the unique_key column of the role table (used in cancancan ability file and other places)
   def admin?
@@ -44,12 +55,13 @@ class User < ActiveRecord::Base
   def self.authenticate(f)
     user = find_by_email(f[:email].downcase)
     return nil unless user && user.password == f[:password_digest]
+    user.update_signin_info
     user
   end
 
   def self.register(f)
-    new_user = new(firstname: f[:firstname], lastname: f[:lastname], email: f[:email].downcase, 
-                   username: create_username(f[:email]), uuid: SecureRandom.hex, role_ids: 3)
+    new_user = new(firstname: f[:firstname], lastname: f[:lastname], email: f[:email].downcase,
+                   username: create_username_by_email(f[:email]), uuid: SecureRandom.hex, role_ids: 3, state_id: 1)
     new_user.password = f[:password_digest]
     new_user.save
     new_user
@@ -78,13 +90,24 @@ class User < ActiveRecord::Base
 
   def set_validation_date
     return nil unless self.validated_at.blank? # only set the date once
-    self.validated_at = Time.current
+    self.validated_at = Time.now
     self.save
   end
 
-  def update_login_info
+  def self.change_password(f, u)
+    current_pw = f[:password_current]
+    decrypt_pw = Password.new(u.password_digest)
+    return nil unless decrypt_pw == current_pw
+    user = u
+    user.password = f[:password_digest]
+    user.security_updated_at = Time.now
+    user.save
+    user
+  end
+
+  def update_signin_info
     self.sign_in_count = self.sign_in_count + 1
-    self.last_sign_in_at = Time.current
+    self.last_sign_in_at = Time.now
     self.save
   end
 
@@ -102,6 +125,14 @@ class User < ActiveRecord::Base
 
   def full_name_ad_style
     "#{firstname} #{middleinit} #{lastname}"
+  end
+
+  def self.username_is_taken(u, i)
+    where(username: u).where.not(id: i).present? ? true : false
+  end
+
+  def self.email_is_taken(e, i)
+    where(email: e).where.not(id: i).present? ? true : false
   end
 
   private
@@ -126,9 +157,9 @@ class User < ActiveRecord::Base
    end
   end
 
-  def self.create_username(n)
-    username = n.split("@")[0].downcase
+  def self.create_username_by_email(e)
+    username = e.split("@")[0].downcase
     return username unless User.find_by_username(username)
     username + rand(10..99).to_s
-  end  
+  end
 end

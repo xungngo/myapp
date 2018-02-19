@@ -13,5 +13,11 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore PaperClip images
+/public/system
+
+# Ignore compiled assets
+public/assets
+
 # Ignore Byebug command history file.
 .byebug_history

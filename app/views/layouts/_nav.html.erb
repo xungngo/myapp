@@ -1,0 +1,18 @@
+<ul class="nav nav-pills nav-pills-right">
+<li role="presentation">&nbsp;&nbsp;&nbsp;</li>
+	<li role="presentation" class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+		<ul class="dropdown-menu nav-pills-left">
+			<li role="presentation"><a href="#">Home</a></li>
+			<li role="presentation"><a href="#">Profile</a></li>
+			<li role="presentation"><a href="#">Messages</a></li>
+		</ul>
+	</li>
+	<li role="presentation"><a href="#">Messages</a></li>
+	<li role="presentation"><a href="#">My Searches</a></li>
+	<li role="presentation" <% if params[:controller].include? 'organizer/events' %>class="active"<% end %>><a href="/organizer/events">Events</a></li>
+	<li role="presentation" <% if params[:action].include? 'user_security' %>class="active"<% end %>><a href="/user_security">Security</a></li>
+	<li role="presentation" <% if params[:action].include? 'user_preferences' %>class="active"<% end %>><a href="/user_preferences">Preferences</a></li>
+	<li role="presentation" <% if params[:action].include? 'user_profile' %>class="active"<% end %>><a href="/user_profile">Profile</a></li>
+	<li role="presentation" <% if params[:action].include? 'user_home' %>class="active"<% end %>><a href="/user">User Home</a></li>
+</ul>

@@ -8,26 +8,13 @@
 				<h2 class="h2-flush-top"><%=@page_title%></h2>
 			</div>
 			<div class="col-lg-7">
-				<ul class="nav nav-pills nav-pills-right">
-				<li role="presentation">&nbsp;&nbsp;&nbsp;</li>
-					<li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-						<ul class="dropdown-menu nav-pills-left">
-							<li role="presentation"><a href="#">Home</a></li>
-							<li role="presentation"><a href="#">Profile</a></li>
-							<li role="presentation"><a href="#">Messages</a></li>
-						</ul>
-					</li>
-					<li role="presentation"><a href="#">Messages</a></li>
-					<li role="presentation"><a href="#">My Searches</a></li>
-					<li role="presentation" class="active"><a href="#">User Home</a></li>
-				</ul>
+				<%= render "layouts/nav" %>
 			</div>
 		</div>
 		
 		<div class="row">
-			<div class="col-lg-12">
-				<p>asd asdas dasdasdasd asd asd as dasd asd asdas dsad</p>
+			<div class="col-lg-12" style="height:400px;">
+				<p>General user info will go here, including graphs, name, searches, and etc.</p>
 			</div>
 		</div>
     </div>

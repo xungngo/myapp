@@ -26,7 +26,7 @@
 <!-- END / PAGE WRAP -->
 
 <!-- Load Javascript -->
-<% if params[:action] == "home" || params[:action] == "aboutus" %>
+<% if %w(search signin register forgot).exclude? params[:action] %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 <% end %>
 </body>
