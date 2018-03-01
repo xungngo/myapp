@@ -9,11 +9,11 @@ class Eventdate < ActiveRecord::Base
     to_length = p[:eventdate].size.to_i - 1
     (0..to_length).each do |ct|
       if p[:eventdate][ct].present?
-        #binding.pry
         @new_eventdate = Eventdate.new(eventdate: Date.strptime(p[:eventdate][ct], '%m/%d/%Y'), starttime: p[:starttime][ct], endtime: p[:endtime][ct])
         @new_eventdate.save
         @new_eventdates_events = EventdatesEvents.new(event_id: eid, eventdate_id: @new_eventdate.id)
         @new_eventdates_events.save
+        #binding.pry
       end
     end
     @new_eventdate

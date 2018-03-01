@@ -101,12 +101,11 @@
 			<div><span class="help-block">Select 1-14 day(s) for this event.</span></div><br>
 			
 			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-4">
+				<div class="col-md-5">
 					<input type="input" name="event_start" id="event_start" class="form-control">
 				</div>
 				<div class="col-md-7">
-					<table style="width:100%;" cellspacing="10" id="event_date_table">
+					<table style="width:100%;" cellspacing="2" id="event_date_table">
 						<thead>
 							<tr>
 								<th></th>
@@ -119,11 +118,23 @@
 						<tbody id="event_date_tbody">
 							<tr class="tr_clone" id="tr_clone" style="visibility: hidden;">
 								<td style="width:8%; padding-bottom:8px; padding-right:10px; text-align:right"><span class="count" style="font-size: 1.2em"></span></td>
-								<td style="width:26%; padding-bottom:8px"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
+								<td style="width:26%; padding-bottom:8px;"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="starttime[]" class="form-control starttime" style="width:90%; font-size: 1.2em"></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="endtime[]" class="form-control endtime" style="width:90%; font-size: 1.2em"></td>
 								<td style="width:10%; padding-bottom:8px;"><button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button><input type="hidden" name="eventdate[]" class="eventdate"></td>
 							</tr>
+						<% if action_name == 'editxx' %>
+							<% @event.eventdates.each do |evt| %>
+							<tr class="tr_clone" id="tr_clone">
+								<td style="width:8%; padding-bottom:8px; padding-right:10px; text-align:right"><span class="count" style="font-size: 1.2em"></span></td>
+								<td style="width:26%; padding-bottom:8px;"><span class="dateshow" style="font-size: 1.2em"><%= evt['eventdate'].strftime("%m/%d/%Y") %></span></td>
+								<td style="width:28%; padding-bottom:8px;"><input type="text" name="starttime[]" value="<%= evt['starttime'].strftime('%l:%M %p') %>" class="form-control starttime" style="width:90%; font-size: 1.2em"></td>
+								<td style="width:28%; padding-bottom:8px;"><input type="text" name="endtime[]" value="<%= evt['endtime'].strftime('%l:%M %p') %>" class="form-control endtime" style="width:90%; font-size: 1.2em"></td>
+								<td style="width:10%; padding-bottom:8px;"><button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button><input type="hidden" name="eventdate[]" class="eventdate"></td>
+							</tr>
+							<% end %>
+						<% end %>
+							<input type="input" name="current_eventdates" id="current_eventdates" value="<%= @event.eventdates.to_json %>">
 						</tbody>
 					</table>
 				</div>
