@@ -40,13 +40,13 @@ $('#event_start').on('change', function() {
     var endtime_id = 'endtime_'+date_id;
     var eventdate_id = 'eventdate_'+date_id;
     if ($('#'+starttime_id).length == 0 && cloned_ct <= 14) {
-        createEventDate(date_string, eventdate_id, starttime_id, endtime_id);
+        createEventDate(date_string, eventdate_id, starttime_id, endtime_id, '9:00 am', '5:00 pm');
     };
     sortTableColumn('event_date_table',1);
     countRows();
 });
 
-function createEventDate(date_string, eventdate_id, starttime_id, endtime_id) {
+function createEventDate(date_string, eventdate_id, starttime_id, endtime_id, starttime_val, endtime_val) {
     cloned_obj = $('#tr_clone:first').clone(true);
     cloned_obj.css('visibility', 'visible'); // show
     cloned_obj.attr('id',''); // remove dup id
@@ -56,8 +56,8 @@ function createEventDate(date_string, eventdate_id, starttime_id, endtime_id) {
     cloned_obj.find('.eventdate').attr('id',eventdate_id);
     cloned_obj.find('.eventdate').attr('value',date_string);
     $('#tr_clone').before(cloned_obj);
-    var starttime_picker = $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'9:00 am', steps:[1,5,2,1], onHide: function($input){setMinTime($input.val(), $input.attr('id'))}});
-    var endtime_picker = $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'5:00 pm', steps:[1,5,2,1], onHide: function($input){setMaxTime($input.val(), $input.attr('id'))}});
+    var starttime_picker = $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime: starttime_val, steps:[1,5,2,1], onHide: function($input){setMinTime($input.val(), $input.attr('id'))}});
+    var endtime_picker = $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime: endtime_val, steps:[1,5,2,1], onHide: function($input){setMaxTime($input.val(), $input.attr('id'))}});
     cloned_ct = $('.tr_clone').length;
 };
 
@@ -130,10 +130,15 @@ function sortTableColumn(tb,col) {
     var starttime_id = 'starttime_'+date_id;
     var endtime_id = 'endtime_'+date_id;
     var eventdate_id = 'eventdate_'+date_id;
+    var starttime_string = evt_json[i].starttime;
+    var endtime_string = evt_json[i].endtime;
+    //alert(endtime_string);
     if ($('#'+starttime_id).length == 0 && cloned_ct <= 14) {
-        createEventDate(date_string, eventdate_id, starttime_id, endtime_id);
+        createEventDate(date_string, eventdate_id, starttime_id, endtime_id, starttime_string, endtime_string);
+        setMinTime(starttime_string, starttime_id);
+        setMaxTime(endtime_string, endtime_id);
     };
     sortTableColumn('event_date_table',1);
     countRows();      
-    //alert(evt_json[i].eventdate); 
+    //alert(evt_json[i].eventdate);
   };

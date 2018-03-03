@@ -8,11 +8,9 @@ class Organizer::EventsController < ApplicationController
 
   def new
     @event = Event.new
-    #@event = Event.includes(:eventtype).find_or_initialize_by(params[:id])
   end
 
   def create
-    # binding.pry
     if params[:event].present?
       @event = Event.new(event_params)
       if @event.save && Eventdate.create(params, @event.id)
@@ -29,14 +27,13 @@ class Organizer::EventsController < ApplicationController
 
   def edit
     @event = Event.includes(:eventtype, :eventattendeetype, :eventdates).find(params[:id])
-    #@eventdates = Eventdate.includes(:EventdatesEvents).where(EventdatesEvents: { event_id: params[:id] })
   end
 
   def update
     #binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
-      if @event.update_attributes(event_params)
+      if @event.update_attributes(event_params) && Eventdate.update_attributes(params, @event.id)
         flash[:success] = "The event was updated successfully."
         redirect_to organizer_events_path
       else

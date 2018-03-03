@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20180113174570) do
 
   create_table "eventdates", id: :serial, force: :cascade do |t|
     t.date "eventdate"
-    t.time "starttime"
-    t.time "endtime"
+    t.string "starttime"
+    t.string "endtime"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
