@@ -121,7 +121,12 @@
 								<td style="width:26%; padding-bottom:8px;"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="starttime[]" class="form-control starttime" style="width:90%; font-size: 1.2em"></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="endtime[]" class="form-control endtime" style="width:90%; font-size: 1.2em"></td>
-								<td style="width:10%; padding-bottom:8px;"><button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button><input type="hidden" name="eventdate[]" class="eventdate"></td>
+								<td style="width:10%; padding-bottom:8px;">
+									<button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button>
+									<input type="hidden" name="eventdate[]" class="eventdate">
+									<!--populate for update only-->
+									<input type="hidden" name="eventdate_id[]" class="eventdate_id">
+								</td>
 							</tr>
 							<input type="hidden" name="current_eventdates" id="current_eventdates" value="<%= @event.eventdates.to_json %>">
 						</tbody>

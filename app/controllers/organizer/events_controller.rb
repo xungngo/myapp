@@ -33,7 +33,7 @@ class Organizer::EventsController < ApplicationController
     #binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
-      if @event.update_attributes(event_params) && Eventdate.update_attributes(params, @event.id)
+      if @event.update_attributes(event_params) && Eventdate.update(params, @event.id)
         flash[:success] = "The event was updated successfully."
         redirect_to organizer_events_path
       else
