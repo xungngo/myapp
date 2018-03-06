@@ -26,3 +26,4 @@
 //= require moment.min
 //= require library/periodpicker/jquery.periodpicker.full.min
 //= require events
+//= require library/jquery.fileuploader.min

@@ -143,3 +143,12 @@ function sortTableColumn(tb,col) {
     sortTableColumn('event_date_table',1);
     countRows();
   };
+
+  //File Uploader
+  $(document).ready(function() {
+    $('input[name="event[attachments]"]').fileuploader({
+      inputNameBrackets: true,
+      addMore: true,
+      sorter: '.fileuploader-action-sort'
+    });
+  });
