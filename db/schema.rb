@@ -16,10 +16,11 @@ ActiveRecord::Schema.define(version: 20180113174570) do
   enable_extension "plpgsql"
 
   create_table "attachments", id: :serial, force: :cascade do |t|
-    t.string "eventimg_file_name"
-    t.string "eventimg_content_type"
-    t.integer "eventimg_file_size"
-    t.datetime "eventimg_updated_at"
+    t.integer "event_id"
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|

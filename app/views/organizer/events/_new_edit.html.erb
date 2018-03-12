@@ -1,6 +1,6 @@
 <!--= debug(@event.eventdates) -->
 
-<%= form_for [:organizer, @event], class:'form' do |f| %>
+<%= form_for [:organizer, @event], html: { multipart: true, class: 'form' } do |f| %>
 <%= render "layouts/message_error_organizer" %>
 <%= render "layouts/message_flash" %>
 
@@ -62,8 +62,9 @@
 			<div class="row form-group">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<%= f.label :attachments, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.file_field :attachments, class: "form-control" %>
+					<%= f.label :images, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
+					<!--= f.file_field :images, class: "form-control" -->
+					<%= file_field_tag "images[]", id: "event_images", type: :file, multiple: true, class: "form-control" %>
 					<span class="help-block">Upload up to 20 photos.</span>
 				</div>
 				<div class="col-md-1"></div>

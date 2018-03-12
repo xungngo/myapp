@@ -14,6 +14,11 @@ class Organizer::EventsController < ApplicationController
     if params[:event].present?
       @event = Event.new(event_params)
       if @event.save && Eventdate.create(params, @event.id)
+        if params[:images]
+          params[:images].each { |image|
+            @event.attachments.create(image: image)
+          }
+        end
         flash[:success] = "The event was created successfully."
         redirect_to organizer_events_path
       else
@@ -30,10 +35,16 @@ class Organizer::EventsController < ApplicationController
   end
 
   def update
-    #binding.pry
+    # binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
-      if @event.update_attributes(event_params) && Eventdate.update(params, @event.id)
+      #binding.pry
+      if @event.update(event_params) && Eventdate.update(params, @event.id)
+        if params[:images]
+          params[:images].each { |image|
+            @event.attachments.create(image: image)
+          }
+        end
         flash[:success] = "The event was updated successfully."
         redirect_to organizer_events_path
       else

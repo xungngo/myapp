@@ -146,9 +146,63 @@ function sortTableColumn(tb,col) {
 
   //File Uploader
   $(document).ready(function() {
-    $('input[name="event[attachments]"]').fileuploader({
+    $('input[name="images[]"]').fileuploader({
       inputNameBrackets: true,
       addMore: true,
-      sorter: '.fileuploader-action-sort'
+      editor: {
+		// editor cropper
+		cropper: {
+			// cropper ratio
+			// example: null
+			// example: '1:1'
+			// example: '16:9'
+			// you can also write your own
+			ratio: null,
+			
+			// cropper minWidth in pixels
+			// size is adjusted with the image natural width
+			minWidth: null,
+			
+			// cropper minHeight in pixels
+			// size is adjusted with the image natural height
+			minHeight: null,
+			
+			// show cropper grid - gives a 'has-grid' classname to the editor
+			showGrid: true
+		},
+		
+		// editor on save quality (0 - 100)
+		// only front-end
+		quality: null,
+		
+		// editor on save maxWidth in pixels
+		// only front-end
+		maxWidth: null,
+		 
+		// editor on save maxHeight in pixels
+		// only front-end
+		maxHeight: null,
+		
+		// Callback fired after saving the image in editor
+		onSave: function(blobOrDataUrl, item, listEl, parentEl, newInputEl, inputEl) {
+			// callback will go here
+		}
+     },
+     sorter: {
+		// selector exclude on drag (ex: 'input, textarea')
+		selectorExclude: null,
+
+		// placeholder html
+		// null - will clone the item without content
+		placeholder: null,
+
+		// scroll container on drag
+		scrollContainer: window,
+
+		// callback fired after sorting, adding and removing a file
+		onSort: function(list, listEl, parentEl, newInputEl, inputEl) {
+			// your callback goes here
+		}
+	 }
     });
   });
