@@ -8,5 +8,5 @@ class Attachment < ActiveRecord::Base
   # use this cmd from above link: sudo apt-get install imagemagick libmagickcore-dev libmagickwand-dev libmagic-dev
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100#" }
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/, message: 'Attachment should be an image type such as: jpeg, gif, or png.'
-  validates_attachment_size :image, :less_than => 500.kilobytes, message: 'Attachment file size should be less than 500Kb!'
+  validates_attachment_size :image, :less_than => 4.megabytes, message: 'Attachment file size should be less than 5Mb!'
 end

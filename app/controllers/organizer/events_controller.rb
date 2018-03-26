@@ -1,5 +1,6 @@
 class Organizer::EventsController < ApplicationController
   before_action :authenticate_user
+  protect_from_forgery with: :null_session, only: [:create_attachments]
   #load_and_authorize_resource # cancancan
 
   def index
@@ -31,7 +32,7 @@ class Organizer::EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.includes(:eventtype, :eventattendeetype, :eventdates).find(params[:id])
+    @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
   end
 
   def update
@@ -56,6 +57,15 @@ class Organizer::EventsController < ApplicationController
       render :action => :edit
     end
   end
+
+  def create_attachments
+    @event_attachment = Event.find(params[:event_id])
+    if params[:images]
+      params[:images].each { |image|
+        @event_attachment.attachments.create(image: image)
+      }
+    end
+  end  
 
   private
   

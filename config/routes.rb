@@ -21,11 +21,16 @@ Rails.application.routes.draw do
   get 'user_preferences_avatar_delete', to: 'admin/users#user_preferences_avatar_delete'
   get 'user_security', to: 'admin/users#user_security'
   post 'user_security_update', to: 'admin/users#user_security_update'
+  # post 'create_event_attachments', to: 'attachments#create'
 
   get 'admin/', to: redirect('/')
   get 'admin/dashboard', to: 'admin#dashboard'
 
+  resources :attachments
+  
   namespace :organizer do
-    resources :events
+    resources :events do
+      post :create_attachments, :collection => :events
+    end
   end
 end
