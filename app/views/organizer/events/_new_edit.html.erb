@@ -1,4 +1,5 @@
 <!--= debug(@event.eventdates) -->
+<%= debug(@img_json)%>
 
 <%= form_for [:organizer, @event], html: { multipart: true, class: 'form' } do |f| %>
 <%= render "layouts/message_error_organizer" %>
@@ -64,7 +65,9 @@
 				<div class="col-md-10">
 					<%= f.label :images, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
 					<!--= f.file_field :images, class: "form-control" -->
-					<%= file_field_tag "images[]", id: "event_images", type: :file, multiple: true, class: "form-control" %>
+					<%= file_field_tag "images[]", id: "event_images", type: :file,
+					multiple: true, class: "form-control",
+					"data-fileuploader-files" => @img_json %>
 					<span class="help-block">Upload up to 20 photos.</span>
 					<% @event.attachments.each do |attachment| %>
 					<%= link_to image_tag(attachment.image.url(:thumb)) %><br><br>

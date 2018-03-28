@@ -1,6 +1,7 @@
 class Organizer::EventsController < ApplicationController
   before_action :authenticate_user
   protect_from_forgery with: :null_session, only: [:create_attachments]
+  include CustomJson
   #load_and_authorize_resource # cancancan
 
   def index
@@ -33,6 +34,7 @@ class Organizer::EventsController < ApplicationController
 
   def edit
     @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
+    @img_json = images_to_json(@event)
   end
 
   def update
