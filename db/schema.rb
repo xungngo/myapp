@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.string "image_content_type"
     t.integer "image_file_size"
     t.datetime "image_updated_at"
+    t.integer "sort"
   end
 
   create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|

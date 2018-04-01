@@ -16,11 +16,7 @@ class Organizer::EventsController < ApplicationController
     if params[:event].present?
       @event = Event.new(event_params)
       if @event.save && Eventdate.create(params, @event.id)
-        if params[:images]
-          params[:images].each { |image|
-            @event.attachments.create(image: image)
-          }
-        end
+        create_images
         flash[:success] = "The event was created successfully."
         redirect_to organizer_events_path
       else
@@ -34,20 +30,13 @@ class Organizer::EventsController < ApplicationController
 
   def edit
     @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
-    @img_json = images_to_json(@event)
+    @img_json = images_to_json(@event.attachments.order(sort: :asc))
   end
 
   def update
-    # binding.pry
     if params[:event].present?
       @event = Event.find(params[:id])
-      #binding.pry
       if @event.update(event_params) && Eventdate.update(params, @event.id)
-        if params[:images]
-          params[:images].each { |image|
-            @event.attachments.create(image: image)
-          }
-        end
         flash[:success] = "The event was updated successfully."
         redirect_to organizer_events_path
       else
@@ -60,19 +49,36 @@ class Organizer::EventsController < ApplicationController
     end
   end
 
-  def create_attachments
-    @event_attachment = Event.find(params[:event_id])
+  def create_images
+    params[:event_id] ||= @event.id
     if params[:images]
-      params[:images].each { |image|
-        @event_attachment.attachments.create(image: image)
+      params[:images].each_with_index() { |image, index|
+        Attachment.create(event_id: params[:event_id], image: image, sort: index)
       }
     end
-  end  
+  end
+
+  def update_image
+    new_img = Attachment.where(event_id: params[:event_id])
+    new_img.create(image: params[:images][0], sort: new_img.size)
+  end
+
+  def delete_image
+    Attachment.where(event_id: params[:event_id]).delete(params[:image_id])
+  end
+
+  def sort_image
+    data = JSON.parse(params[:_list])
+    data.each { |image|
+      Attachment.where(id: image['image_id'], event_id: params[:event_id]).update(sort: image['index'])
+    }
+  end
 
   private
   
     def event_params
-      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id).merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
+      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :images => [])
+      .merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
     end
 
 end

@@ -30,7 +30,10 @@ Rails.application.routes.draw do
   
   namespace :organizer do
     resources :events do
-      post :create_attachments, :collection => :events
+      post :create_images, :collection => :events
+      post :update_image, :collection => :events
+      post :delete_image
+      post :sort_image
     end
   end
 end
