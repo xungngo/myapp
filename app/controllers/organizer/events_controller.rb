@@ -5,7 +5,7 @@ class Organizer::EventsController < ApplicationController
   #load_and_authorize_resource # cancancan
 
   def index
-    @events = Event.includes(:eventtype).all.order(:name)
+    @events = Event.includes(:eventtype).all.order(created_at: :desc)
   end
 
   def new
@@ -70,7 +70,12 @@ class Organizer::EventsController < ApplicationController
   def sort_image
     data = JSON.parse(params[:_list])
     data.each { |image|
-      Attachment.where(id: image['image_id'], event_id: params[:event_id]).update(sort: image['index'])
+      #binding.pry
+      if image['image_id'].present?
+        Attachment.where(id: image['image_id'], event_id: params[:event_id]).update(sort: image['index'])
+      else
+        Attachment.where(event_id: params[:event_id], sort: nil).update(sort: image['index'])
+      end
     }
   end
 

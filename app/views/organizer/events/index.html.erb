@@ -14,16 +14,19 @@
 		
 		<div class="row">
 			<div class="col-lg-1"></div>
-			<div class="col-lg-4">
+			<div class="col-lg-10">
 				<%= render "layouts/message_flash" %>
 				<table class="table table-hover">
 				<thead>
-					<tr><td colspan="13" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Event".html_safe, new_organizer_event_path, :title =>"new event" %></td></tr>
+					<tr><td colspan="8" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Event".html_safe, new_organizer_event_path, :title =>"new event" %></td></tr>
 					<tr>
 						<th scope="col">#</th>
+						<th scope="col">Images</th>
 						<th scope="col">Name</th>
 						<th scope="col">Type</th>
-						<th scope="col" class="text-center">Status</th>
+						<th scope="col">Starts</th>
+						<th scope="col">Status</th>
+						<th scope="col">Created</th>
 						<th scope="col" class="text-center">Option</th>
 					</tr>
 				</thead>
@@ -33,20 +36,22 @@
 					<% currentrow = currentrow + 1 %>
 					<tr scope="row">
 						<td scope="row"><%= currentrow %></td>
+						<td>
+						<% if evt.attachments.first.present? %>
+						<%= image_tag(evt.attachments.order(:sort).first.image.url(:thumb), :size => "40x40") %><br>
+						<%= evt.attachments.size %> more
+						<% end %>
+						</td>
 						<td><%= evt.name %></td>
 						<td><%= evt.eventtype.name %></td>
-						<td class="text-center"><%= evt.pretty_active %></td>
+						<td><%= evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") %></td>
+						<td><%= evt.pretty_active %></td>
+						<td><%= evt.created_at.strftime("%-m/%-d/%Y") %></td>
 						<td class="text-center"><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %></td>
 					</tr>
 				<% end %>
 				</tbody>
 			</table>
-			</div>
-
-			<div class="col-lg-2"></div>
-
-			<div class="col-lg-4">
-				<!--goes here-->
 			</div>
 			<div class="col-lg-1"></div>
 		</div>

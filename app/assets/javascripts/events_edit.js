@@ -72,11 +72,13 @@ $(document).ready(function() {
             synchron: true,
             beforeSend: null,
             onSuccess: function(data, item) {
+				//$('#event_images').attr('data-fileuploader-files', 'xxxxxxxxxx');
 				setTimeout(function() {
                     item.html.find('.fileuploader-action-remove').before('<a class="fileuploader-action fileuploader-action-sort" title="Sort"><i></i></a>');
 					item.html.find('.progress-holder').hide();
 					item.renderThumbnail();
 				}, 400);
+				//$('input[name="fileuploader-list-images"]').val('zzzzzzzzzzzzz');
             },
             onError: function(item) {
 				item.html.find('.progress-holder').hide();
