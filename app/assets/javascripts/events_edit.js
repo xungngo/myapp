@@ -72,14 +72,19 @@ $(document).ready(function() {
             synchron: true,
             beforeSend: null,
             onSuccess: function(data, item) {
-				//$('#event_images').attr('data-fileuploader-files', 'xxxxxxxxxx');
+				//setTimeout(function() {
+					//$.get("get_images_json?id=14", function(data2) {
+						//$('input[name="fileuploader-list-files"]').val(data2);
+						//$('#event_images').attr('data-fileuploader-files', 'xxxxxxxxxx');
+						//$('input[name="fileuploader-list-images"]').val('zzzzzzzzzzzzz');
+					//});
+				//}, 400);
 				setTimeout(function() {
                     item.html.find('.fileuploader-action-remove').before('<a class="fileuploader-action fileuploader-action-sort" title="Sort"><i></i></a>');
 					item.html.find('.progress-holder').hide();
 					item.renderThumbnail();
 				}, 400);
-				//$('input[name="fileuploader-list-images"]').val('zzzzzzzzzzzzz');
-            },
+			},
             onError: function(item) {
 				item.html.find('.progress-holder').hide();
 				item.html.find('.fileuploader-item-icon i').text('Failed!');
@@ -106,20 +111,22 @@ $(document).ready(function() {
 			placeholder: '<li class="fileuploader-item fileuploader-sorter-placeholder"><div class="fileuploader-item-inner"></div></li>',
 			scrollContainer: window,
 			onSort: function(list, listEl, parentEl, newInputEl, inputEl) {
-                var api = $.fileuploader.getInstance(inputEl.get(0)),
+				var api = $.fileuploader.getInstance(inputEl.get(0)),
                     fileList = api.getFileList(),
-                    _list = [];
-                
+					_list = [];
+
                 $.each(fileList, function(i, item) {
                     _list.push({
-                        image_id: item.data.id,
+						image_id: item.data.id,
+						image_name: item.name,
+						image_size: item.size,
                         index: item.index
                     });
                 });
                 
                 $.post('sort_image', {
                     _list: JSON.stringify(_list)
-                });
+				});
 			}
 		},
 	});

@@ -70,13 +70,17 @@ class Organizer::EventsController < ApplicationController
   def sort_image
     data = JSON.parse(params[:_list])
     data.each { |image|
-      #binding.pry
       if image['image_id'].present?
         Attachment.where(id: image['image_id'], event_id: params[:event_id]).update(sort: image['index'])
       else
-        Attachment.where(event_id: params[:event_id], sort: nil).update(sort: image['index'])
+        data_in = data.map {|d| d['image_id'] if d['image_id'].present?}.compact
+        Attachment.where(image_file_name: image['image_name'], image_file_size: image['image_size'], event_id: params[:event_id]).where.not(id: data_in).update(sort: image['index'])
       end
     }
+  end
+
+  def get_images_json
+    render json: images_to_json(Event.includes(:attachments).find(params[:id]).attachments.order(sort: :asc))
   end
 
   private

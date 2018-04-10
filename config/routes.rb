@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       post :update_image, :collection => :events
       post :delete_image
       post :sort_image
+      get  :get_images_json
     end
   end
 end
