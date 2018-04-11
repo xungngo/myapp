@@ -72,13 +72,6 @@ $(document).ready(function() {
             synchron: true,
             beforeSend: null,
             onSuccess: function(data, item) {
-				//setTimeout(function() {
-					//$.get("get_images_json?id=14", function(data2) {
-						//$('input[name="fileuploader-list-files"]').val(data2);
-						//$('#event_images').attr('data-fileuploader-files', 'xxxxxxxxxx');
-						//$('input[name="fileuploader-list-images"]').val('zzzzzzzzzzzzz');
-					//});
-				//}, 400);
 				setTimeout(function() {
                     item.html.find('.fileuploader-action-remove').before('<a class="fileuploader-action fileuploader-action-sort" title="Sort"><i></i></a>');
 					item.html.find('.progress-holder').hide();

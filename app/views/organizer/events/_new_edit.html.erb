@@ -144,7 +144,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :address, "Address <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :address, class: "form-control" %>
+					<%= f.text_field :address, class: "form-control", placeholder: "Enter a location" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -166,3 +166,5 @@
 </div>
 <% end -%>
 <br><br><br><br>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&libraries=places&callback=initAutoComplete"></script>
