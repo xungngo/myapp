@@ -39,7 +39,7 @@
 						<td>
 						<% if evt.attachments.first.present? %>
 						<%= image_tag(evt.attachments.order(:sort).first.image.url(:thumb), :size => "40x40") %><br>
-						<%= evt.attachments.size %> more
+						<%= evt.attachments.size-1 %> more
 						<% end %>
 						</td>
 						<td><%= evt.name %></td>

@@ -18,9 +18,12 @@ var ppYearsPeriod = [ppYear-1, ppYear+1]
 $('#event_start').periodpicker({
     inline: true,
     norange: true,
-    cells: [1, 1],
+    cells: [1, 2],
     okButton: true,
+    withoutBottomPanel: true,
     resizeButton: false,
+    fullsizeButton: false,
+    fullsizeOnDblClick: false,
     formatDate: 'MM/DD/YYYY',
     dayOfWeekStart: 7,
     weekEnds: [6,7],
