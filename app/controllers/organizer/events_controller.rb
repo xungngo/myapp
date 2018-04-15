@@ -29,22 +29,16 @@ class Organizer::EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
-    @img_json = images_to_json(@event.attachments.order(sort: :asc))
+    edit_update_instances
   end
 
   def update
-    if params[:event].present?
-      @event = Event.find(params[:id])
-      if @event.update(event_params) && Eventdate.update(params, @event.id)
-        flash[:success] = "The event was updated successfully."
-        redirect_to organizer_events_path
-      else
-        #@event.errors.add(:base, "Error error error.")
-        render :action => :edit
-      end
+    edit_update_instances
+    geolocation
+    if @event.update(event_params) && Eventdate.update(params, @event.id)
+      flash[:success] = "The event was updated successfully."
+      redirect_to organizer_events_path
     else
-      #flash[:danger] = "Please fill in all required form fields."
       render :action => :edit
     end
   end
@@ -86,8 +80,30 @@ class Organizer::EventsController < ApplicationController
   private
   
     def event_params
-      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :images => [])
-      .merge(latitude: 16.1234, longitude: 35.4456, uuid: SecureRandom.hex, active: true)
+      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :latitude, :longitude, :images => [])
+      .merge(uuid: SecureRandom.hex, active: true)
     end
 
+    def geolocation
+      params[:event][:latitude] = nil
+      params[:event][:longitude] = nil
+      geoloc = JSON.load(open("https://maps.googleapis.com/maps/api/geocode/json?address=#{params[:event][:address]}&key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA"))
+      
+      if geoloc['status'] == 'OK' && geoloc['results'][0]['geometry']['location']['lat'].present?
+        params[:event][:latitude] = geoloc['results'][0]['geometry']['location']['lat']
+        params[:event][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
+        return true
+      else
+        # params[:event][:address] = nil
+        return false
+      end
+    rescue
+      # params[:event][:address] = nil
+      return false
+    end
+
+    def edit_update_instances
+      @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
+      @img_json = images_to_json(@event.attachments.order(sort: :asc))
+    end
 end
