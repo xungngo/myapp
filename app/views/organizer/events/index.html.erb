@@ -44,7 +44,7 @@
 						</td>
 						<td><%= evt.name %></td>
 						<td><%= evt.eventtype.name %></td>
-						<td><%= evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") %></td>
+						<td><%= evt.eventdates.present? ? evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") : 'N/A' %></td>
 						<td><%= evt.pretty_active %></td>
 						<td><%= evt.created_at.strftime("%-m/%-d/%Y") %></td>
 						<td class="text-center"><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %></td>

@@ -2,7 +2,9 @@ class Event < ActiveRecord::Base
   #has_many :event_attachment_mappings
   #has_many :attachments, :through => :event_attachment_mappings
   has_many :attachments, :dependent => :destroy
-  has_and_belongs_to_many :eventdates
+  #has_and_belongs_to_many :eventdates
+  has_many :eventdates_events
+  has_many :eventdates, :through => :eventdates_events  
   belongs_to :eventtype
   belongs_to :eventattendeetype
 

@@ -46,9 +46,11 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.datetime "updated_at"
   end
 
-  create_table "eventdates_events", id: false, force: :cascade do |t|
+  create_table "eventdates_events", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.integer "eventdate_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["event_id"], name: "index_eventdates_events_on_event_id"
     t.index ["eventdate_id"], name: "index_eventdates_events_on_eventdate_id"
   end

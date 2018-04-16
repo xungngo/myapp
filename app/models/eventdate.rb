@@ -1,5 +1,7 @@
 class Eventdate < ActiveRecord::Base
-  has_and_belongs_to_many :events
+  #has_and_belongs_to_many :events
+  has_many :eventdates_events
+  has_many :events, :through => :eventdates_events
 
   validates :eventdate, presence: {message: "The Event Date field is required."}
   validates :starttime, presence: {message: "The Start Time field is required."}
@@ -11,9 +13,8 @@ class Eventdate < ActiveRecord::Base
       if p[:eventdate][count].present?
         @new_eventdate = Eventdate.new(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
         @new_eventdate.save
-        @new_eventdates_events = EventdatesEvents.new(event_id: eid, eventdate_id: @new_eventdate.id)
+        @new_eventdates_events = EventdatesEvent.new(event_id: eid, eventdate_id: @new_eventdate.id)
         @new_eventdates_events.save
-        #binding.pry
       end
     end
     @new_eventdate
@@ -21,7 +22,6 @@ class Eventdate < ActiveRecord::Base
   end
 
   def self.update(p, eid)
-    # binding.pry
     to_length = p[:eventdate].size.to_i - 1
     (0..to_length).each do |count|
       if p[:eventdate][count].present? && p[:eventdate_id][count].present?
@@ -29,7 +29,7 @@ class Eventdate < ActiveRecord::Base
       elsif p[:eventdate][count].present?
         @new_eventdate = Eventdate.new(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
         @new_eventdate.save
-        @new_eventdates_events = EventdatesEvents.new(event_id: eid, eventdate_id: @new_eventdate.id)
+        @new_eventdates_events = EventdatesEvent.new(event_id: eid, eventdate_id: @new_eventdate.id)
         @new_eventdates_events.save
       end
     end

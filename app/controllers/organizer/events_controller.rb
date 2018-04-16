@@ -13,17 +13,13 @@ class Organizer::EventsController < ApplicationController
   end
 
   def create
-    if params[:event].present?
-      @event = Event.new(event_params)
-      if @event.save && Eventdate.create(params, @event.id)
-        create_images
-        flash[:success] = "The event was created successfully."
-        redirect_to organizer_events_path
-      else
-        render :action => :new
-      end
+    geolocation
+    @event = Event.new(event_params)
+    if @event.save && Eventdate.create(params, @event.id)
+      create_images
+      flash[:success] = "The event was created successfully."
+      redirect_to organizer_events_path
     else
-      #flash[:danger] = "Please fill in all required form fields."
       render :action => :new
     end
   end
@@ -88,7 +84,7 @@ class Organizer::EventsController < ApplicationController
       params[:event][:latitude] = nil
       params[:event][:longitude] = nil
       geoloc = JSON.load(open("https://maps.googleapis.com/maps/api/geocode/json?address=#{params[:event][:address]}&key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA"))
-      
+
       if geoloc['status'] == 'OK' && geoloc['results'][0]['geometry']['location']['lat'].present?
         params[:event][:latitude] = geoloc['results'][0]['geometry']['location']['lat']
         params[:event][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
