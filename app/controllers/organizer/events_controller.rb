@@ -31,9 +31,15 @@ class Organizer::EventsController < ApplicationController
   def update
     edit_update_instances
     geolocation
-    if @event.update(event_params) && Eventdate.update(params, @event.id)
+    if @event.update(event_params) && Eventdate.update(params, @event.id) && verify_has_image(@event.id)
       flash[:success] = "The event was updated successfully."
       redirect_to organizer_events_path
+    elsif params[:eventdate].size.to_i == 1
+      @event.errors.add(:base, "At least one event date is required.")
+      render :action => :edit
+    elsif !verify_has_image(@event.id)
+      @event.errors.add(:base, "At least one image is required.")
+      render :action => :edit
     else
       render :action => :edit
     end
@@ -101,5 +107,10 @@ class Organizer::EventsController < ApplicationController
     def edit_update_instances
       @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
       @img_json = images_to_json(@event.attachments.order(sort: :asc))
+    end
+
+    def verify_has_image(eid)
+      attachment = Attachment.find_by(event_id: eid)
+      attachment.present? ? true : false
     end
 end

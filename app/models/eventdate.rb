@@ -6,6 +6,7 @@ class Eventdate < ActiveRecord::Base
   validates :eventdate, presence: {message: "The Event Date field is required."}
   validates :starttime, presence: {message: "The Start Time field is required."}
   validates :endtime, presence: {message: "The End Time field is required."}
+  # validates_associated :eventdates_events, :events
 
   def self.create(p, eid)
     to_length = p[:eventdate].size.to_i - 1
@@ -23,6 +24,7 @@ class Eventdate < ActiveRecord::Base
 
   def self.update(p, eid)
     to_length = p[:eventdate].size.to_i - 1
+    return if to_length.zero?
     (0..to_length).each do |count|
       if p[:eventdate][count].present? && p[:eventdate_id][count].present?
         @update_eventdate = Eventdate.find(p[:eventdate_id][count]).update(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
