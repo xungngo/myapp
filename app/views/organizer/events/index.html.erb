@@ -47,7 +47,10 @@
 						<td><%= evt.eventdates.present? ? evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") : 'N/A' %></td>
 						<td><%= evt.pretty_active %></td>
 						<td><%= evt.created_at.strftime("%-m/%-d/%Y") %></td>
-						<td class="text-center"><%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %></td>
+						<td class="text-center" style="width: 15%">
+							<%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %>&nbsp;&nbsp;&nbsp;&nbsp;
+							<%= link_to "<i class='glyphicon glyphicon-ban-circle'></i> Deactivate".html_safe, organizer_event_status_path(evt), class: "event_status", id: evt.id, title: "deactivate #{evt.name}" %>
+						</td>
 					</tr>
 				<% end %>
 				</tbody>
@@ -57,4 +60,5 @@
 		</div>
     </div>
 </section>
+<div id="modal-window" class="modal" title="Event Status" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <!-- END / SECTION 1 -->

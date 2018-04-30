@@ -17,6 +17,7 @@
 //= require library/jquery.magnific-popup.min
 //= require library/jquery.owl.carousel
 //= require library/bootstrap.min
+//= require library/jquery-ui.min
 //= require library/perfect-scrollbar.min
 //= require library/scripts
 // require library/scripts.min [this script is minified version of scripts.js]

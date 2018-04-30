@@ -29,10 +29,14 @@
 <% if %w(search signin register forgot).exclude? params[:action] %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 <% end %>
-<% if %w(edit update).include? action_name %>
-    <%= javascript_include_tag "#{controller_name}_edit" %>
-<% elsif %w(new create).include? action_name %>
-    <%= javascript_include_tag "#{controller_name}_new" %>
+<% if %w(events).include? controller_name %>
+    <% if %w(edit update).include? action_name %>
+        <%= javascript_include_tag "#{controller_name}_edit" %>
+    <% elsif %w(new create).include? action_name %>
+        <%= javascript_include_tag "#{controller_name}_new" %>
+    <% elsif %w(index).include? action_name %>
+        <%= javascript_include_tag "#{controller_name}_index" %>
+    <% end %>
 <% end %>
 </body>
 </html>

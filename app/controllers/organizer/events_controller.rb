@@ -19,6 +19,9 @@ class Organizer::EventsController < ApplicationController
       create_images
       flash[:success] = "The event was created successfully."
       redirect_to organizer_events_path
+    elsif params[:eventdate].size.to_i == 1
+      @event.errors.add(:base, "At least one event date is required.")
+      render :action => :edit
     else
       render :action => :new
     end
@@ -31,7 +34,7 @@ class Organizer::EventsController < ApplicationController
   def update
     edit_update_instances
     geolocation
-    if @event.update(event_params) && Eventdate.update(params, @event.id) && verify_has_image(@event.id)
+    if @event.update(event_params) && Eventdate.update(params, @event.id) # && verify_has_image(@event.id)
       flash[:success] = "The event was updated successfully."
       redirect_to organizer_events_path
     elsif params[:eventdate].size.to_i == 1
@@ -77,6 +80,15 @@ class Organizer::EventsController < ApplicationController
 
   def get_images_json
     render json: images_to_json(Event.includes(:attachments).find(params[:id]).attachments.order(sort: :asc))
+  end
+
+  def status
+    # binding.pry
+    @event = Event.find(params[:event_id])
+    #respond_to do |format|
+      #format.html
+      #format.js
+    #end
   end
 
   private

@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       post :delete_image
       post :sort_image
       get  :get_images_json
+      get  :status
     end
   end
 end
