@@ -1,3 +1,3 @@
-<%= render "/layouts/header" %>
+<%= render "/layouts/header" unless @no_wrapper.present? %>
   <%= yield %>
-<%= render "/layouts/footer" %>
+<%= render "/layouts/footer" unless @no_wrapper.present? %>

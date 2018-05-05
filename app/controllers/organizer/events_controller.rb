@@ -84,11 +84,19 @@ class Organizer::EventsController < ApplicationController
 
   def status
     # binding.pry
+    @no_wrapper = true
     @event = Event.find(params[:event_id])
+    return "The status was updated!"
     #respond_to do |format|
       #format.html
       #format.js
     #end
+  end
+
+  def status_update
+    @no_wrapper = true
+    @event = Event.find(params[:event_id])
+    @status_update_success = false
   end
 
   private
