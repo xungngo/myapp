@@ -3,11 +3,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<% if @status_update_success %>
-					<h3>Successful Deactivation</h3>
-				<% else %>
-					<h3>Unsuccessful Deactivation</h3>
-				<% end %>
+				<h3><%= @status_change_message %></h3>
 			</div>
 		</div>
 	</div>

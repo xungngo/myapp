@@ -93,18 +93,38 @@ class Organizer::EventsController < ApplicationController
     #end
   end
 
-  def status_update
+  def status_activate
     @no_wrapper = true
     @event = Event.find(params[:event_id])
-    @status_update_success = false
+    if @event.update(active: true)
+      @status_change_message = "Successful Activation"
+      flash[:success] = "The event status was updated successfully."
+    else
+      @status_change_message = "Unsuccessful Activation"   
+      flash[:danger] = "The event status did not update successfully."
+    end
+    render :action => :status_change
+  end
+
+  def status_deactivate
+    @no_wrapper = true
+    @event = Event.find(params[:event_id])
+    if @event.update(active: false)
+      @status_change_message = "Successful Deactivation"
+      flash[:success] = "The event status was updated successfully."
+    else
+      @status_change_message = "Unsuccessful Deactivation"   
+      flash[:danger] = "The event status did not update successfully."
+    end
+    render :action => :status_change
   end
 
   private
-  
-    def event_params
-      params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :latitude, :longitude, :images => [])
-      .merge(uuid: SecureRandom.hex, active: true)
-    end
+
+  def event_params
+    params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :latitude, :longitude, :images => [])
+    .merge(uuid: SecureRandom.hex, active: true)
+  end
 
     def geolocation
       params[:event][:latitude] = nil
