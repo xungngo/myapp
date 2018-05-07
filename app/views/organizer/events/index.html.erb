@@ -16,6 +16,7 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-10">
 				<%= render "layouts/message_flash" %>
+				<h2>Your Events</h2>
 				<table class="table table-hover">
 				<thead>
 					<tr><td colspan="8" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Event".html_safe, new_organizer_event_path, :title =>"new event" %></td></tr>
@@ -50,10 +51,10 @@
 						<td style="width: 20%">
 							<%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %>&nbsp;&nbsp;&nbsp;
 							<% if evt.active %>
-								<%= link_to "<i class='glyphicon glyphicon-ban-circle'></i> Deactivate".html_safe, organizer_event_status_path(evt), 'data-post-type': "Deactivate", class: "event_status", id: evt.id, title: "deactivate #{evt.name}" %>
+								<%= link_to "<i class='glyphicon glyphicon-ban-circle'></i> Deactivate".html_safe, organizer_event_status_update_path(evt, type: 'Deactivate'), 'data-post-type': "Deactivate", class: "event_status", id: evt.id, title: "deactivate #{evt.name}" %>
 							<% else %>
-								<%= link_to "<i class='glyphicon glyphicon-ok-circle'></i> Activate".html_safe, organizer_event_status_path(evt), 'data-post-type': "Activate", class: "event_status", id: evt.id, title: "activate #{evt.name}" %>&nbsp;&nbsp;&nbsp;
-								<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Delete".html_safe, organizer_event_status_path(evt), 'data-post-type': "Delete", class: "event_status", id: evt.id, title: "delete #{evt.name}" %>
+								<%= link_to "<i class='glyphicon glyphicon-ok-circle'></i> Activate".html_safe, organizer_event_status_update_path(evt, type: 'Activate'), 'data-post-type': "Activate", class: "event_status", id: evt.id, title: "activate #{evt.name}" %>&nbsp;&nbsp;&nbsp;
+								<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Delete".html_safe, organizer_event_status_update_path(evt, type: 'Delete'), 'data-post-type': "Delete", class: "event_status", id: evt.id, title: "delete #{evt.name}" %>
 							<% end %>
 						</td>
 					</tr>
@@ -62,7 +63,56 @@
 			</table>
 			</div>
 			<div class="col-lg-1"></div>
+		</div><br><br>
+
+		<% if @events_deleted.present? %>
+		<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-10">
+				<h2>Deleted Events</h2>
+				<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Images</th>
+						<th scope="col">Name</th>
+						<th scope="col">Type</th>
+						<th scope="col">Starts</th>
+						<th scope="col">Created</th>
+						<th scope="col">Status</th>
+						<th scope="col">Options</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% currentrow = 0 %>
+				<% @events_deleted.each do |evt| %>
+					<% currentrow = currentrow + 1 %>
+					<tr scope="row">
+						<td scope="row"><%= currentrow %></td>
+						<td>
+						<% if evt.attachments.first.present? %>
+						<%= image_tag(evt.attachments.order(:sort).first.image.url(:thumb), :size => "40x40") %><br>
+						<%= evt.attachments.size-1 %> more
+						<% end %>
+						</td>
+						<td><%= evt.name %></td>
+						<td><%= evt.eventtype.name %></td>
+						<td><%= evt.eventdates.present? ? evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") : 'N/A' %></td>
+						<td><%= evt.created_at.strftime("%-m/%-d/%Y") %></td>
+						<td><%= evt.pretty_active %></td>
+						<td style="width: 20%">
+							<%= link_to "<i class='glyphicon glyphicon-edit'></i> View".html_safe, edit_organizer_event_path(evt), :title =>"view #{evt.name}" %>&nbsp;&nbsp;&nbsp;
+							<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Undelete".html_safe, organizer_event_status_update_path(evt, type: 'Undelete'), 'data-post-type': "Undelete", class: "event_status", id: evt.id, title: "undelete #{evt.name}" %>&nbsp;&nbsp;&nbsp;
+							<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Purge".html_safe, organizer_event_status_update_path(evt, type: 'Purge'), 'data-post-type': "Purge", class: "event_status", id: evt.id, title: "purge #{evt.name}" %>
+						</td>
+					</tr>
+				<% end %>
+				</tbody>
+			</table>
+			</div>
+			<div class="col-lg-1"></div>
 		</div>
+		<% end %>	
     </div>
 </section>
 <div id="modal-window" class="modal" title="Change Event Status" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>

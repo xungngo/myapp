@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.decimal "longitude", precision: 10, scale: 6, null: false
     t.boolean "active", default: true, null: false
     t.string "uuid", limit: 100, null: false
+    t.integer "deleted_by"
+    t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

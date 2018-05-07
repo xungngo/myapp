@@ -14,7 +14,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :name, "Name <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :name, class: "form-control" %>
+					<%= f.text_field :name, value: "mcskdmcos sdcsdc #{rand(999)}", class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -23,7 +23,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :description, "Description <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :description, rows: "8", class: "form-control", placeholder: "Provide a detailed description of the event. An outline works well." %>
+					<%= f.text_area :description, value: "dafreg ewg er gerg", rows: "8", class: "form-control", placeholder: "Provide a detailed description of the event. An outline works well." %>
 					<span class="help-block">Detailed description of the event such as an outline.</span>
 				</div>
 				<div class="col-md-1"></div>
@@ -33,7 +33,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :requirement, "Requirements", class:"control-label" %>
-					<%= f.text_area :requirement, rows: "5", class: "form-control", placeholder: "- ID\n- laptop\n- dress-code" %>
+					<%= f.text_area :requirement, value: "dscsc dafreg ewg ersdcsdc gerg", rows: "5", class: "form-control", placeholder: "- ID\n- laptop\n- dress-code" %>
 					<span class="help-block">Such as: laptop, book, ID, or dress-code.</span>
 				</div>
 				<div class="col-md-1"></div>
@@ -43,7 +43,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :price, "Price (USD per person)", class: "control-label" %>
-					<%= f.text_field :price, class: "form-control" %>
+					<%= f.text_field :price, value: "$44", class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>	
@@ -81,7 +81,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :contact, "Organizer Contact Information <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :contact, rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
+					<%= f.text_area :contact, value: "organier ewg er gerg", rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -150,7 +150,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :address, "Address <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :address, class: "form-control", placeholder: "Enter a location" %>
+					<%= f.text_field :address, value: "11852 Medway Church Loop, VA", class: "form-control", placeholder: "Enter a location" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>

@@ -15,6 +15,8 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.decimal :longitude, precision: 10, scale: 6, null: false
       t.boolean :active, null: false, default: true
       t.string :uuid, :limit => 100, null: false
+      t.integer :deleted_by
+      t.timestamp :deleted_at
       t.timestamps null: true
     end
 
