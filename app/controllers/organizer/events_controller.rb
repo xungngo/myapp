@@ -7,6 +7,7 @@ class Organizer::EventsController < ApplicationController
   def index
     @events = Event.includes(:eventtype).where(deleted_at: nil).order(created_at: :desc)
     @events_deleted = Event.includes(:eventtype).where.not(deleted_at: nil).order(created_at: :desc)
+    @events_deleted.where('deleted_at < ?', Time.zone.now-2.days).destroy_all
   end
 
   def new
@@ -111,75 +112,10 @@ class Organizer::EventsController < ApplicationController
     end
 
     if update
-      @status_change_message = "Successful #{params[:type]}"
+      @status_change_message = "#{params[:type]}d Successfully"
       flash[:success] = "The event status was updated successfully."
     else
-      @status_change_message = "Unsuccessful #{params[:type]}"   
-      flash[:danger] = "The event status did not update successfully."
-    end
-    render :action => :status_change
-  end
-
-  def status_activate
-    @no_wrapper = true
-    @event = Event.find(params[:event_id])
-    if @event.update(active: true)
-      @status_change_message = "Successful Activation"
-      flash[:success] = "The event status was updated successfully."
-    else
-      @status_change_message = "Unsuccessful Activation"   
-      flash[:danger] = "The event status did not update successfully."
-    end
-    render :action => :status_change
-  end
-
-  def status_deactivate
-    @no_wrapper = true
-    @event = Event.find(params[:event_id])
-    if @event.update(active: false)
-      @status_change_message = "Successful Deactivation"
-      flash[:success] = "The event status was updated successfully."
-    else
-      @status_change_message = "Unsuccessful Deactivation"   
-      flash[:danger] = "The event status did not update successfully."
-    end
-    render :action => :status_change
-  end
-
-  def status_delete
-    @no_wrapper = true
-    @event = Event.find(params[:event_id])
-    if @event.update(active: false, deleted_by: current_user.id, deleted_at: Date.today)
-      @status_change_message = "Successful Deletion"
-      flash[:success] = "The event status was updated successfully."
-    else
-      @status_change_message = "Unsuccessful Deletion"   
-      flash[:danger] = "The event status did not update successfully."
-    end
-    render :action => :status_change
-  end
-
-  def status_undelete
-    @no_wrapper = true
-    @event = Event.find(params[:event_id])
-    if @event.update(active: false, deleted_by: nil, deleted_at: nil)
-      @status_change_message = "Successful Undeletion"
-      flash[:success] = "The event status was updated successfully."
-    else
-      @status_change_message = "Unsuccessful Undeletion"   
-      flash[:danger] = "The event status did not update successfully."
-    end
-    render :action => :status_change
-  end
-
-  def status_purge
-    @no_wrapper = true
-    @event = Event.includes(:eventdates).find(params[:event_id])
-    if @event.destroy
-      @status_change_message = "Successful Purging"
-      flash[:success] = "The event status was updated successfully."
-    else
-      @status_change_message = "Unsuccessful Purging"   
+      @status_change_message = "Error: Could Not #{params[:type]}"   
       flash[:danger] = "The event status did not update successfully."
     end
     render :action => :status_change

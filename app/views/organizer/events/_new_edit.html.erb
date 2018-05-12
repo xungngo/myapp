@@ -166,7 +166,7 @@
 		<%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Cancel".html_safe, organizer_events_path, :title =>"cancel & back to listings" %>
 	</div>
 	<div class="col-md-5" align="right">
-		<%= f.submit "#{params[:action] == 'new' ? 'Submit' : 'Update'} Event", :class => "btn btn-default" %>
+		<%= f.submit "#{params[:action] == 'new' ? 'Submit' : 'Update'} Event", class: "btn btn-default", disabled: @event.deleted_at.present? %>
 	</div>
 	<div class="col-md-1"></div>
 </div>

@@ -76,6 +76,31 @@ class PagesController < ApplicationController
 
   def getmarkers
     if params[:type] == 'organizer'
+      haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(latitude)) * cos(radians(longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(latitude))))"
+      sql = "SELECT name, address, latitude, longitude, 'organizer' as type,
+            #{haversine} as distant
+      FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
+      AND active = TRUE
+      GROUP BY name, address, latitude, longitude
+      HAVING #{haversine} < 1
+      ORDER BY distant ASC"
+    else
+      haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(latitude)) * cos(radians(longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(latitude))))"
+      sql = "SELECT name, address, latitude, longitude, 'seeker' as type,
+            #{haversine} as distant
+      FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
+      AND active = TRUE
+      GROUP BY name, address, latitude, longitude 
+      HAVING #{haversine} < 10
+      ORDER BY distant ASC"
+    end
+    @markers = ActiveRecord::Base.connection.execute(sql)
+    render :json => @markers.as_json
+  end
+
+=begin
+  def getmarkers
+    if params[:type] == 'organizer'
     haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(latitude)) * cos(radians(longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(latitude))))"
     sql = "SELECT name, address, latitude, longitude, 'organizer' as type,
           #{haversine} as distant
@@ -94,7 +119,7 @@ class PagesController < ApplicationController
     end
     @markers = ActiveRecord::Base.connection.execute(sql)
     render :json => @markers.as_json
-  end
+=end
 
   private
 end
