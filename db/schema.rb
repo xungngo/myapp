@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180113174570) do
+ActiveRecord::Schema.define(version: 20180514174560) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.integer "eventtype_id", null: false
     t.integer "eventattendeetype_id", null: false
     t.string "tag", limit: 100
+    t.integer "organization_id", null: false
     t.decimal "latitude", precision: 10, scale: 6, null: false
     t.decimal "longitude", precision: 10, scale: 6, null: false
     t.boolean "active", default: true, null: false
@@ -74,6 +75,7 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["name"], name: "index_events_on_name", unique: true
   end
 
   create_table "eventtypes", id: :serial, force: :cascade do |t|
@@ -97,6 +99,16 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.decimal "latitude", precision: 10, scale: 6, null: false
     t.decimal "longitude", precision: 10, scale: 6, null: false
     t.boolean "active", default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "organizations", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 200
+    t.string "address", limit: 500
+    t.decimal "latitude", precision: 10, scale: 6, null: false
+    t.decimal "longitude", precision: 10, scale: 6, null: false
+    t.boolean "default", default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -153,6 +165,13 @@ ActiveRecord::Schema.define(version: 20180113174570) do
     t.datetime "avatar_updated_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "last_sign_in_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users_organizations", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

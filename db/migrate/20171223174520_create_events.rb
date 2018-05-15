@@ -11,6 +11,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.integer :eventtype_id, null: false
       t.integer :eventattendeetype_id, null: false
       t.string :tag, :limit => 100
+      t.integer :organization_id, null: false
       t.decimal :latitude, precision: 10, scale: 6, null: false
       t.decimal :longitude, precision: 10, scale: 6, null: false
       t.boolean :active, null: false, default: true
@@ -20,6 +21,6 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.timestamps null: true
     end
 
-    # add_index :events, :name, unique: true
+    add_index :events, :name, unique: true
   end
 end

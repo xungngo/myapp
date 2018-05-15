@@ -80,6 +80,7 @@ class PagesController < ApplicationController
       sql = "SELECT name, address, latitude, longitude, 'organizer' as type,
             #{haversine} as distant
       FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
+      OR lower(description) LIKE '%#{params[:input_keyword].downcase}%'
       AND active = TRUE
       GROUP BY name, address, latitude, longitude
       HAVING #{haversine} < 1
@@ -89,6 +90,7 @@ class PagesController < ApplicationController
       sql = "SELECT name, address, latitude, longitude, 'seeker' as type,
             #{haversine} as distant
       FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
+      OR lower(description) LIKE '%#{params[:input_keyword].downcase}%'
       AND active = TRUE
       GROUP BY name, address, latitude, longitude 
       HAVING #{haversine} < 10

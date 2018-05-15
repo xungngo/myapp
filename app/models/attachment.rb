@@ -1,6 +1,4 @@
 class Attachment < ActiveRecord::Base
-  #has_many :event_attachment_mappings
-  #has_many :events, :through => :event_attachment_mappings
   belongs_to :event
   
   # attachment with paperclip
