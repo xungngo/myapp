@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   validates :latitude, presence: {message: "The Organization Latitude field is required."}
   validates :latitude, uniqueness: {message: "The Organization Latitude field must be unique."}
   validates :longitude, presence: {message: "The Organization Longitude field is required."}
-  validates :longitude, uniqueness: {message: "The Organization Longitude field must be unique."} 
+  validates :longitude, uniqueness: {message: "The Organization Longitude field must be unique."}
 
   def pretty_created_at
     self.created_at.nil? ? "" : formatted_ts(self.created_at)

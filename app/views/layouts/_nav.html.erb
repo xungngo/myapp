@@ -10,6 +10,7 @@
 	</li>
 	<li role="presentation"><a href="#">Messages</a></li>
 	<li role="presentation"><a href="#">My Searches</a></li>
+	<li role="presentation" <% if params[:controller].include? 'organizer/organizations' %>class="active"<% end %>><a href="/organizer/organizations">Organizations</a></li>
 	<li role="presentation" <% if params[:controller].include? 'organizer/events' %>class="active"<% end %>><a href="/organizer/events">Events</a></li>
 	<li role="presentation" <% if params[:action].include? 'user_security' %>class="active"<% end %>><a href="/user_security">Security</a></li>
 	<li role="presentation" <% if params[:action].include? 'user_preferences' %>class="active"<% end %>><a href="/user_preferences">Preferences</a></li>

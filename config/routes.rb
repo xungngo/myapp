@@ -43,5 +43,6 @@ Rails.application.routes.draw do
       post :status_undelete
       post :status_purge
     end
+    resources :organizations
   end
 end
