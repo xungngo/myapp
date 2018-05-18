@@ -21,10 +21,12 @@
 //= require library/perfect-scrollbar.min
 //= require library/scripts
 // require library/scripts.min [this script is minified version of scripts.js]
-// require_tree . 
+// require_tree .
 // stub "library/scripts.min"
 //= require users
 //= require moment.min
 //= require library/periodpicker/jquery.periodpicker.full.min
 //= require events
+//= require organizations
 //= require library/jquery.fileuploader.min
+//= require googlemap-auto-complete

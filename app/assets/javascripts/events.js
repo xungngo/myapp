@@ -147,15 +147,4 @@ function sortTableColumn(tb,col) {
     countRows();
   };
 
-  //autocomplete map
-  function initAutoComplete() {
-    var event_address = document.getElementById("event_address");
-    new google.maps.places.Autocomplete(event_address);
-    
-    //enter key to select not submit
-    google.maps.event.addDomListener(event_address, 'keydown', function(event) { 
-        if (event.keyCode === 13) { 
-            event.preventDefault(); 
-        }
-    });
-  };
+  var auto_complete_id = "event_address"; //global var for initAutoComplete()

@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20180514174560) do
   create_table "organizations", id: :serial, force: :cascade do |t|
     t.string "name", limit: 200
     t.string "address", limit: 500
+    t.string "contact", limit: 300
     t.decimal "latitude", precision: 10, scale: 6, null: false
     t.decimal "longitude", precision: 10, scale: 6, null: false
     t.boolean "default", default: true, null: false
