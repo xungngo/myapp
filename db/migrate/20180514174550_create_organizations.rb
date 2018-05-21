@@ -6,7 +6,7 @@ class CreateOrganizations < ActiveRecord::Migration[5.0]
       t.string    :contact, limit: 300
       t.decimal   :latitude, precision: 10, scale: 6, null: false
       t.decimal   :longitude, precision: 10, scale: 6, null: false
-      t.boolean   :default, :null => false, :default => true
+      t.boolean   :defaultorg, :null => false, :default => true
       t.timestamps null: true
     end
   end

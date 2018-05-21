@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.string "contact", limit: 300
     t.decimal "latitude", precision: 10, scale: 6, null: false
     t.decimal "longitude", precision: 10, scale: 6, null: false
-    t.boolean "default", default: true, null: false
+    t.boolean "defaultorg", default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

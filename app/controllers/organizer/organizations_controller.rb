@@ -3,7 +3,7 @@ class Organizer::OrganizationsController < ApplicationController
   #load_and_authorize_resource # cancancan
 
   def index
-    @organizations = Organization.all.order(name: :asc)
+    @organizations = Organization.includes(:users_organizations).where('users_organizations.user_id' => current_user.id).order(name: :asc)
   end
 
   def new
@@ -15,20 +15,25 @@ class Organizer::OrganizationsController < ApplicationController
   end
 
   def create
+    geolocation
     @organization = Organization.new(organization_params)
-
-    if @organization.save
-      redirect_to admin_organizations_path
+    # binding.pry
+    if @organization.create_user_organization!(current_user.id)
+      #@organization.save
+      #@organization.users_organizations.create(user_id: current_user.id, organization_id: Organization.last.id)
+      flash[:success] = "The organization was created successfully."
+      redirect_to organizer_organizations_path
     else
-      render action: :edit
+      render :action => :new
     end
   end
 
   def update
+    geolocation
     @organization = Organization.find(params[:id])
 
     if @organization.update(organization_params)
-      redirect_to admin_organizations_path
+      redirect_to organizer_organizations_path
     else
       render action: :edit
     end
@@ -63,6 +68,24 @@ class Organizer::OrganizationsController < ApplicationController
 private
 
   def organization_params
-    params.require(:organization).permit(:name, :address, :latitude, :longitude, :default)
+    params.require(:organization).permit(:name, :address, :contact, :latitude, :longitude, :defaultorg)
   end
+
+  def geolocation
+    params[:organization][:latitude] = nil
+    params[:organization][:longitude] = nil
+    geoloc = JSON.load(open("https://maps.googleapis.com/maps/api/geocode/json?address=#{params[:organization][:address]}&key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA"))
+
+    if geoloc['status'] == 'OK' && geoloc['results'][0]['geometry']['location']['lat'].present?
+      params[:organization][:latitude] = geoloc['results'][0]['geometry']['location']['lat']
+      params[:organization][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
+      return true
+    else
+      # params[:organization][:address] = nil
+      return false
+    end
+  rescue
+    # params[:organization][:address] = nil
+    return false
+  end  
 end

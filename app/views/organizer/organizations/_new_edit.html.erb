@@ -1,5 +1,5 @@
 <!--= debug(@event.eventdates) -->
-<%= form_for [:organizer, @organization], html: { multipart: true, class: 'form' } do |f| %>
+<%= form_for [:organizer, @organization] do |f| %>
 <%= render "layouts/message_error_organizer", pg_obj: @organization %>
 <%= render "layouts/message_flash" %>
 
@@ -14,7 +14,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :name, "Name <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :name, value: "organization #{rand(999)}", class: "form-control" %>
+					<%= f.text_field :name, class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -23,7 +23,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :address, "Address <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :address, value: "11852 Medway Church Loop, VA", class: "form-control", placeholder: "Enter a location" %>
+					<%= f.text_field :address, class: "form-control", placeholder: "Enter a location" %>
 					<div><span class="help-block">Provide an exact address or a general location.</span></div>
 				</div>
 				<div class="col-md-1"></div>
@@ -33,8 +33,18 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :contact, "Contact Information <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :contact, value: "organier ewg er gerg", rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
+					<%= f.text_area :contact, rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
 				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row form-group checkbox_bigger">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<%= f.check_box :defaultorg, class: "form-check-input" %>
+					<%= f.label :defaultorg, "Yes, this is the default organization.", class: "form-check-label" %>
+				</div>
+
 				<div class="col-md-1"></div>
 			</div>			
 		</fieldset><br><br><br>
@@ -58,5 +68,3 @@
 </div>
 <% end -%>
 <br><br><br><br>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&libraries=places&callback=initAutoComplete"></script>

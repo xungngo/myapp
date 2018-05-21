@@ -28,6 +28,7 @@
 <!-- Load Javascript -->
 <% if %w(search signin register forgot).exclude? params[:action] %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&libraries=places&callback=initAutoComplete"></script>
 <% end %>
 <% if %w(events).include? controller_name %>
     <% if %w(edit update).include? action_name %>
