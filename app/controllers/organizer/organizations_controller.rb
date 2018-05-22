@@ -28,10 +28,10 @@ class Organizer::OrganizationsController < ApplicationController
 
   def update
     geolocation
-    organization = Organization.find(params[:id])
-    organization.assign_attributes(organization_params)
+    @organization = Organization.find(params[:id])
+    @organization.assign_attributes(organization_params)
     
-    if organization.update_user_organization!(current_user.id)
+    if @organization.update_user_organization!(current_user.id)
       flash[:success] = "The organization was updated successfully."
       redirect_to organizer_organizations_path
     else

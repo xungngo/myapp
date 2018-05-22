@@ -24,8 +24,11 @@ class Organization < ActiveRecord::Base
     return if user_id.blank? && self.name.blank?
     user_orgs = Organization.includes(:users_organizations).where("users_organizations.user_id" => user_id)
     duplicate = user_orgs.where("lower(name) = lower(?)", self.name)
- 
-    if duplicate.present?
+
+    if user_orgs.count >= 20
+      errors.add(:base, "Maximum organizations reached.")
+      return false
+    elsif duplicate.present?
       errors.add(:base, "The Organization Name field must be unique per user.")
       return false
     elsif self.save && self.users_organizations.create(user_id: user_id, organization_id: Organization.last.id)

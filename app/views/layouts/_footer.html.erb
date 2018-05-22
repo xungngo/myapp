@@ -38,6 +38,10 @@
     <% elsif %w(index).include? action_name %>
         <%= javascript_include_tag "#{controller_name}_index" %>
     <% end %>
+<% elsif %w(organizations).include? controller_name %>
+    <% if %w(index).include? action_name %>
+        <%= javascript_include_tag "#{controller_name}_index" %>
+    <% end %>
 <% end %>
 </body>
 </html>
