@@ -17,10 +17,8 @@ class Organizer::OrganizationsController < ApplicationController
   def create
     geolocation
     @organization = Organization.new(organization_params)
-    # binding.pry
+    
     if @organization.create_user_organization!(current_user.id)
-      #@organization.save
-      #@organization.users_organizations.create(user_id: current_user.id, organization_id: Organization.last.id)
       flash[:success] = "The organization was created successfully."
       redirect_to organizer_organizations_path
     else
@@ -28,6 +26,19 @@ class Organizer::OrganizationsController < ApplicationController
     end
   end
 
+  def update
+    geolocation
+    organization = Organization.find(params[:id])
+    organization.assign_attributes(organization_params)
+    
+    if organization.update_user_organization!(current_user.id)
+      flash[:success] = "The organization was updated successfully."
+      redirect_to organizer_organizations_path
+    else
+      render action: :edit
+    end
+  end
+=begin
   def update
     geolocation
     @organization = Organization.find(params[:id])
@@ -38,7 +49,7 @@ class Organizer::OrganizationsController < ApplicationController
       render action: :edit
     end
   end
-
+=end
   def status
     @no_wrapper = true
     @organization = Organization.find(params[:organization_id])
@@ -81,11 +92,9 @@ private
       params[:organization][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
       return true
     else
-      # params[:organization][:address] = nil
       return false
     end
   rescue
-    # params[:organization][:address] = nil
     return false
   end  
 end
