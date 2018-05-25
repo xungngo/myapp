@@ -3,12 +3,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><% if @event.attachments.present? %><%= image_tag(@event.attachments.order(:sort).first.image.url(:medium), :size => "60x60") %>&nbsp;<% end %><%= @event.name %></h3>
+				<h3><%= @organization.name %></h3>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<p><strong>You are about to <%= params[:type].downcase %> this event. Click the <%= params[:type] %> button to proceed or Cancel button to abort.</strong></p>
+				<p><strong>You are about to <%= params[:type].downcase %> this organization. Click the <%= params[:type] %> button to proceed or Cancel button to abort.</strong></p>
 			</div>
 		</div>
 	</div>

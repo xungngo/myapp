@@ -1,5 +1,6 @@
 class Organizer::OrganizationsController < ApplicationController
   before_action :authenticate_user
+  skip_before_action :verify_authenticity_token, :only => [:status_update]
   #load_and_authorize_resource # cancancan
 
   def index
@@ -17,7 +18,7 @@ class Organizer::OrganizationsController < ApplicationController
   def create
     geolocation
     @organization = Organization.new(organization_params)
-    
+
     if @organization.create_user_organization!(current_user.id)
       flash[:success] = "The organization was created successfully."
       redirect_to organizer_organizations_path
@@ -30,7 +31,7 @@ class Organizer::OrganizationsController < ApplicationController
     geolocation
     @organization = Organization.find(params[:id])
     @organization.assign_attributes(organization_params)
-    
+
     if @organization.update_user_organization!(current_user.id)
       flash[:success] = "The organization was updated successfully."
       redirect_to organizer_organizations_path
@@ -59,22 +60,20 @@ class Organizer::OrganizationsController < ApplicationController
     @no_wrapper = true
     @organization = Organization.find(params[:organization_id])
     case params[:type]
-    when "Default"
-      Organization.find_user_id(params[:organization_id])
-      update = @organization.update(default: true)
     when "Delete"
       update = @organization.destroy
+      Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).first.update(defaultorg: "true") if update && @organization.defaultorg
     end
 
     if update
       @status_change_message = "#{params[:type]}d Successfully"
-      flash[:success] = "The event status was updated successfully."
+      flash[:success] = "The organization status was updated successfully."
     else
-      @status_change_message = "Error: Could Not #{params[:type]}"   
-      flash[:danger] = "The event status did not update successfully."
+      @status_change_message = "Error: Could Not #{params[:type]}"
+      flash[:danger] = "The organization status did not update successfully."
     end
     render :action => :status_change
-  end  
+  end
 
 private
 
@@ -96,5 +95,5 @@ private
     end
   rescue
     return false
-  end  
+  end
 end

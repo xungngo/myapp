@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     end
     resources :organizations do
       get  :status
+      post :status_update
       post :status_delete
     end
   end

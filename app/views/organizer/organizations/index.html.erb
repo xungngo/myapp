@@ -41,7 +41,7 @@
 						<td><%= org.defaultorg %></td>
 						<td style="width: 20%">
 							<%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_organization_path(org), :title =>"edit #{org.name}" %>&nbsp;&nbsp;&nbsp;
-							<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Delete".html_safe, organizer_organization_path(org, type: 'Delete'), 'data-post-type': "Delete", class: "event_status", id: org.id, title: "delete #{org.name}" %>
+							<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Delete".html_safe, organizer_organization_status_update_path(org, type: 'Delete'), 'data-post-type': "Delete", class: "organization_status", id: org.id, title: "delete #{org.name}" %>
 						</td>
 					</tr>
 				<% end %>

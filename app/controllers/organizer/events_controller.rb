@@ -1,6 +1,7 @@
 class Organizer::EventsController < ApplicationController
   before_action :authenticate_user
-  protect_from_forgery with: :null_session, only: [:create_attachments]
+  # protect_from_forgery with: :null_session, only: [:create_attachments]
+  skip_before_action :verify_authenticity_token, :only => [:create_attachments]
   include CustomJson
   #load_and_authorize_resource # cancancan
 
@@ -108,14 +109,14 @@ class Organizer::EventsController < ApplicationController
       update = @event.update(active: false, deleted_by: nil, deleted_at: nil)
     when "Purge"
       @event = Event.includes(:eventdates).find(params[:event_id])
-      update = @event.destroy      
+      update = @event.destroy
     end
 
     if update
       @status_change_message = "#{params[:type]}d Successfully"
       flash[:success] = "The event status was updated successfully."
     else
-      @status_change_message = "Error: Could Not #{params[:type]}"   
+      @status_change_message = "Error: Could Not #{params[:type]}"
       flash[:danger] = "The event status did not update successfully."
     end
     render :action => :status_change
