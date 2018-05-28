@@ -24,6 +24,18 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.integer "sort"
   end
 
+  create_table "companies", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "description", limit: 200
+    t.string "address", limit: 200
+    t.string "apt", limit: 100
+    t.decimal "latitude", precision: 10, scale: 6, null: false
+    t.decimal "longitude", precision: 10, scale: 6, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.integer "attachment_id"
@@ -85,14 +97,6 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.datetime "updated_at"
   end
 
-  create_table "locations", id: :serial, force: :cascade do |t|
-    t.string "code", limit: 10
-    t.string "name", limit: 100
-    t.boolean "active", default: true, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "markers", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "address", limit: 100, null: false
@@ -106,6 +110,7 @@ ActiveRecord::Schema.define(version: 20180514174560) do
   create_table "organizations", id: :serial, force: :cascade do |t|
     t.string "name", limit: 200
     t.string "address", limit: 500
+    t.string "apt", limit: 100
     t.string "contact", limit: 300
     t.decimal "latitude", precision: 10, scale: 6, null: false
     t.decimal "longitude", precision: 10, scale: 6, null: false
@@ -123,13 +128,6 @@ ActiveRecord::Schema.define(version: 20180514174560) do
   create_table "states", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "abbr", null: false
-  end
-
-  create_table "user_location_mappings", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "location_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "user_role_mappings", id: :serial, force: :cascade do |t|
@@ -166,6 +164,13 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.datetime "avatar_updated_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "last_sign_in_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users_companies", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "company_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

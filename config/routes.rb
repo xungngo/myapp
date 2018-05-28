@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get 'user', to: 'admin/users#user_home'
   get 'user_profile', to: 'admin/users#user_profile'
   post 'user_profile_update', to: 'admin/users#user_profile_update'
+  get 'user_company', to: 'admin/users#user_company'
+  post 'user_company_update', to: 'admin/users#user_company_update'
   get 'user_preferences', to: 'admin/users#user_preferences'
   post 'user_preferences_update', to: 'admin/users#user_preferences_update'
   post 'user_preferences_avatar_update', to: 'admin/users#user_preferences_avatar_update'
@@ -27,7 +29,7 @@ Rails.application.routes.draw do
   get 'admin/dashboard', to: 'admin#dashboard'
 
   resources :attachments
-  
+
   namespace :organizer do
     resources :events do
       post :create_images, :collection => :events

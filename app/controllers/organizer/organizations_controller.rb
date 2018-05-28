@@ -61,16 +61,21 @@ class Organizer::OrganizationsController < ApplicationController
     @organization = Organization.find(params[:organization_id])
     case params[:type]
     when "Delete"
-      update = @organization.destroy
-      Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).first.update(defaultorg: "true") if update && @organization.defaultorg
+      if ok_to_delete
+        update = @organization.destroy
+        Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).first.update(defaultorg: "true") if update && @organization.defaultorg
+      else
+        flash[:danger] = "At least one organization is required."
+        update = false
+      end
     end
 
     if update
       @status_change_message = "#{params[:type]}d Successfully"
       flash[:success] = "The organization status was updated successfully."
     else
-      @status_change_message = "Error: Could Not #{params[:type]}"
-      flash[:danger] = "The organization status did not update successfully."
+      @status_change_message = "Could Not #{params[:type]}"
+      flash[:danger] ||= "The organization status did not update successfully."
     end
     render :action => :status_change
   end
@@ -79,6 +84,15 @@ private
 
   def organization_params
     params.require(:organization).permit(:name, :address, :contact, :latitude, :longitude, :defaultorg)
+  end
+
+  def ok_to_delete
+    org_count = Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).count
+    if org_count == 1
+      return false
+    else
+      return true
+    end
   end
 
   def geolocation

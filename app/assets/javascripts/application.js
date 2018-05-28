@@ -29,4 +29,4 @@
 //= require events
 //= require organizations
 //= require library/jquery.fileuploader.min
-//= require googlemap-auto-complete
+// require googlemap-auto-complete

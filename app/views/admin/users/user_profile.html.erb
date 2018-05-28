@@ -11,19 +11,19 @@
 				<%= render "layouts/nav" %>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-lg-1"></div>
-			<div class="col-lg-4">
+			<div class="col-lg-5">
 
-				<%= render "layouts/message_error" %>
+				<%= render "layouts/message_error", pg_obj: @user %>
 				<%= render "layouts/message_flash" %>
-				
+
 				<%= form_for @user, url: user_profile_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>
 					<legend>Personal Information (private)</legend>
 					<div><span class="help-block">These information are private and will not be shared.</span></div><br>
-					
+
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-4">
@@ -40,7 +40,7 @@
 						</div>
 						<div class="col-md-1"></div>
 					</div>
-				
+
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
@@ -89,10 +89,10 @@
 				<br><br><br><br>
 			</div>
 
-			<div class="col-lg-2"></div>
+			<div class="col-lg-1"></div>
 
 			<div class="col-lg-4">
-				
+
 				<%= form_for @user, url: user_profile_path(@user), class:'form' do |f| %>
 				<fieldset>
 					<legend>General Information</legend>

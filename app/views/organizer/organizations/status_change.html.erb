@@ -3,7 +3,14 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><%= image_tag 'ok-icon.png', :size => "70x70" %> <%= @status_change_message %></h3>
+				<h3>
+				<% if @status_change_message.include?('Successfully') %>
+					<%= image_tag 'ok-icon.png', :size => "70x70" %>
+				<% else %>
+					<%= image_tag 'error-icon.png', :size => "70x70" %>
+				<% end %>
+				<%= @status_change_message %>
+				</h3>
 			</div>
 		</div>
 	</div>

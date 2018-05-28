@@ -3,6 +3,7 @@ class CreateOrganizations < ActiveRecord::Migration[5.0]
     create_table  :organizations do |t|
       t.string    :name, limit: 200
       t.string    :address, limit: 500
+      t.string    :apt, limit: 100
       t.string    :contact, limit: 300
       t.decimal   :latitude, precision: 10, scale: 6, null: false
       t.decimal   :longitude, precision: 10, scale: 6, null: false

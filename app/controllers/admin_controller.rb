@@ -7,9 +7,9 @@ class AdminController < ApplicationController
 
   def dashboard
     if current_user.admin?
-      @locations = Location.order(:code).where(:active => true)
+      @companies = Company.order(:code).where(:active => true)
     else
-      @locations = Location.order(:code).where(:active => true, :id => UserLocationMapping.location_ids(current_user.id))
+      @companies = Company.order(:code).where(:active => true, :id => UsersCompany.company_ids(current_user.id))
     end
   end
 
