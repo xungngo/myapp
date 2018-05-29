@@ -60,10 +60,16 @@ State.create!([
   {name: "VIRGIN ISLANDS", abbr: "VI"}
 ])
 
+Company.create!([
+  {name: "Costco", description: "Costco at Manassas", address: "Costco Wholesale, 10701 Sudley Manor Dr, Manassas, VA 20109", latitude: "38.784487", longitude: "-77.516357"},
+  {name: "Manassas Mall", description: "Sears, Macy, Walmart, IHOP, AutoBahn, Crazy Burger, and more", address: "8300 Sudley Rd suite m1, Manassas, VA 20109", latitude: "38.772978", longitude: "-77.506014"},
+  {name: "Freedom Aquatic & Fitness Center", description: "Swimming and fitness", address: "9100 Freedom Center Blvd, Manassas, VA 20110", latitude: "38.760129", longitude: "-77.518502"}
+])
+
 User.create!([
-  {email: "xungngo@gmail.com", username: "xungngo", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "V", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 1, validated_at: Time.now},
-  {email: "xung@axxume.com", username: "axxume", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "K", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 2, validated_at: Time.now},
-  {email: "xungngo@hotmail.com", username: "xungngohotmail", password_digest: BCrypt::Password.create('Password!23'), firstname: "Michael", middleinit: "L", lastname: "Jackson", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 3, validated_at: Time.now}
+  {email: "xungngo@gmail.com", username: "xungngo", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "V", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 1, company_ids: 1, validated_at: Time.now},
+  {email: "xung@axxume.com", username: "axxume", password_digest: BCrypt::Password.create('Password!23'), firstname: "Xung", middleinit: "K", lastname: "Ngo", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 2, company_ids: 2, validated_at: Time.now},
+  {email: "xungngo@hotmail.com", username: "xungngohotmail", password_digest: BCrypt::Password.create('Password!23'), firstname: "Michael", middleinit: "L", lastname: "Jackson", address1: "11852 Medway Church Loop", city: "Manassas", state_id: 46, zipcode: '20109', uuid: SecureRandom.hex, role_ids: 3, company_ids: 3, validated_at: Time.now}
 ])
 
 Eventtype.create!([

@@ -11,14 +11,14 @@
 				<%= render "layouts/nav" %>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-4">
 
-				<%= render "layouts/message_error" %>
+				<%= render "layouts/message_error", pg_obj: @user %>
 				<%= render "layouts/message_flash" %>
-				
+
 				<%= form_for @user, url: user_security_update_path, method: 'post', class:'form' do |f| %>
 				<fieldset>
 					<legend>Change Password</legend>
@@ -26,7 +26,7 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
-						<%= f.label :password_current, "Current Password", class:"control-label" %>
+						<%= f.label :password_current, "Current Password <span class='required'>*</span>".html_safe, class:"control-label" %>
 						<input type="password" name="password_current" id="password_current" maxlength="100" class="form-control">
 						</div>
 						<div class="col-md-1"></div>
@@ -35,16 +35,16 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
-						<%= f.label :password_digest, "New Password", class:"control-label" %>
+						<%= f.label :password_digest, "New Password <span class='required'>*</span>".html_safe, class:"control-label" %>
 						<input type="password" name="password_digest" id="password_digest" maxlength="100" class="form-control">
 						</div>
 						<div class="col-md-1"></div>
 					</div>
-				
+
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
-						<%= f.label :password_confirmation, "Confirm New Password", class:"control-label" %>
+						<%= f.label :password_confirmation, "Confirm New Password <span class='required'>*</span>".html_safe, class:"control-label" %>
 						<input type="password" name="password_confirmation" id="password_confirmation" maxlength="100" class="form-control">
 						</div>
 						<div class="col-md-1"></div>
@@ -66,7 +66,7 @@
 			<div class="col-lg-2"></div>
 
 			<div class="col-lg-4">
-				
+
 				<%= form_for @user, url: user_security_update_path(@user), class:'form' do |f| %>
 				<fieldset>
 					<legend>General Information</legend>

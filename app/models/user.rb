@@ -8,14 +8,14 @@ class User < ActiveRecord::Base
 
   has_many :user_role_mappings
   has_many :roles, :through => :user_role_mappings
-  has_many :user_location_mappings
-  has_many :locations, :through => :user_location_mappings
+  has_many :users_companies
+  has_many :companies, :through => :users_companies
   belongs_to :state
 
   validates :email, uniqueness: {message: "The email is in the system."}, presence: true
-  validates :username, uniqueness: {message: "The username has already been taken."}, presence: true  
+  validates :username, uniqueness: {message: "The username has already been taken."}, presence: true
   validate :validate_user_has_role
-  # validate :validate_user_has_location
+  # validate :validate_user_has_company
   validate :validate_admin_exists
   validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i, message: "A valid email is required."
   # metacharacters [, \, ^, $, ., |, ?, *, +, (, and ) need to be escaped with a \
@@ -141,8 +141,8 @@ class User < ActiveRecord::Base
     errors.add(:base, "A user must have at least one role") if self.roles.empty?
   end
 
-  def validate_user_has_location
-    errors.add(:base, "A user with Trainee role must have at least one location") if self.locations.empty? && self.trainee?
+  def validate_user_has_company
+    errors.add(:base, "Organizer must have at least one company.") if self.companies.empty? && self.organizer?
   end
 
   def validate_admin_exists

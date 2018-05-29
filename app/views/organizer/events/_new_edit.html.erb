@@ -1,7 +1,6 @@
 <!--= debug(@event.eventdates) -->
-
-<%= form_for [:organizer, @event], class:'form' do |f| %>
-<%= render "layouts/message_error_organizer" %>
+<%= form_for [:organizer, @event], html: { multipart: true, class: 'form' } do |f| %>
+<%= render "layouts/message_error_organizer", pg_obj: @event %>
 <%= render "layouts/message_flash" %>
 
 <div class="row">
@@ -15,7 +14,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :name, "Name <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :name, class: "form-control" %>
+					<%= f.text_field :name, value: "mcskdmcos sdcsdc #{rand(999)}", class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -24,7 +23,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :description, "Description <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :description, rows: "8", class: "form-control", placeholder: "Provide a detailed description of the event. An outline works well." %>
+					<%= f.text_area :description, value: "dafreg ewg er gerg", rows: "8", class: "form-control", placeholder: "Provide a detailed description of the event. An outline works well." %>
 					<span class="help-block">Detailed description of the event such as an outline.</span>
 				</div>
 				<div class="col-md-1"></div>
@@ -34,7 +33,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :requirement, "Requirements", class:"control-label" %>
-					<%= f.text_area :requirement, rows: "5", class: "form-control", placeholder: "- ID\n- laptop\n- dress-code" %>
+					<%= f.text_area :requirement, value: "dscsc dafreg ewg ersdcsdc gerg", rows: "5", class: "form-control", placeholder: "- ID\n- laptop\n- dress-code" %>
 					<span class="help-block">Such as: laptop, book, ID, or dress-code.</span>
 				</div>
 				<div class="col-md-1"></div>
@@ -44,7 +43,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :price, "Price (USD per person)", class: "control-label" %>
-					<%= f.text_field :price, class: "form-control" %>
+					<%= f.text_field :price, value: "$44", class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>	
@@ -62,9 +61,11 @@
 			<div class="row form-group">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<%= f.label :attachments, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :attachments, class: "form-control" %>
-					<span class="help-block">Upload up to 20 photos.</span>
+					<%= f.label :images, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
+					<%= file_field_tag "images[]", id: "event_images", type: :file,
+					multiple: true, class: "form-control",
+					"data-fileuploader-files" => @img_json %>
+					<span class="help-block">Upload up to 10 photos.</span>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -80,7 +81,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :contact, "Organizer Contact Information <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :contact, rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
+					<%= f.text_area :contact, value: "organier ewg er gerg", rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -100,13 +101,10 @@
 			<legend>3. When</legend>
 			<div><span class="help-block">Select 1-14 day(s) for this event.</span></div><br>
 			
-			<div class="row form-group">
+			<div class="row">
 				<div class="col-md-1"></div>
-				<div class="col-md-4">
-					<input type="input" name="event_start" id="event_start" class="form-control">
-				</div>
-				<div class="col-md-7">
-					<table style="width:100%;" cellspacing="10" id="event_date_table">
+				<div class="col-md-10 text-center">
+					<table style="width:100%;" cellspacing="2" id="event_date_table">
 						<thead>
 							<tr>
 								<th></th>
@@ -119,15 +117,29 @@
 						<tbody id="event_date_tbody">
 							<tr class="tr_clone" id="tr_clone" style="visibility: hidden;">
 								<td style="width:8%; padding-bottom:8px; padding-right:10px; text-align:right"><span class="count" style="font-size: 1.2em"></span></td>
-								<td style="width:26%; padding-bottom:8px"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
+								<td style="width:26%; padding-bottom:8px;"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="starttime[]" class="form-control starttime" style="width:90%; font-size: 1.2em"></td>
 								<td style="width:28%; padding-bottom:8px;"><input type="text" name="endtime[]" class="form-control endtime" style="width:90%; font-size: 1.2em"></td>
-								<td style="width:10%; padding-bottom:8px;"><button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button><input type="hidden" name="eventdate[]" class="eventdate"></td>
+								<td style="width:10%; padding-bottom:8px;">
+									<button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button>
+									<input type="hidden" name="eventdate[]" class="eventdate">
+									<!--populate for update only-->
+									<input type="hidden" name="eventdate_id[]" class="eventdate_id">
+								</td>
 							</tr>
+							<input type="hidden" name="current_eventdates" id="current_eventdates" value="<%= @event.eventdates.to_json %>">
 						</tbody>
 					</table>
 				</div>
+				<div class="col-md-1"></div>
 			</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10 text-center">
+					<input type="input" name="event_start" id="event_start" class="form-control">
+				</div>
+				<div class="col-md-1"></div>
+			</div>			
 		</fieldset><br><br><br>
 
 		<fieldset>
@@ -138,7 +150,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :address, "Address <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :address, class: "form-control" %>
+					<%= f.text_field :address, value: "11852 Medway Church Loop, VA", class: "form-control", placeholder: "Enter a location" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -154,7 +166,7 @@
 		<%= link_to "<i class='glyphicon glyphicon-chevron-left'></i> Cancel".html_safe, organizer_events_path, :title =>"cancel & back to listings" %>
 	</div>
 	<div class="col-md-5" align="right">
-		<%= f.submit "#{params[:action] == 'new' ? 'Submit' : 'Update'} Event", :class => "btn btn-default" %>
+		<%= f.submit "#{params[:action] == 'new' ? 'Submit' : 'Update'} Event", class: "btn btn-default", disabled: @event.deleted_at.present? %>
 	</div>
 	<div class="col-md-1"></div>
 </div>

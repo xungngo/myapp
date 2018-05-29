@@ -1,11 +1,7 @@
 class Admin::UsersController < ApplicationController
-
+  include Geolocation
   before_action :authenticate_user
   #load_and_authorize_resource # cancancan
-
-  #def user_params
-  #  params.require(:user).permit(:samaccountname)
-  #end
 
 	def index
 		@users = User.includes(:user_role_mappings, :roles).order(:last_name, :first_name, :middle_name)
@@ -15,15 +11,14 @@ class Admin::UsersController < ApplicationController
     @user = User.find(current_user.id)
 
     if current_user.present?
-      @locations = Location.order(:code).where(:active => true, :id => UserLocationMapping.location_ids(current_user.id))
+      @companies = Company.order(:code).where(:active => true, :id => UsersCompany.company_ids(current_user.id))
     else
-      @locations = Location.all
+      @companies = Company.all
     end
   end
-  
+
 	def user_profile
     @user = User.find(current_user.id)
-    #@updated = date_formatted(@user.profile_updated_at)
   end
 
   def user_profile_update
@@ -33,6 +28,24 @@ class Admin::UsersController < ApplicationController
       redirect_to user_profile_path
     else
       render :action => :user_profile
+    end
+  end
+
+  def user_company
+    # @company = Company.includes(:users_companies).find_by('users_companies.user_id' => current_user.id)
+    # above will work with 'errors' hash. Below will work only using [0] otherwise 'errors' is undefined
+    @company = Company.find(current_user.company_ids[0])
+  end
+
+  def user_company_update
+    @company = Company.find(current_user.company_ids[0])
+    geoloc_lat_long(params[:company])
+
+    if @company.update(name: params[:company][:name], description: params[:company][:description], address: params[:company][:address], apt: params[:company][:apt], latitude: params[:company][:latitude], longitude: params[:company][:longitude])
+      flash[:success] = "User company was updated successfully."
+      redirect_to user_company_path
+    else
+      render :action => :user_company
     end
   end
 
@@ -47,7 +60,7 @@ class Admin::UsersController < ApplicationController
       redirect_to user_preferences_path
     elsif User.email_is_taken(params[:user][:email], current_user.id)
       flash[:danger] = "This email is taken."
-      redirect_to user_preferences_path      
+      redirect_to user_preferences_path
     elsif @user.update(username: params[:user][:username], email: params[:user][:email], timezone: params[:user][:timezone], preferences_updated_at: Time.now)
       flash[:success] = "User preferences were updated successfully."
       redirect_to user_preferences_path
@@ -140,7 +153,7 @@ class Admin::UsersController < ApplicationController
       @user.errors.add(:base, "You may not deactivate your own account.")
       render :action => :edit
     else
-      if @user.update(:active => params[:user][:active], :role_ids => params[:user][:role_ids], :location_ids => params[:user][:location_ids])
+      if @user.update(:active => params[:user][:active], :role_ids => params[:user][:role_ids], :company_ids => params[:user][:company_ids])
         redirect_to admin_users_path
       else
         render :action => :edit
@@ -156,7 +169,7 @@ class Admin::UsersController < ApplicationController
 
 	def role_list
 	  @role_list = Role.all
-=begin    
+=begin
     if current_user.sys_admin?
       @role_list = Role.all
     else

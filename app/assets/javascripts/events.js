@@ -18,9 +18,12 @@ var ppYearsPeriod = [ppYear-1, ppYear+1]
 $('#event_start').periodpicker({
     inline: true,
     norange: true,
-    cells: [1, 1],
+    cells: [1, 2],
     okButton: true,
+    withoutBottomPanel: true,
     resizeButton: false,
+    fullsizeButton: false,
+    fullsizeOnDblClick: false,
     formatDate: 'MM/DD/YYYY',
     dayOfWeekStart: 7,
     weekEnds: [6,7],
@@ -40,32 +43,33 @@ $('#event_start').on('change', function() {
     var endtime_id = 'endtime_'+date_id;
     var eventdate_id = 'eventdate_'+date_id;
     if ($('#'+starttime_id).length == 0 && cloned_ct <= 14) {
-        cloned_obj = $('#tr_clone:first').clone(true);
-        cloned_obj.css('visibility', 'visible'); // show
-        cloned_obj.attr('id',''); // remove dup id
-        cloned_obj.find('.dateshow').html(date_string);
-        //cloned_obj.find('.starttime').attr('name',starttime_id);
-        cloned_obj.find('.starttime').attr('id',starttime_id);
-        //cloned_obj.find('.endtime').attr('name',endtime_id);
-        cloned_obj.find('.endtime').attr('id',endtime_id);
-        cloned_obj.find('.eventdate').attr('id',eventdate_id);
-        cloned_obj.find('.eventdate').attr('value',date_string);
-        $('#tr_clone').before(cloned_obj);
-        var starttime_picker = $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'9:00 am', steps:[1,5,2,1], onHide: function($input){setMinTime($input.val(), $input.attr('id'))}});
-        var endtime_picker = $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime:'5:00 pm', steps:[1,5,2,1], onHide: function($input){setMaxTime($input.val(), $input.attr('id'))}});
-        cloned_ct = $('.tr_clone').length;
-        //console.log(cloned_ct);
+        createEventDate(date_string, eventdate_id, starttime_id, endtime_id, '9:00 am', '5:00 pm');
     };
     sortTableColumn('event_date_table',1);
     countRows();
 });
 
+function createEventDate(date_string, eventdate_id, starttime_id, endtime_id, starttime_val, endtime_val) {
+    cloned_obj = $('#tr_clone:first').clone(true);
+    cloned_obj.css('visibility', 'visible'); // show
+    cloned_obj.attr('id',''); // remove dup id
+    cloned_obj.find('.dateshow').html(date_string);
+    cloned_obj.find('.starttime').attr('id',starttime_id);
+    cloned_obj.find('.endtime').attr('id',endtime_id);
+    cloned_obj.find('.eventdate').attr('id',eventdate_id);
+    cloned_obj.find('.eventdate').attr('value',date_string);
+    $('#tr_clone').before(cloned_obj);
+    var starttime_picker = $('#'+starttime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime: starttime_val, steps:[1,5,2,1], onHide: function($input){setMinTime($input.val(), $input.attr('id'))}});
+    var endtime_picker = $('#'+endtime_id).timepickeralone({hours: true, minutes: true, ampm: true, inputFormat: 'h:mm a', defaultTime: endtime_val, steps:[1,5,2,1], onHide: function($input){setMaxTime($input.val(), $input.attr('id'))}});
+    cloned_ct = $('.tr_clone').length;
+};
+
 $('.btnDel').click(function() {
-    if (confirm('continue delete?')) {
+    //if (confirm('continue delete?')) {
         $(this).closest('.tr_clone').remove(); //id is gone, use class
         countRows();
         cloned_ct = 1;
-    }
+    //}
 });
 
 function setMinTime(v, id) {
@@ -118,3 +122,29 @@ function sortTableColumn(tb,col) {
       }
     }
   };
+
+  //update
+  var evt_json = JSON.parse($('#current_eventdates').val());
+  for (i in evt_json) {
+    var date_string = evt_json[i].eventdate.split('-');
+    var date_string = date_string[1]+'/'+date_string[2]+'/'+date_string[0]
+    var date_id = date_string.replace(/\//g, '_');
+    var starttime_id = 'starttime_'+date_id;
+    var endtime_id = 'endtime_'+date_id;
+    var eventdate_id = 'eventdate_'+date_id;
+    var eventdate_id_id = 'eventdate_id_'+date_id; //update use only
+    var starttime_string = evt_json[i].starttime;
+    var endtime_string = evt_json[i].endtime;
+    if ($('#'+starttime_id).length == 0 && cloned_ct <= 14) {
+        createEventDate(date_string, eventdate_id, starttime_id, endtime_id, starttime_string, endtime_string);
+        //need to add id for update
+        cloned_obj.find('.eventdate_id').attr('id',eventdate_id_id);
+        cloned_obj.find('.eventdate_id').attr('value',evt_json[i].id);
+        setMinTime(starttime_string, starttime_id);
+        setMaxTime(endtime_string, endtime_id);
+    };
+    sortTableColumn('event_date_table',1);
+    countRows();
+  };
+
+  var auto_complete_id = "event_address"; //global var for initAutoComplete()
