@@ -27,7 +27,7 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-4">
-							<%= f.label :firstname, "First Name", class:"control-label" %>
+							<%= f.label :firstname, "First Name <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.text_field :firstname, class:"form-control" %>
 						</div>
 						<div class="col-md-2">
@@ -35,7 +35,7 @@
 							<%= f.text_field :middleinit, class:"form-control" %>
 						</div>
 						<div class="col-md-4">
-							<%= f.label :lastname, "Last Name", class:"control-label" %>
+							<%= f.label :lastname, "Last Name <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.text_field :lastname, class:"form-control" %>
 						</div>
 						<div class="col-md-1"></div>
@@ -44,7 +44,7 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-10">
-							<%= f.label :address1, "Address 1", class:"control-label" %>
+							<%= f.label :address1, "Address 1 <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.text_field :address1, class:"form-control" %>
 						</div>
 						<div class="col-md-1"></div>
@@ -62,15 +62,15 @@
 					<div class="row form-group">
 						<div class="col-md-1"></div>
 						<div class="col-md-5">
-							<%= f.label :city, "City", class:"control-label" %>
+							<%= f.label :city, "City <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.text_field :city, class:"form-control" %>
 						</div>
 						<div class="col-md-2">
-							<%= f.label :state_id, "State", class:"control-label" %>
+							<%= f.label :state_id, "State <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.select :state_id, options_from_collection_for_select(State.all, :id, :abbr, @user.state_id), {}, {title: "States", class: "form-control"} %>
 						</div>
 						<div class="col-md-3">
-							<%= f.label :zipcode, "Zipcode", class:"control-label" %>
+							<%= f.label :zipcode, "Zipcode <span class='required'>*</span>".html_safe, class:"control-label" %>
 							<%= f.text_field :zipcode, class:"form-control" %>
 						</div>
 						<div class="col-md-1"></div>
