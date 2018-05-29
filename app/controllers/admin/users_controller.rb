@@ -1,11 +1,7 @@
 class Admin::UsersController < ApplicationController
-
+  include Geolocation
   before_action :authenticate_user
   #load_and_authorize_resource # cancancan
-
-  #def user_params
-  #  params.require(:user).permit(:samaccountname)
-  #end
 
 	def index
 		@users = User.includes(:user_role_mappings, :roles).order(:last_name, :first_name, :middle_name)
@@ -35,8 +31,22 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-	def user_company
-    @company = Company.includes(:users_companies).find_by('users_companies.user_id' => current_user.id)
+  def user_company
+    # @company = Company.includes(:users_companies).find_by('users_companies.user_id' => current_user.id)
+    # above will work with 'errors' hash. Below will work only using [0] otherwise 'errors' is undefined
+    @company = Company.find(current_user.company_ids[0])
+  end
+
+  def user_company_update
+    @company = Company.find(current_user.company_ids[0])
+    geoloc_lat_long(params[:company])
+
+    if @company.update(name: params[:company][:name], description: params[:company][:description], address: params[:company][:address], apt: params[:company][:apt], latitude: params[:company][:latitude], longitude: params[:company][:longitude])
+      flash[:success] = "User company was updated successfully."
+      redirect_to user_company_path
+    else
+      render :action => :user_company
+    end
   end
 
   def user_preferences

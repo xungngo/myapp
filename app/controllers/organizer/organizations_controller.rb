@@ -1,4 +1,5 @@
 class Organizer::OrganizationsController < ApplicationController
+  include Geolocation
   before_action :authenticate_user
   skip_before_action :verify_authenticity_token, :only => [:status_update]
   #load_and_authorize_resource # cancancan
@@ -16,7 +17,7 @@ class Organizer::OrganizationsController < ApplicationController
   end
 
   def create
-    geolocation
+    geoloc_lat_long(params[:organization])
     @organization = Organization.new(organization_params)
 
     if @organization.create_user_organization!(current_user.id)
@@ -28,7 +29,7 @@ class Organizer::OrganizationsController < ApplicationController
   end
 
   def update
-    geolocation
+    geoloc_lat_long(params[:organization])
     @organization = Organization.find(params[:id])
     @organization.assign_attributes(organization_params)
 
@@ -39,18 +40,7 @@ class Organizer::OrganizationsController < ApplicationController
       render action: :edit
     end
   end
-=begin
-  def update
-    geolocation
-    @organization = Organization.find(params[:id])
 
-    if @organization.update(organization_params)
-      redirect_to organizer_organizations_path
-    else
-      render action: :edit
-    end
-  end
-=end
   def status
     @no_wrapper = true
     @organization = Organization.find(params[:organization_id])
@@ -93,21 +83,5 @@ private
     else
       return true
     end
-  end
-
-  def geolocation
-    params[:organization][:latitude] = nil
-    params[:organization][:longitude] = nil
-    geoloc = JSON.load(open("https://maps.googleapis.com/maps/api/geocode/json?address=#{params[:organization][:address]}&key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA"))
-
-    if geoloc['status'] == 'OK' && geoloc['results'][0]['geometry']['location']['lat'].present?
-      params[:organization][:latitude] = geoloc['results'][0]['geometry']['location']['lat']
-      params[:organization][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
-      return true
-    else
-      return false
-    end
-  rescue
-    return false
   end
 end

@@ -1,5 +1,7 @@
 class Company < ActiveRecord::Base
+  include Stripper
   include CompanyHelpers
+  strip_attributes :name, :description, :address, :apt
 
   has_many :users_companies
   has_many :users, :through => :users_companies
@@ -7,6 +9,8 @@ class Company < ActiveRecord::Base
   validates :name, presence: {message: "The Company Name field is required."}
   validates :name, uniqueness: {message: "The Company Name field must be unique."}
   validates :address, presence: {message: "The Company Address field is required."}
+  validates :latitude, presence: {message: "Something is wrong with the address. Please try again."}
+  validates :longitude, presence: {message: "Something is wrong with the address. Please try again."}
 
   def pretty_active
     self.active ? "Active" : "Inactive"
