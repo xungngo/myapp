@@ -13,7 +13,7 @@
               <span id="place-name" class="title"></span><br>
               <span id="place-address"></span>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
   </section>
@@ -49,8 +49,8 @@
 
       infowindow = new google.maps.InfoWindow();
       infowindowContent = document.getElementById('infowindow-content');
-      infowindow.setContent(infowindowContent); 
-      
+      infowindow.setContent(infowindowContent);
+
       autocomplete.addListener('place_changed', function() {
         //infowindow.close();
         marker.setVisible(false);
@@ -61,7 +61,7 @@
           window.alert("No details available for input: '" + place.name + "'");
           return;
         }
-    
+
         // If the place has a geometry, then present it on a map.
         if (place.geometry.viewport) {
           map.fitBounds(place.geometry.viewport);
@@ -78,7 +78,7 @@
         //put cordinate into hidden form fields
         $("#input_latitude").val(place.geometry.location.lat());
         $("#input_longitude").val(place.geometry.location.lng());
-      });      
+      });
 
       infoWindowEvent(map, marker, seeker_icon, seeker_placename, seeker_address, infowindow);
 
@@ -105,7 +105,7 @@
       type = geo_result['type'];
       $("#input_address").val(address);
       $("#input_latitude").val(lat);
-      $("#input_longitude").val(lng);      
+      $("#input_longitude").val(lng);
       infoWindowContentDrag(map, marker, infowindow, placeid);
       submitSearch(type);
     };
@@ -139,7 +139,7 @@
       });
     });
 
-    function submitSearch(type) {      
+    function submitSearch(type) {
       var form_params = $("input[name^='input_']").serialize();
       $.ajax({
         type: "GET",
@@ -298,4 +298,4 @@
     });
   </script>
 
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&callback=initMap&libraries=places"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=GOOGLE_API_KEY%>&callback=initMap&libraries=places"></script>

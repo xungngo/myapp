@@ -104,4 +104,4 @@
 var auto_complete_id = "company_address"; //global var for initAutoComplete()
 </script>
 <%= javascript_include_tag "googlemap-auto-complete" %>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA&libraries=places&callback=initAutoComplete"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=GOOGLE_API_KEY%>&libraries=places&callback=initAutoComplete"></script>

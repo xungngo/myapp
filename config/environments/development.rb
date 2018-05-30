@@ -56,6 +56,7 @@ Rails.application.configure do
   SITE_NAME = Rails.application.secrets.site_name
   SITE_DOTCOM = Rails.application.secrets.site_dotcom
   SITE_URL = Rails.application.secrets.site_url
+  GOOGLE_API_KEY = Rails.application.secrets.google_api_key
 
   # config.action_mailer.preview_path = "test/mailers/previews"
   config.action_mailer.delivery_method = :smtp
