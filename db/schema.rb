@@ -36,6 +36,13 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.datetime "updated_at"
   end
 
+  create_table "company_organizations", id: :serial, force: :cascade do |t|
+    t.integer "company_id"
+    t.integer "organization_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.integer "attachment_id"
@@ -171,13 +178,6 @@ ActiveRecord::Schema.define(version: 20180514174560) do
   create_table "users_companies", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "company_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "users_organizations", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

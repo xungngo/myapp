@@ -32,13 +32,11 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_company
-    # @company = Company.includes(:users_companies).find_by('users_companies.user_id' => current_user.id)
-    # above will work with 'errors' hash. Below will work only using [0] otherwise 'errors' is undefined
-    @company = Company.find(current_user.company_ids[0])
+    @company = Company.find(current_user.company_ids.first)
   end
 
   def user_company_update
-    @company = Company.find(current_user.company_ids[0])
+    @company = Company.find(current_user.company_ids.first)
     geoloc_lat_long(params[:company])
 
     if @company.update(name: params[:company][:name], description: params[:company][:description], address: params[:company][:address], apt: params[:company][:apt], latitude: params[:company][:latitude], longitude: params[:company][:longitude])

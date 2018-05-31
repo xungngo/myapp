@@ -1,8 +1,8 @@
 class Organization < ActiveRecord::Base
   #after_save :default_organization
 
-  has_many :users_organizations
-  has_many :users, :through => :users_organizations
+  has_many :company_organizations, :dependent => :destroy
+  has_many :companies, :through => :company_organizations
 
   validates :name, presence: {message: "The Organization Name field is required."}
   #validates :name, uniqueness: {message: "The Organization Name field must be unique."}
@@ -10,7 +10,7 @@ class Organization < ActiveRecord::Base
   #validates :address, uniqueness: {message: "The Organization Address field must be unique."}
   validates :latitude, presence: {message: "The Organization Latitude field is required."}
   validates :longitude, presence: {message: "The Organization Longitude field is required."}
-  #validate :uniqueness_of_name_per_user
+  #validate :uniqueness_of_name_per_company
 
   def pretty_created_at
     self.created_at.nil? ? "" : formatted_ts(self.created_at)
@@ -20,35 +20,35 @@ class Organization < ActiveRecord::Base
     self.updated_at.nil? ? "" : formatted_ts(self.updated_at)
   end
 
-  def create_user_organization!(user_id)
-    return if user_id.blank? && self.name.blank?
-    user_orgs = Organization.includes(:users_organizations).where("users_organizations.user_id" => user_id)
-    duplicate = user_orgs.where("lower(name) = lower(?)", self.name)
+  def create_company_organization!(company_id)
+    return if company_id.blank? && self.name.blank?
+    company_orgs = Organization.includes(:company_organizations).where("company_organizations.company_id" => company_id)
+    duplicate = company_orgs.where("lower(name) = lower(?)", self.name)
 
-    if user_orgs.count >= 20
+    if company_orgs.count >= 20
       errors.add(:base, "Maximum organizations reached.")
       return false
     elsif duplicate.present?
-      errors.add(:base, "The Organization Name field must be unique per user.")
+      errors.add(:base, "The Organization Name field must be unique per company.")
       return false
-    elsif self.save && self.users_organizations.create(user_id: user_id, organization_id: Organization.last.id)
-      user_orgs.where.not(id: self.id).update(defaultorg: "false") if self.defaultorg
+    elsif self.save && self.company_organizations.create(company_id: company_id, organization_id: Organization.last.id)
+      company_orgs.where.not(id: self.id).update(defaultorg: "false") if self.defaultorg
       return true
     else
       return false
     end
   end
 
-  def update_user_organization!(user_id)
-    return if user_id.blank? && self.name.blank?
-    user_orgs = Organization.includes(:users_organizations).where("users_organizations.user_id" => user_id).where.not(id: self.id)
-    duplicate = user_orgs.where("lower(name) = lower(?)", self.name)
- 
+  def update_company_organization!(company_id)
+    return if company_id.blank? && self.name.blank?
+    company_orgs = Organization.includes(:company_organizations).where("company_organizations.company_id" => company_id).where.not(id: self.id)
+    duplicate = company_orgs.where("lower(name) = lower(?)", self.name)
+
     if duplicate.present?
-      errors.add(:base, "The Organization Name field must be unique per user.")
+      errors.add(:base, "The Organization Name field must be unique per company.")
       return false
     elsif self.save
-      user_orgs.update(defaultorg: "false") if self.defaultorg
+      company_orgs.update(defaultorg: "false") if self.defaultorg
       return true
     else
       return false
@@ -64,17 +64,17 @@ class Organization < ActiveRecord::Base
 
   def default_organization
     binding.pry
-    #if Organization.find_by(user: current_user.id).count <= 1
+    #if Organization.find_by(company: current_user.id).count <= 1
     #  self.update(defaultorg: true)
     #else
-      
+
     #end
   end
-   
-  #def uniqueness_of_name_per_user
+
+  #def uniqueness_of_name_per_company
   #  if self.name.present?
-  #    duplicate = Organization.includes(:users_organizations).where("users_organizations.user_id" => 1, name: self.name)
-  #    errors.add(:base, "The Organization Name field must be unique per user.") if duplicate.present?
+  #    duplicate = Organization.includes(:company_organizations).where("company_organizations.company_id" => 1, name: self.name)
+  #    errors.add(:base, "The Organization Name field must be unique per company.") if duplicate.present?
   #  end
   #end
 end

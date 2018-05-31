@@ -6,9 +6,10 @@ class Organizer::EventsController < ApplicationController
   #load_and_authorize_resource # cancancan
 
   def index
-    @events = Event.includes(:eventtype).where(deleted_at: nil).order(created_at: :desc)
-    @events_deleted = Event.includes(:eventtype).where.not(deleted_at: nil).order(created_at: :desc)
+    @events = Event.includes(:eventtype).where(company_id: current_user.company_ids.first, deleted_at: nil).order(created_at: :desc)
+    @events_deleted = Event.includes(:eventtype).where(company_id: current_user.company_ids.first).where.not(deleted_at: nil).order(created_at: :desc)
     @events_deleted.where('deleted_at < ?', Time.zone.now-2.days).destroy_all
+    binding.pry
   end
 
   def new
@@ -125,8 +126,9 @@ class Organizer::EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id, :latitude, :longitude, :images => [])
-    .merge(uuid: SecureRandom.hex, active: true)
+    params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id,
+                                  :latitude, :longitude, :images => [])
+    .merge(company_id: current_user.company_ids.first, uuid: SecureRandom.hex, active: true)
   end
 
     def geolocation

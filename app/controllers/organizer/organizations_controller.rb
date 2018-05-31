@@ -5,7 +5,7 @@ class Organizer::OrganizationsController < ApplicationController
   #load_and_authorize_resource # cancancan
 
   def index
-    @organizations = Organization.includes(:users_organizations).where('users_organizations.user_id' => current_user.id).order(name: :asc)
+    @organizations = Organization.includes(:company_organizations).where('company_organizations.company_id' => current_user.company_ids.first).order(name: :asc)
   end
 
   def new
@@ -20,7 +20,7 @@ class Organizer::OrganizationsController < ApplicationController
     geoloc_lat_long(params[:organization])
     @organization = Organization.new(organization_params)
 
-    if @organization.create_user_organization!(current_user.id)
+    if @organization.create_company_organization!(current_user.company_ids.first)
       flash[:success] = "The organization was created successfully."
       redirect_to organizer_organizations_path
     else
@@ -33,7 +33,7 @@ class Organizer::OrganizationsController < ApplicationController
     @organization = Organization.find(params[:id])
     @organization.assign_attributes(organization_params)
 
-    if @organization.update_user_organization!(current_user.id)
+    if @organization.update_company_organization!(current_user.company_ids.first)
       flash[:success] = "The organization was updated successfully."
       redirect_to organizer_organizations_path
     else
@@ -53,7 +53,7 @@ class Organizer::OrganizationsController < ApplicationController
     when "Delete"
       if ok_to_delete
         update = @organization.destroy
-        Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).first.update(defaultorg: "true") if update && @organization.defaultorg
+        Organization.includes(:company_organizations).where("company_organizations.company_id" => current_user.company_ids.first).first.update(defaultorg: "true") if update && @organization.defaultorg
       else
         flash[:danger] = "At least one organization is required."
         update = false
@@ -77,7 +77,7 @@ private
   end
 
   def ok_to_delete
-    org_count = Organization.includes(:users_organizations).where("users_organizations.user_id" => current_user.id).count
+    org_count = Organization.includes(:company_organizations).where("company_organizations.company_id" => current_user.company_ids.first).count
     if org_count == 1
       return false
     else
