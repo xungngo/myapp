@@ -8,8 +8,8 @@ class Organization < ActiveRecord::Base
   #validates :name, uniqueness: {message: "The Organization Name field must be unique."}
   validates :address, presence: {message: "The Organization Address field is required."}
   #validates :address, uniqueness: {message: "The Organization Address field must be unique."}
-  validates :latitude, presence: {message: "The Organization Latitude field is required."}
-  validates :longitude, presence: {message: "The Organization Longitude field is required."}
+  validates :latitude, presence: {message: "The Organization Latitude field is required."}, if: :address?
+  validates :longitude, presence: {message: "The Organization Longitude field is required."}, if: :address?
   #validate :uniqueness_of_name_per_company
 
   def pretty_created_at

@@ -9,8 +9,8 @@ class Company < ActiveRecord::Base
   validates :name, presence: {message: "The Company Name field is required."}
   validates :name, uniqueness: {message: "The Company Name field must be unique."}
   validates :address, presence: {message: "The Company Address field is required."}
-  validates :latitude, presence: {message: "Something is wrong with the address. Please try again."}
-  validates :longitude, presence: {message: "Something is wrong with the address. Please try again."}
+  validates :latitude, presence: {message: "Something is wrong with the address. Please try again."}, if: :address?
+  validates :longitude, presence: {message: "Something is wrong with the address. Please try again."}, if: :address?
 
   def pretty_active
     self.active ? "Active" : "Inactive"

@@ -7,14 +7,14 @@
 	<div class="col-lg-1"></div>
 	<div class="col-lg-5">
 		<fieldset>
-			<legend>1. What</legend>
+			<legend>Event Information</legend>
 			<div><span class="help-block">Fill in the required fields and click the submit button to create an event.</span></div><br>
-			
+
 			<div class="row form-group">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<%= f.label :name, "Name <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :name, value: "mcskdmcos sdcsdc #{rand(999)}", class: "form-control" %>
+					<%= f.text_field :name, value: "mcskdmcos sdcsdc #{rand(999)}", class: "form-control" %><br>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -25,6 +25,36 @@
 					<%= f.label :description, "Description <span class='required'>*</span>".html_safe, class: "control-label" %>
 					<%= f.text_area :description, value: "dafreg ewg er gerg", rows: "8", class: "form-control", placeholder: "Provide a detailed description of the event. An outline works well." %>
 					<span class="help-block">Detailed description of the event such as an outline.</span>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<%= f.label :eventtype_id, "Type <span class='required'>*</span>".html_safe, class: "control-label" %>
+					<%= f.select :eventtype_id, options_from_collection_for_select(Eventtype.all, :id, :name, selected: @event.eventtype_id), {}, {title: "Event Types", class: "form-control"} %><br>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<%= f.label :eventattendeetype_id, "Attendee Type<span class='required'>*</span>".html_safe, class: "control-label" %>
+					<%= f.select :eventattendeetype_id, options_from_collection_for_select(Eventattendeetype.all, :id, :name, @event.eventattendeetype_id), {}, {title: "Event Attendee", class: "form-control"} %><br>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<%= f.label :images, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
+					<%= file_field_tag "images[]", id: "event_images", type: :file,
+					multiple: true, class: "form-control",
+					"data-fileuploader-files" => @img_json %>
+					<span class="help-block">Upload up to 10 photos.</span>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -46,61 +76,31 @@
 					<%= f.text_field :price, value: "$44", class: "form-control" %>
 				</div>
 				<div class="col-md-1"></div>
-			</div>	
-
-			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<%= f.label :eventtype_id, "Type <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.select :eventtype_id, options_from_collection_for_select(Eventtype.all, :id, :name, selected: @event.eventtype_id), {}, {title: "Event Types", class: "form-control"} %>
-					<span class="help-block">Select the event type.</span>
-				</div>
-				<div class="col-md-1"></div>
-			</div>
-			
-			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<%= f.label :images, "Attachment <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= file_field_tag "images[]", id: "event_images", type: :file,
-					multiple: true, class: "form-control",
-					"data-fileuploader-files" => @img_json %>
-					<span class="help-block">Upload up to 10 photos.</span>
-				</div>
-				<div class="col-md-1"></div>
 			</div>
 		</fieldset><br><br><br>
 	</div>
 
 	<div class="col-lg-5">
 		<fieldset>
-			<legend>2. Who</legend>
-			<div><span class="help-block">Who is the organizer of the event and who is allowed to attend.</span></div><br>
-			
-			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<%= f.label :contact, "Organizer Contact Information <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_area :contact, value: "organier ewg er gerg", rows: "3", class: "form-control", placeholder: "- fullname\n- phone\n- email" %>
-				</div>
-				<div class="col-md-1"></div>
-			</div>
+			<legend>Organizer Information</legend>
+			<div><span class="help-block">Who is the organizer of the event?</span></div><br>
 
 			<div class="row form-group">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<%= f.label :eventattendeetype_id, "Attendee Type<span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.select :eventattendeetype_id, options_from_collection_for_select(Eventattendeetype.all, :id, :name, @event.eventattendeetype_id), {}, {title: "Event Attendee", class: "form-control"} %>
-					<span class="help-block">Select the type of attendee for this event.</span>
+					<%= f.label :organization_id, "Organization <span class='required'>*</span>".html_safe, class: "control-label" %>
+					<%= f.select :organization_id, options_from_collection_for_select(@organizations, :id, :name, @event.organization_id), {}, {title: "organization information", class: "form-control"} %>
+					<% plural_desc = pluralize_no_count(@organizations, 'edit organization') %>
+					<span class="help-block"><%= link_to "<i class='glyphicon glyphicon-pencil'></i> #{plural_desc}".html_safe, organizer_organizations_path, title: "#{plural_desc}" %></span>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
 		</fieldset><br><br><br>
 
 		<fieldset>
-			<legend>3. When</legend>
+			<legend>Schedule</legend>
 			<div><span class="help-block">Select 1-14 day(s) for this event.</span></div><br>
-			
+
 			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10 text-center">
@@ -137,20 +137,6 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10 text-center">
 					<input type="input" name="event_start" id="event_start" class="form-control">
-				</div>
-				<div class="col-md-1"></div>
-			</div>			
-		</fieldset><br><br><br>
-
-		<fieldset>
-			<legend>4. Where</legend>
-			<div><span class="help-block">Provide an exact address or a general location.</span></div><br>
-
-			<div class="row form-group">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<%= f.label :address, "Address <span class='required'>*</span>".html_safe, class: "control-label" %>
-					<%= f.text_field :address, value: "11852 Medway Church Loop, VA", class: "form-control", placeholder: "Enter a location" %>
 				</div>
 				<div class="col-md-1"></div>
 			</div>

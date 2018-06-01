@@ -1,7 +1,7 @@
 class Organizer::EventsController < ApplicationController
   before_action :authenticate_user
   # protect_from_forgery with: :null_session, only: [:create_attachments]
-  skip_before_action :verify_authenticity_token, :only => [:create_attachments]
+  skip_before_action :verify_authenticity_token, :only => [:create_attachments, :status_update]
   include CustomJson
   #load_and_authorize_resource # cancancan
 
@@ -9,15 +9,15 @@ class Organizer::EventsController < ApplicationController
     @events = Event.includes(:eventtype).where(company_id: current_user.company_ids.first, deleted_at: nil).order(created_at: :desc)
     @events_deleted = Event.includes(:eventtype).where(company_id: current_user.company_ids.first).where.not(deleted_at: nil).order(created_at: :desc)
     @events_deleted.where('deleted_at < ?', Time.zone.now-2.days).destroy_all
-    binding.pry
   end
 
   def new
     @event = Event.new
+    @organizations = Organization.includes(:company_organizations).where("company_organizations.company_id" => current_user.company_ids.first)
+                                 .order(defaultorg: :desc, name: :asc)
   end
 
   def create
-    geolocation
     @event = Event.new(event_params)
     if @event.save && Eventdate.create(params, @event.id)
       create_images
@@ -37,7 +37,6 @@ class Organizer::EventsController < ApplicationController
 
   def update
     edit_update_instances
-    geolocation
     if @event.update(event_params) && Eventdate.update(params, @event.id) # && verify_has_image(@event.id)
       flash[:success] = "The event was updated successfully."
       redirect_to organizer_events_path
@@ -89,11 +88,6 @@ class Organizer::EventsController < ApplicationController
   def status
     @no_wrapper = true
     @event = Event.find(params[:event_id])
-    # return "The status was updated!"
-    #respond_to do |format|
-      #format.html
-      #format.js
-    #end
   end
 
   def status_update
@@ -126,36 +120,20 @@ class Organizer::EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :description, :requirement, :price, :contact, :address, :eventtype_id, :eventattendeetype_id,
-                                  :latitude, :longitude, :images => [])
+    params.require(:event).permit(:name, :description, :requirement, :price, :eventtype_id, :eventattendeetype_id,
+                                  :organization_id, :images => [])
     .merge(company_id: current_user.company_ids.first, uuid: SecureRandom.hex, active: true)
   end
 
-    def geolocation
-      params[:event][:latitude] = nil
-      params[:event][:longitude] = nil
-      geoloc = JSON.load(open("https://maps.googleapis.com/maps/api/geocode/json?address=#{params[:event][:address]}&key=AIzaSyAsCilLl4Pts-_BVVKJLoR_PCC7OmQsRcA"))
+  def edit_update_instances
+    @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
+    @organizations = Organization.includes(:company_organizations).where("company_organizations.company_id" => current_user.company_ids.first)
+                                 .order(defaultorg: :desc, name: :asc)
+    @img_json = images_to_json(@event.attachments.order(sort: :asc))
+  end
 
-      if geoloc['status'] == 'OK' && geoloc['results'][0]['geometry']['location']['lat'].present?
-        params[:event][:latitude] = geoloc['results'][0]['geometry']['location']['lat']
-        params[:event][:longitude] = geoloc['results'][0]['geometry']['location']['lng']
-        return true
-      else
-        # params[:event][:address] = nil
-        return false
-      end
-    rescue
-      # params[:event][:address] = nil
-      return false
-    end
-
-    def edit_update_instances
-      @event = Event.includes(:eventtype, :eventattendeetype, :eventdates, :attachments).find(params[:id])
-      @img_json = images_to_json(@event.attachments.order(sort: :asc))
-    end
-
-    def verify_has_image(eid)
-      attachment = Attachment.find_by(event_id: eid)
-      attachment.present? ? true : false
-    end
+  def verify_has_image(eid)
+    attachment = Attachment.find_by(event_id: eid)
+    attachment.present? ? true : false
+  end
 end

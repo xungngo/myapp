@@ -78,16 +78,13 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.string "name", limit: 100, null: false
     t.string "description", limit: 2000, null: false
     t.string "requirement", limit: 1000
-    t.string "contact", limit: 100
-    t.string "address", limit: 200, null: false
     t.string "price", limit: 100
     t.integer "limit"
     t.integer "eventtype_id", null: false
     t.integer "eventattendeetype_id", null: false
     t.string "tag", limit: 100
     t.integer "organization_id", null: false
-    t.decimal "latitude", precision: 10, scale: 6, null: false
-    t.decimal "longitude", precision: 10, scale: 6, null: false
+    t.integer "company_id", null: false
     t.boolean "active", default: true, null: false
     t.string "uuid", limit: 100, null: false
     t.integer "deleted_by"
