@@ -11,7 +11,7 @@
 				<%= render "layouts/nav" %>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-10">
@@ -24,7 +24,7 @@
 						<th scope="col">#</th>
 						<th scope="col">Event</th>
 						<th scope="col">Starts</th>
-						<th scope="col">Created</th>
+						<th scope="col">Updated</th>
 						<th scope="col">Status</th>
 						<th scope="col">Options</th>
 					</tr>
@@ -42,7 +42,7 @@
 						<%= evt.name %>
 						</td>
 						<td><%= evt.eventdates.present? ? evt.eventdates.first.eventdate.strftime("%-m/%-d/%Y") : 'N/A' %></td>
-						<td><%= evt.created_at.strftime("%-m/%-d/%Y") %></td>
+						<td><%= evt.updated_at.strftime("%-m/%-d/%Y") %></td>
 						<td><%= evt.pretty_active %></td>
 						<td style="width: 20%">
 							<%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_event_path(evt), :title =>"edit #{evt.name}" %>&nbsp;&nbsp;&nbsp;
@@ -104,7 +104,7 @@
 			</div>
 			<div class="col-lg-1"></div>
 		</div>
-		<% end %>	
+		<% end %>
     </div>
 </section>
 <div id="modal-window" class="modal" title="Change Event Status" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
