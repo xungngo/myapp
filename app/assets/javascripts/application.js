@@ -26,7 +26,5 @@
 //= require users
 //= require moment.min
 //= require library/periodpicker/jquery.periodpicker.full.min
-//= require events
 //= require organizations
 //= require library/jquery.fileuploader.min
-// require googlemap-auto-complete
