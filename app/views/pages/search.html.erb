@@ -232,13 +232,15 @@
           desc = $('<div class="search-list-desc">'),
           org = $('<div class="search-list-org">'),
           addr = $('<div class="search-list-addr">'),
-          link = $('<a id="organizersearch_'+data.latitude+'_'+data.longitude+'">');
+          link = $('<a id="organizersearch_'+data.latitude+'_'+data.longitude+'">'),
+          img = $('<img id="organizersearch_image_'+itemCt+'">');
         link.attr('href','#').text(itemCt + ') ' + data.name).appendTo(header);
         addr.text(data.address);
-        desc.text(data.description);
+        desc.text(data.description.substring(0,120));
         org.text(data.org_name);
         item.append(header);
         item.append(desc);
+        img.attr('src','images/thumb/missing.png').prependTo(desc);
         item.append(org);
         //item.append(addr);
         item.appendTo(container);
