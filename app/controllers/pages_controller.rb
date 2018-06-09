@@ -77,24 +77,24 @@ class PagesController < ApplicationController
   def getmarkers
     haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(o.latitude))))"
     if params[:type] == 'organizer'
-      sql = "SELECT e.name, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'organizer' as type,
+      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'organizer' as type,
       #{haversine} as distant
       FROM events e INNER JOIN organizations o ON e.organization_id = o.id
       WHERE e.active = TRUE
-      OR lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
-      OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%'
-      GROUP BY e.name, o.address, o.latitude, o.longitude, o.contact, org_name
-      HAVING #{haversine} < 30
+      AND (lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
+      OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%')
+      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name
+      HAVING #{haversine} < 20
       ORDER BY distant ASC"
     else
-      sql = "SELECT e.name, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'seeker' as type,
+      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'seeker' as type,
       #{haversine} as distant
       FROM events e INNER JOIN organizations o ON e.organization_id = o.id
       WHERE e.active = TRUE
-      OR lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
-      OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%'
-      GROUP BY e.name, o.address, o.latitude, o.longitude, o.contact, org_name
-      HAVING #{haversine} < 30
+      AND (lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
+      OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%')
+      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name
+      HAVING #{haversine} < 20
       ORDER BY distant ASC"
     end
     @markers = ActiveRecord::Base.connection.execute(sql)

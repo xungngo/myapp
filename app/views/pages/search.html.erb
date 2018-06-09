@@ -229,12 +229,19 @@
         // Create DOM
         var item = $('<div class="col-md-4 table-responsive" id="item_'+itemCt+'" >').addClass('search-item'),
           header = $('<h2>'),
-          addr = $('<p>'),
+          desc = $('<div class="search-list-desc">'),
+          org = $('<div class="search-list-org">'),
+          addr = $('<div class="search-list-addr">'),
           link = $('<a id="organizersearch_'+data.latitude+'_'+data.longitude+'">');
         link.attr('href','#').text(itemCt + ') ' + data.name).appendTo(header);
         addr.text(data.address);
-        item.append(header,addr); // Append the infos to the item
-        item.appendTo(container); // Append the item to the container
+        desc.text(data.description);
+        org.text(data.org_name);
+        item.append(header);
+        item.append(desc);
+        item.append(org);
+        //item.append(addr);
+        item.appendTo(container);
       });
       // spread it 3 items per row
       var divs = $("#search-list > div");
@@ -275,6 +282,8 @@
               geo_result['infowindow'] = infowindow;
               geo_result['placeid'] = placeid;
               geo_result['address'] = address;
+              geo_result['description'] = description;
+              geo_result['org_name'] = org_name;
               geo_result['type'] = type;
               callback(geo_result);
           };
