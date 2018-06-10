@@ -236,11 +236,13 @@
           img = $('<img id="organizersearch_image_'+itemCt+'">');
         link.attr('href','#').text(itemCt + ') ' + data.name).appendTo(header);
         addr.text(data.address);
-        desc.text(data.description.substring(0,120));
+        desc.text(getWords(data.description));
         org.text(data.org_name);
         item.append(header);
         item.append(desc);
-        img.attr('src','images/thumb/missing.png').prependTo(desc);
+        img.attr('src','/system/attachments/images/'+padNum(data.attachment_id)+'/thumb/'+data.attachment_filename).prependTo(desc);
+        //img.attr('src','<%= escape_javascript(Attachment.find(1).image.url) %>').prependTo(desc);
+        //img.attr('src','images/thumb/missing.png').prependTo(desc);
         item.append(org);
         //item.append(addr);
         item.appendTo(container);
@@ -286,6 +288,8 @@
               geo_result['address'] = address;
               geo_result['description'] = description;
               geo_result['org_name'] = org_name;
+              geo_result['attachment_id'] = attachment_id;
+              geo_result['attachment_filename'] = attachment_filename;
               geo_result['type'] = type;
               callback(geo_result);
           };
@@ -307,6 +311,18 @@
       markers[row_minus].setIcon('/teacher.png');
       $('#item_'+row_ct).removeClass('search-item-highlite');
     });
+
+    //function to get first 30 words
+    function getWords(str) {
+      return str.split(/\s+/).slice(0,30).join(" ")+"...";
+    };
+
+    //zero padding format for paperclip file location
+    function padNum(num) {
+      s = "000000000" + num;
+      newNum = s.substr(s.length-9);
+      return newNum.toString().match(/.{3}/g).join('/');
+    }
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=GOOGLE_API_KEY%>&callback=initMap&libraries=places"></script>

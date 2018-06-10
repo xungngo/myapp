@@ -77,56 +77,31 @@ class PagesController < ApplicationController
   def getmarkers
     haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(o.latitude))))"
     if params[:type] == 'organizer'
-      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'organizer' as type,
+      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, a.id as attachment_id, a.image_file_name as attachment_filename, 'organizer' as type,
       #{haversine} as distant
       FROM events e INNER JOIN organizations o ON e.organization_id = o.id
+      INNER JOIN attachments a ON a.id = (SELECT id FROM attachments WHERE event_id = e.id ORDER BY sort LIMIT 1)
       WHERE e.active = TRUE
       AND (lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
       OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%')
-      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name
+      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name, attachment_id, attachment_filename
       HAVING #{haversine} < 20
       ORDER BY distant ASC"
     else
-      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, 'seeker' as type,
+      sql = "SELECT e.name, e.description, o.address, o.latitude, o.longitude, o.contact, o.name as org_name, a.id as attachment_id, a.image_file_name as attachment_filename, 'seeker' as type,
       #{haversine} as distant
       FROM events e INNER JOIN organizations o ON e.organization_id = o.id
+      INNER JOIN attachments a ON a.id = (SELECT id FROM attachments WHERE event_id = e.id ORDER BY sort LIMIT 1)
       WHERE e.active = TRUE
       AND (lower(e.name) LIKE '%#{params[:input_keyword].downcase}%'
       OR lower(e.description) LIKE '%#{params[:input_keyword].downcase}%')
-      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name
+      GROUP BY e.name, e.description, o.address, o.latitude, o.longitude, o.contact, org_name, attachment_id, attachment_filename
       HAVING #{haversine} < 20
       ORDER BY distant ASC"
     end
     @markers = ActiveRecord::Base.connection.execute(sql)
     render :json => @markers.as_json
   end
-=begin
-  def getmarkers
-    if params[:type] == 'organizer'
-      haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(latitude)) * cos(radians(longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(latitude))))"
-      sql = "SELECT name, address, latitude, longitude, 'organizer' as type,
-            #{haversine} as distant
-      FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
-      OR lower(description) LIKE '%#{params[:input_keyword].downcase}%'
-      AND active = TRUE
-      GROUP BY name, address, latitude, longitude
-      HAVING #{haversine} < 1
-      ORDER BY distant ASC"
-    else
-      haversine = "(3959 * acos(cos(radians('#{params[:input_latitude]}')) * cos(radians(latitude)) * cos(radians(longitude) - radians('#{params[:input_longitude]}')) + sin( radians('#{params[:input_latitude]}') ) * sin(radians(latitude))))"
-      sql = "SELECT name, address, latitude, longitude, 'seeker' as type,
-            #{haversine} as distant
-      FROM events WHERE lower(name) LIKE '%#{params[:input_keyword].downcase}%'
-      OR lower(description) LIKE '%#{params[:input_keyword].downcase}%'
-      AND active = TRUE
-      GROUP BY name, address, latitude, longitude
-      HAVING #{haversine} < 10
-      ORDER BY distant ASC"
-    end
-    @markers = ActiveRecord::Base.connection.execute(sql)
-    render :json => @markers.as_json
-  end
-=end
 
   private
 end
