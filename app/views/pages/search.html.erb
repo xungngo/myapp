@@ -1,12 +1,12 @@
 
   <!-- SECTION 1 -->
-  <section id="mc-section-1" class="mc-section-1 section" style="padding:20px 0px; 20px; 0px;">
+  <section id="mc-section-1" class="mc-section-1 section" style="padding: 10px 0px 10px 0px;">
       <div class="container">
         <div class="row">
-          <div class="col-lg-6 table-responsive">
+          <div class="col-lg-7 table-responsive" style="padding: 0px 10px 0px 10px;">
             <div id="search-list"></div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-5" style="padding: 0px 10px 0px 0px;">
             <div id="map"></div>
             <div id="infowindow-content">
               <img src="" width="16" height="16" id="place-icon">
@@ -228,24 +228,32 @@
         var itemCt = i+1;
         // Create DOM
         var item = $('<div class="col-md-4 table-responsive" id="item_'+itemCt+'" >').addClass('search-item'),
-          header = $('<h2>'),
-          desc = $('<div class="search-list-desc">'),
-          org = $('<div class="search-list-org">'),
-          addr = $('<div class="search-list-addr">'),
-          link = $('<a id="organizersearch_'+data.latitude+'_'+data.longitude+'">'),
-          img = $('<img id="organizersearch_image_'+itemCt+'">');
-        link.attr('href','#').text(itemCt + ') ' + data.name).appendTo(header);
+            item_inner = $('<div class="search-item-inner">'),
+            header = $('<h2>'),
+            desc = $('<div class="search-list-desc">'),
+            count = $('<div class="search-list-count">'),
+            org = $('<div class="search-list-org">'),
+            addr = $('<div class="search-list-addr">'),
+            link = $('<a id="organizersearch_'+data.uuid+'">'),
+            img = $('<img class="search-list-img" id="organizersearch_image_'+itemCt+'">');
+        count.text(itemCt);
+        link.attr('href','#'+data.uuid);
+        //link.attr('href','#'+data.uuid).text(itemCt + ') ' + data.name).appendTo(header);
+        header.text(data.name);
         addr.text(data.address);
-        desc.text(getWords(data.description));
+        //desc.text(getWords(data.description));
         org.text(data.org_name);
-        item.append(header);
-        item.append(desc);
-        img.attr('src','/system/attachments/images/'+padNum(data.attachment_id)+'/thumb/'+data.attachment_filename).prependTo(desc);
-        //img.attr('src','<%= escape_javascript(Attachment.find(1).image.url) %>').prependTo(desc);
-        //img.attr('src','images/thumb/missing.png').prependTo(desc);
-        item.append(org);
-        //item.append(addr);
+        //item.append(desc);
+        //img.attr('src','/system/attachments/images/'+padNum(data.attachment_id)+'/thumb/'+data.attachment_filename).prependTo(desc);
+        img.attr('src','/system/attachments/images/'+padNum(data.attachment_id)+'/medium/'+data.attachment_filename);
+        item_inner.append(count);
+        item_inner.append(img);
+        item_inner.append(header);
+        item_inner.append(org);
+        item.append(item_inner);
+        item.wrapInner(link);
         item.appendTo(container);
+        //descHeightAdjust(header, desc);
       });
       // spread it 3 items per row
       var divs = $("#search-list > div");
@@ -322,7 +330,15 @@
       s = "000000000" + num;
       newNum = s.substr(s.length-9);
       return newNum.toString().match(/.{3}/g).join('/');
-    }
+    };
+
+    // adjust desc height based on header height
+    function descHeightAdjust(header, desc) {
+      //alert(header.height());
+      if (header.height() > 60) {
+        desc.css("height", "110px");
+      }
+    };
   </script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=GOOGLE_API_KEY%>&callback=initMap&libraries=places"></script>
