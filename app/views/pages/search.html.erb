@@ -203,11 +203,11 @@
     // organizer marker mouseover event
     function organizerMouseEvent(map, marker, dataCt){
       marker.addListener('mouseover', function() {
-        $('#item_'+dataCt).addClass('search-item-highlite');
+        $('#item_'+dataCt).addClass('search-item-inner-highlite');
         markers[dataCt-1].setIcon('/teacher_light.png');
       });
       marker.addListener('mouseout', function() {
-        $('#item_'+dataCt).removeClass('search-item-highlite');
+        $('#item_'+dataCt).removeClass('search-item-inner-highlite');
         markers[dataCt-1].setIcon('/teacher.png');
       });
     };
@@ -227,8 +227,8 @@
       $.each(data,function(i,data){
         var itemCt = i+1;
         // Create DOM
-        var item = $('<div class="col-md-4 table-responsive" id="item_'+itemCt+'" >').addClass('search-item'),
-            item_inner = $('<div class="search-item-inner">'),
+        var item = $('<div class="col-md-4 table-responsive">').addClass('search-item'),
+            item_inner = $('<div class="search-item-inner" id="item_'+itemCt+'">'),
             header = $('<h2>'),
             desc = $('<div class="search-list-desc">'),
             count = $('<div class="search-list-count">'),
@@ -304,20 +304,20 @@
       });
     };
 
-    $(document).on("mouseover", ".search-item",function() {
+    $(document).on("mouseover", ".search-item-inner",function() {
       row = this.id.split('_');
       row_ct = parseInt(row[1]);
       row_minus = parseInt(row[1])-1;
       markers[row_minus].setIcon('/teacher_light.png');
-      $('#item_'+row_ct).addClass('search-item-highlite');
+      $('#item_'+row_ct).addClass('search-item-inner-highlite');
     });
 
-    $(document).on("mouseout", ".search-item",function() {
+    $(document).on("mouseout", ".search-item-inner",function() {
       row = this.id.split('_');
       row_ct = parseInt(row[1]);
       row_minus = parseInt(row[1])-1;
       markers[row_minus].setIcon('/teacher.png');
-      $('#item_'+row_ct).removeClass('search-item-highlite');
+      $('#item_'+row_ct).removeClass('search-item-inner-highlite');
     });
 
     //function to get first 30 words
