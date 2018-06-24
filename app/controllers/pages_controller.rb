@@ -103,5 +103,9 @@ class PagesController < ApplicationController
     render :json => @markers.as_json
   end
 
+  def event
+    @event = Event.find_by(uuid: params[:uuid])
+  end
+
   private
 end

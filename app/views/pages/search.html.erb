@@ -237,7 +237,7 @@
             link = $('<a id="organizersearch_'+data.uuid+'">'),
             img = $('<img class="search-list-img" id="organizersearch_image_'+itemCt+'">');
         count.text(itemCt);
-        link.attr('href','#'+data.uuid);
+        link.attr('href','event?uuid='+data.uuid);
         //link.attr('href','#'+data.uuid).text(itemCt + ') ' + data.name).appendTo(header);
         header.text(data.name);
         addr.text(data.address);
