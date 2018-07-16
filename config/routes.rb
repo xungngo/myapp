@@ -51,5 +51,7 @@ Rails.application.routes.draw do
       post :status_update
       post :status_delete
     end
+    resources :schedules do
+    end
   end
 end

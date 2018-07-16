@@ -1,9 +1,7 @@
 class Event < ActiveRecord::Base
-  before_destroy :destroy_eventdates
 
   has_many :attachments, dependent: :destroy
-  has_many :eventdates_events, dependent: :destroy
-  has_many :eventdates, :through => :eventdates_events
+  has_many :schedules, dependent: :destroy
   belongs_to :eventtype
   belongs_to :eventattendeetype
   belongs_to :organization
@@ -17,11 +15,5 @@ class Event < ActiveRecord::Base
 
   def pretty_active
     self.active ? "Active" : "Inactive"
-  end
-
-  private
-
-  def destroy_eventdates
-    Eventdate.destroy(self.eventdates.ids)
   end
 end

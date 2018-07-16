@@ -82,7 +82,8 @@
 
 	<div class="col-lg-5">
 		<fieldset>
-			<legend>Organizer Information</legend>
+			<% plural_desc = pluralize_no_count(@organizations, 'edit organization') %>
+			<legend class="legend">Organizer Information<span class="legend-span-right"><%= link_to "<i class='glyphicon glyphicon-pencil'></i> #{plural_desc}".html_safe, organizer_organizations_path, title: "#{plural_desc}" %></span></legend>
 			<div><span class="help-block">Who is the organizer of the event?</span></div><br>
 
 			<div class="row form-group">
@@ -90,56 +91,15 @@
 				<div class="col-md-10">
 					<%= f.label :organization_id, "Organization <span class='required'>*</span>".html_safe, class: "control-label" %>
 					<%= f.select :organization_id, options_from_collection_for_select(@organizations, :id, :name, @event.organization_id), {}, {title: "organization information", class: "form-control"} %>
-					<% plural_desc = pluralize_no_count(@organizations, 'edit organization') %>
-					<span class="help-block"><%= link_to "<i class='glyphicon glyphicon-pencil'></i> #{plural_desc}".html_safe, organizer_organizations_path, title: "#{plural_desc}" %></span>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
 		</fieldset><br><br><br>
 
 		<fieldset>
-			<legend>Schedule</legend>
+			<legend class="legend">Schedule<span class="legend-span-right"><%= link_to "<i class='glyphicon glyphicon-pencil'></i> New Schedule".html_safe, new_organizer_schedule_path(event_id: 0, type: 'Schedule'), 'data-post-type': "Create", class: "event_schedule", id: @event.id, title: "create new schedule" %></span></legend>
+			<div id="modal-window" class="modal" title="New Schedule" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 			<div><span class="help-block">Select 1-14 day(s) for this event.</span></div><br>
-
-			<div class="row">
-				<div class="col-md-1"></div>
-				<div class="col-md-10 text-center">
-					<table style="width:100%;" cellspacing="2" id="event_date_table">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Event Date</th>
-								<th>Start Time</th>
-								<th>End Time</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody id="event_date_tbody">
-							<tr class="tr_clone" id="tr_clone" style="visibility: hidden;">
-								<td style="width:8%; padding-bottom:8px; padding-right:10px; text-align:right"><span class="count" style="font-size: 1.2em"></span></td>
-								<td style="width:26%; padding-bottom:8px;"><span class="dateshow" style="font-size: 1.2em">99/99/9999</span></td>
-								<td style="width:28%; padding-bottom:8px;"><input type="text" name="starttime[]" class="form-control starttime" style="width:90%; font-size: 1.2em"></td>
-								<td style="width:28%; padding-bottom:8px;"><input type="text" name="endtime[]" class="form-control endtime" style="width:90%; font-size: 1.2em"></td>
-								<td style="width:10%; padding-bottom:8px;">
-									<button type="button" class='btn btn-default glyphicon glyphicon-remove btnDel' style="color:red" title="remove"></button>
-									<input type="hidden" name="eventdate[]" class="eventdate">
-									<!--populate for update only-->
-									<input type="hidden" name="eventdate_id[]" class="eventdate_id">
-								</td>
-							</tr>
-							<input type="hidden" name="current_eventdates" id="current_eventdates" value="<%= @event.eventdates.to_json %>">
-						</tbody>
-					</table>
-				</div>
-				<div class="col-md-1"></div>
-			</div>
-			<div class="row">
-				<div class="col-md-1"></div>
-				<div class="col-md-10 text-center">
-					<input type="input" name="event_start" id="event_start" class="form-control">
-				</div>
-				<div class="col-md-1"></div>
-			</div>
 		</fieldset><br><br><br>
 	</div>
 	<div class="col-lg-1"></div>

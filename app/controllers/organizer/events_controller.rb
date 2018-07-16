@@ -6,7 +6,7 @@ class Organizer::EventsController < ApplicationController
   #load_and_authorize_resource # cancancan
 
   def index
-    @events = Event.includes(:eventtype, :eventdates).where(company_id: current_user.company_ids.first, deleted_at: nil).order("eventdates.eventdate")
+    @events = Event.includes(:eventtype, :schedules => :eventdates).where(company_id: current_user.company_ids.first, deleted_at: nil).order("eventdates.eventdate ASC")
     @events_deleted = Event.includes(:eventtype).where(company_id: current_user.company_ids.first).where.not(deleted_at: nil).order(created_at: :desc)
     @events_deleted.where('deleted_at < ?', Time.zone.now-2.days).destroy_all
   end

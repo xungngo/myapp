@@ -1,102 +1,77 @@
-<% @page_title="#{@event.name}" %>
+<% @page_title="Event: #{@event.name}" %>
 <!-- SECTION 1 -->
 <section id="mc-section-1" class="mc-section-1 section" style="padding:30px 10px; 30px; 10px;">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h2 class="text-uppercase"><%=@page_title%></h2>
+          <h2 class="text-uppercase">Event</h2>
         </div>
       </div><br><br>
 
       <%= form_for @event, url: user_security_update_path, method: 'post', class:'form' do |f| %>
       <div class="row">
         <div class="col-lg-1"></div>
+        <div class="col-lg-10"><h2 class="event-details-h2"><%= @event.name %></h2><br></div>
+        <div class="col-lg-1"></div>
+      </div>
+
+      <div class="row event-details">
+        <div class="col-lg-1"></div>
         <div class="col-lg-5">
           <fieldset>
             <legend>Description</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%= @event.description %>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </fieldset><br>
+            <div><%= @event.description %></div>
+          </fieldset>
 
           <fieldset>
             <legend>Requirement</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%=@event.requirement %>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </fieldset><br>
+            <div><%=@event.requirement %></div>
+          </fieldset>
 
           <fieldset>
             <legend>Event Type</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%=@event.eventtype.name %>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </fieldset><br>
+            <div><%=@event.eventtype.name %></div>
+          </fieldset>
 
           <fieldset>
             <legend>Attendee Type</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%=@event.eventattendeetype.name %>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </fieldset><br>
+            <div><%=@event.eventattendeetype.name %></div>
+          </fieldset>
 
           <fieldset>
             <legend>Cost</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%=@event.price %>
-              </div>
-              <div class="col-md-1"></div>
+            <div><%=@event.price %></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Organizer</legend>
+            <div>
+              <%= @event.organization.name %>
+              <div id="map" style="width: 100%; height:280px; background-color: gray;"></div>
             </div>
           </fieldset>
         </div>
 
-        <div class="col-lg-5">
+        <div class="col-lg-1"></div>
+
+        <div class="col-lg-4">
           <fieldset>
-            <legend>Organizer</legend>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%= @event.organization.name %>
-              </div>
-              <div class="col-md-1"></div>
+            <legend>Photos</legend>
+            <div>
+              <% if @event.attachments.first.present? %>
+                <%= image_tag(@event.attachments.order(:sort).first.image.url(:medium), :style => "max-width:100%; max-height:500px; width:100%; height:auto;", class: "img_vertical_align") %>
+              <% end %>
             </div>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%= @event.organization.contact %>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
-          </fieldset><br>
+          </fieldset>
 
           <fieldset>
             <legend>Schedule</legend>
-            <div class="row form-group">
-              <div class="col-md-1"></div>
-              <div class="col-md-10">
-              <%= @event.created_at %>
-              </div>
-              <div class="col-md-1"></div>
+            <div>
+              <% @event.eventdates.each do |evt| %>
+                <div><%= evt.eventdate.strftime("%-m/%-d/%Y") %> @ <%= evt.starttime %> - <%= evt.endtime %></div>
+              <% end %>
             </div>
-          </fieldset><br>
+          </fieldset>
         </div>
         <div class="col-lg-1"></div>
       </div><br>
@@ -115,3 +90,24 @@
     </div>
 </section>
 <!-- END / SECTION 1 -->
+
+<script>
+function initMap() {
+  var latlng = {lat: <%= @event.organization.latitude %>, lng: <%= @event.organization.longitude %>};
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 10, center: latlng});
+  var marker = new google.maps.Marker({
+    position: latlng,
+    map: map,
+    icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 12,
+        fillColor: "#F00",
+        fillOpacity: 0.2,
+        strokeWeight: 0.4
+    }
+  });
+}
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=GOOGLE_API_KEY%>&callback=initMap"></script>

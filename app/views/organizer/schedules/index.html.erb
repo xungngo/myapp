@@ -1,0 +1,56 @@
+<% @page_title="Organizations" %>
+
+<!-- SECTION 1 -->
+<section id="mc-section-1" class="mc-section-1 section" style="padding:30px 10px; 30px; 10px;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-5">
+				<h2 class="h2-flush-top"><%=@page_title%></h2>
+			</div>
+			<div class="col-lg-7">
+				<%= render "layouts/nav" %>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-10">
+				<%= render "layouts/message_flash" %>
+				<h2>Your Organizations</h2>
+				<table class="table table-hover">
+				<thead>
+					<tr><td colspan="6" align="right"><%= link_to "<i class='glyphicon glyphicon-plus'></i> New Organization".html_safe, new_organizer_organization_path, :title =>"New Organization" %></td></tr>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Address</th>
+						<th scope="col">Created</th>
+						<th scope="col">Default</th>
+						<th scope="col">Options</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% currentrow = 0 %>
+				<% @organizations.each do |org| %>
+					<% currentrow = currentrow + 1 %>
+					<tr scope="row">
+						<td scope="row" style="width: 40px"><%= currentrow %></td>
+						<td><%= org.name %></td>
+						<td><%= org.address %></td>
+						<td><%= org.pretty_created_at %></td>
+						<td><%= org.defaultorg %></td>
+						<td style="width: 20%">
+							<%= link_to "<i class='glyphicon glyphicon-edit'></i> Edit".html_safe, edit_organizer_organization_path(org), :title =>"edit #{org.name}" %>&nbsp;&nbsp;&nbsp;
+							<%= link_to "<i class='glyphicon glyphicon-remove-circle'></i> Delete".html_safe, organizer_organization_status_update_path(org, type: 'Delete'), 'data-post-type': "Delete", class: "organization_status", id: org.id, title: "delete #{org.name}" %>
+						</td>
+					</tr>
+				<% end %>
+				</tbody>
+			</table>
+			</div>
+			<div class="col-lg-1"></div>
+		</div><br><br>	
+    </div>
+</section>
+<div id="modal-window" class="modal" title="Change Organization Status" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<!-- END / SECTION 1 -->

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514174560) do
+ActiveRecord::Schema.define(version: 20180627274511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,13 +43,6 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.datetime "updated_at"
   end
 
-  create_table "event_attachment_mappings", id: :serial, force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "attachment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "eventattendeetypes", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.boolean "active", default: false, null: false
@@ -58,20 +51,12 @@ ActiveRecord::Schema.define(version: 20180514174560) do
   end
 
   create_table "eventdates", id: :serial, force: :cascade do |t|
-    t.date "eventdate"
-    t.string "starttime"
-    t.string "endtime"
+    t.date "eventdate", null: false
+    t.string "starttime", limit: 100, null: false
+    t.string "endtime", limit: 100, null: false
+    t.integer "schedule_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "eventdates_events", id: :serial, force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "eventdate_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["event_id"], name: "index_eventdates_events_on_event_id"
-    t.index ["eventdate_id"], name: "index_eventdates_events_on_eventdate_id"
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
@@ -123,10 +108,25 @@ ActiveRecord::Schema.define(version: 20180514174560) do
     t.datetime "updated_at"
   end
 
+  create_table "registrations", id: :serial, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "schedule_id", null: false
+    t.integer "guest", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "unique_key"
     t.integer "display_rank", default: 5, null: false
+  end
+
+  create_table "schedules", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.integer "event_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "states", id: :serial, force: :cascade do |t|

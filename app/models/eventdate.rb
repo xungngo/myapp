@@ -1,38 +1,32 @@
 class Eventdate < ActiveRecord::Base
-  has_many :eventdates_events
-  has_many :events, :through => :eventdates_events
+  belongs_to :schedule
 
   validates :eventdate, presence: {message: "The Event Date field is required."}
   validates :starttime, presence: {message: "The Start Time field is required."}
   validates :endtime, presence: {message: "The End Time field is required."}
-  # validates_associated :eventdates_events, :events
+  validates :schedule_id, presence: {message: "A Schedule is required."}
 
-  def self.create(p, eid)
+  def self.create(p, sid)
     to_length = p[:eventdate].size.to_i - 1
     return if to_length.zero?
     (0..to_length).each do |count|
       if p[:eventdate][count].present?
-        @new_eventdate = Eventdate.new(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
+        @new_eventdate = Eventdate.new(schedule_id: sid, eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
         @new_eventdate.save
-        @new_eventdates_events = EventdatesEvent.new(event_id: eid, eventdate_id: @new_eventdate.id)
-        @new_eventdates_events.save
       end
     end
     @new_eventdate
-    @new_eventdates_events
   end
 
-  def self.update(p, eid)
+  def self.update(p, sid)
     to_length = p[:eventdate].size.to_i - 1
     return if to_length.zero?
     (0..to_length).each do |count|
       if p[:eventdate][count].present? && p[:eventdate_id][count].present?
         @update_eventdate = Eventdate.find(p[:eventdate_id][count]).update(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
       elsif p[:eventdate][count].present?
-        @new_eventdate = Eventdate.new(eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
+        @new_eventdate = Eventdate.new(schedule_id: sid, eventdate: Date.strptime(p[:eventdate][count], '%m/%d/%Y'), starttime: p[:starttime][count], endtime: p[:endtime][count])
         @new_eventdate.save
-        @new_eventdates_events = EventdatesEvent.new(event_id: eid, eventdate_id: @new_eventdate.id)
-        @new_eventdates_events.save
       end
     end
 

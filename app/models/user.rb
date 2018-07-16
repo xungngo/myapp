@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :users_companies
   has_many :companies, :through => :users_companies
   belongs_to :state
+  has_many :registrations, dependent: :destroy
 
   validates :email, uniqueness: {message: "The email is in the system."}, presence: true
   validates :username, uniqueness: {message: "The username has already been taken."}, presence: true
