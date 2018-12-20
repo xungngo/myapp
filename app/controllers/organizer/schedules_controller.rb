@@ -73,9 +73,9 @@ class Organizer::SchedulesController < ApplicationController
 
 private
 
-  def schedule_params
-    params.require(:schedule).permit(:name)
-  end
+  #def schedule_params
+  #  params.require(:schedule).permit(:name)
+  #end
 
   def ok_to_delete
     org_count = Schedule.includes(:company_schedules).where("company_schedules.company_id" => current_user.company_ids.first).count
